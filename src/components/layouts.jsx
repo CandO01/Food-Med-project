@@ -6,7 +6,7 @@ function Layouts() {
   const location = useLocation()
 
   // Define routes that should NOT have the footer
-  const noFooterRoutes = ['/login', '/signup', '/forgot-password']
+  const noFooterRoutes = ['/login', '/signup', '/forgot-password', '/reset-password', '/verify-otp']
 
   const hideFooter = noFooterRoutes.includes(location.pathname)
 

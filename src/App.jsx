@@ -5,7 +5,7 @@ import Layouts from './components/layouts'
 import Signup from './Pages/Signup'
 import Signin from './Pages/Signin'
 import ForgotPassword from './Pages/ForgotPassowrd'
-import Home from './Pages/Home' // ✅ make sure you create and import this
+import Home from './Pages/Home'
 import VerifyOTP from './Pages/VerifyOtp'
 import ResetPassword from './Pages/ResetPassword'
 
