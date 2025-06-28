@@ -1,7 +1,7 @@
 // ResetPassword.jsx
 import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-
+import { useNavigate, Link } from 'react-router-dom'
+import { IoArrowBack } from "react-icons/io5";
 function ResetPassword() {
   const [form, setForm] = useState({ password: '', confirm: '' })
   const [error, setError] = useState('')
@@ -47,7 +47,12 @@ function ResetPassword() {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <>
+    <div className="icon">
+      <Link to='/verify-otp'><IoArrowBack className='arrow-back' /></Link>
+      <Link className='cancel-otp' to='/forgot-password'>X</Link>
+    </div>
+    <form className="reset-form" onSubmit={handleSubmit}>
       <input
         type="password"
         name="password"
@@ -55,7 +60,7 @@ function ResetPassword() {
         onChange={handleChange}
         placeholder="New Password"
         required
-      />
+        />
       <input
         type="password"
         name="confirm"
@@ -63,11 +68,13 @@ function ResetPassword() {
         onChange={handleChange}
         placeholder="Confirm Password"
         required
-      />
-      <button type="submit">Reset Password</button>
+        />
+      <button type="submit">Continue</button>
       {message && <p style={{ color: 'green' }}>{message}</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}
     </form>
+  </>
+
   )
 }
 

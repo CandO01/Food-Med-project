@@ -39,7 +39,7 @@ function ForgotPassword() {
   }
 
   return (
-    <div className="forget-password-container">
+  <div className="forget-password-container">
     <Link className='cancel-link' to='/login'>X</Link>
     <form onSubmit={submitResetPassword}>
       <input
@@ -54,7 +54,7 @@ function ForgotPassword() {
       {message && <p style={{ color: 'green' }}>{message}</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}
     </form>
-    <Link to='/signup'>Create a new account</Link>
+    <Link className='create' to='/signup'>Create a new account</Link>
   </div>
   )
 }

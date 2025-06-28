@@ -84,7 +84,7 @@ function Signin() {
 
       <div className="forgot-password">
         <Link to='/forgot-password'>Forgot password?</Link>
-        <p>Not {userName}? <span>Switch account</span></p>
+        <p>Not {userName}? <Link to='/signup'>Switch account</Link></p>
       </div>
     </div>
   )

@@ -19,7 +19,8 @@ padding: 0;
   align-items: center;
 }
 .signup-form, 
-.signin-container{
+.signin-container,
+.reset-form {
   padding-inline: 27px;
 }
 .heading-one{
@@ -29,7 +30,8 @@ padding: 0;
   color: #000000;
 }
 .signup-container,
-.signin-container{
+.signin-container,
+.reset-form{
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -46,15 +48,17 @@ padding: 0;
   border-radius: 50px;
   font-size: 1.375rem;
 } .signup-container > input::placeholder,
-.signin-container > input::placeholder{
-  font-size: 1.1rem;
+.signin-container > input::placeholder,
+.reset-form > input::placeholder{
+  font-size: 1.0rem;
 }
 .signup-container > input:focus,
 .signin-container > input:focus{
   outline: none;
 }
 .signin-container > input,
-.forget-password-container form > input{
+.forget-password-container form > input,
+.reset-form > input{
   border: none; 
   border-bottom: 3px solid #D9D9D999; 
   outline: none;
@@ -81,7 +85,8 @@ padding: 0;
 }
 .signup-container > button,
 .signin-container > button,
-.forget-password-container form > button{
+.forget-password-container form > button,
+.reset-form > button{
   background-color: #FFA500;
   border: none;
   width: 100%;
@@ -134,7 +139,18 @@ padding: 0;
   align-items: center;
   width: 100%;
 }
-.forget-password-container .cancel-link{
+ .icon{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: inherit;
+}
+.icon .arrow-back{
+  font-size: 28px;
+  margin-top: 20px;
+  margin-left: 10px;
+}
+.icon .cancel-otp{
   align-self: flex-end;
   margin-right: 20px;
   margin-top: 20px;
@@ -142,11 +158,19 @@ padding: 0;
   font-size: 1.687rem;
   color: #000000;
 }
+
 .forget-password-container a{
   font-size: 1.25rem;
    color: #000000;
    text-decoration: none;
    font-weight: 700;
+   align-self: flex-end;
+   margin-right: 20px;
+   margin-top: 20px;
+}
+.forget-password-container .create{
+  align-self: center;
+  margin-top: 10px;
 }
 .forget-password-container form{
   margin: 50px;

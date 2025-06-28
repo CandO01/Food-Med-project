@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
+import { IoArrowBack } from "react-icons/io5";
 
 function VerifyOTP({ email: propEmail, onVerified }) {
   const [otp, setOtp] = useState(['', '', '', '', '', ''])
@@ -73,19 +74,24 @@ function VerifyOTP({ email: propEmail, onVerified }) {
   }
 
   return (
+    <>
+    <div className="icon">
+      <Link to='/forgot-password'><IoArrowBack className='arrow-back' /></Link>
+      <Link className='cancel-otp' to='/reset-password'>X</Link>
+    </div>
     <form onSubmit={handleSubmit} className="verify-form">
       <p className="info-text">An OTP has been sent to your email. Please input the OTP:</p>
 
       <div className="otp-boxes">
         {otp.map((digit, idx) => (
           <input
-            key={idx}
-            type="text"
-            maxLength="1"
-            value={digit}
-            onChange={(e) => handleChange(e.target.value, idx)}
-            ref={(el) => (inputsRef.current[idx] = el)}
-            className="otp-input"
+          key={idx}
+          type="text"
+          maxLength="1"
+          value={digit}
+          onChange={(e) => handleChange(e.target.value, idx)}
+          ref={(el) => (inputsRef.current[idx] = el)}
+          className="otp-input"
           />
         ))}
       </div>
@@ -97,6 +103,7 @@ function VerifyOTP({ email: propEmail, onVerified }) {
       {resendMsg && <p className="info-text" style={{ color: 'green' }}>{resendMsg}</p>}
       {error && <p className="error-text">{error}</p>}
     </form>
+  </>
   )
 }
 
