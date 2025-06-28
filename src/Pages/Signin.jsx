@@ -9,6 +9,7 @@ function Signin() {
   const [error, setError] = useState(null)
   const { login } = React.useContext(AuthContext)
 
+  const navigate = useNavigate()
 
   function handleChange(e){
     const { name, value } = e.target
@@ -26,7 +27,7 @@ function Signin() {
     setError('')
 
     try {
-      const res = await fetch('http://localhost:5223/login', {
+      const res = await fetch('https://foodmed-server.onrender.com/login', {
         method: 'POST',
         headers:{ 'Content-Type': 'application/json' },
         body: JSON.stringify(loginForm)
@@ -34,9 +35,10 @@ function Signin() {
       if(!res.ok){
         throw new Error('Please enter your valid email address and password')
       }
-      const data = res.json()
+      const data = await res.json()
       if(res.ok){
         login()
+        navigate('/home')
       }
     } catch (error) {
       
