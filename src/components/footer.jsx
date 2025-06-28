@@ -1,9 +1,9 @@
 import React from 'react'
 
-function footer() {
+function Footer() {
   return (
-    <div>footer</div>
+    <footer>Footing</footer>
   )
 }
 
-export default footer
+export default Footer

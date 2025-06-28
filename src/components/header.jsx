@@ -1,9 +1,16 @@
-import React from 'react'
+// import React from 'react'
+// import { Link } from 'react-router-dom'
 
-function header() {
-  return (
-    <div>header</div>
-  )
-}
+// function Header() {
+//   return (
+//     <header>
+//       <nav>
+//         <Link>Vans</Link>
+//         <Link>Host</Link>
+//         <Link>About</Link>
+//       </nav>
+//     </header>
+//   )
+// }
 
-export default header
+// export default Header

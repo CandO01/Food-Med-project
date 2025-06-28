@@ -1,9 +1,12 @@
 import React from 'react'
+import Footer from './footer'
 
-function layouts() {
+function Layouts() {
   return (
-    <div>layouts</div>
+    <>
+      <Footer />
+    </>
   )
 }
 
-export default layouts
+export default Layouts
