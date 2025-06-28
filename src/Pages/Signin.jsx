@@ -11,6 +11,14 @@ function Signin() {
   const { login } = React.useContext(AuthContext)
   const navigate = useNavigate()
 
+  // Load saved username from localStorage if available
+  useEffect(() => {
+    const savedName = localStorage.getItem('userName')
+    if (savedName) {
+      setUserName(savedName)
+    }
+  }, [])
+
   function handleChange(e) {
     const { name, value } = e.target
     setLoginForm(prev => ({
@@ -38,6 +46,8 @@ function Signin() {
       }
 
       setUserName(data.name)
+      localStorage.setItem('userName', data.name) // ✅ Save name to localStorage
+
       login({ name: data.name, email: data.email })
       navigate('/home')
     } catch (error) {
@@ -55,7 +65,6 @@ function Signin() {
 
       <h1>Welcome back {userName || '!'}</h1>
 
-      {/* Show error message if any */}
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
       <form className='signin-container' onSubmit={handleSubmit}>
@@ -84,7 +93,7 @@ function Signin() {
 
       <div className="forgot-password">
         <Link to='/forgot-password'>Forgot password?</Link>
-        <p>Not {userName}? <Link to='/signup'>Switch account</Link></p>
+        <p>Not {userName || 'you'}? <Link to='/signup'>Switch account</Link></p>
       </div>
     </div>
   )

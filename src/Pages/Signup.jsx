@@ -44,9 +44,13 @@ function Signup() {
       }
 
       setSuccess(true)
-      setMessage(data.message || 'Signup successful!')
+      setMessage(data.message || 'Thank you for signing up successfully! Redirecting you to the login section')
       setStatus('done')
-      navigate('/login') //redirecting to login page
+    // Delay 3 seconds before redirecting
+      setTimeout(() => {
+        navigate('/login')
+      }, 3000)
+     
     } catch (err) {
       setError(err.message)
       setStatus('failed')
