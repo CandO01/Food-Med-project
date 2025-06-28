@@ -14,7 +14,7 @@ function App() {
       <Route path='/' element={<Layouts />}>
         
         {/* Default redirect to login page */}
-        <Route index element={<Navigate to='login' />} />
+        <Route index element={<Navigate to='signup' />} />
         
         {/* Auth routes */}
         <Route path='signup' element={<Signup />} />
