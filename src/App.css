@@ -53,8 +53,9 @@ padding: 0;
 .signin-container > input:focus{
   outline: none;
 }
-.signin-container > input{
-  border: none;
+.signin-container > input,
+.forget-password-container form > input{
+  border: none; 
   border-bottom: 3px solid #D9D9D999; 
   outline: none;
   padding: 8px 4px; 
@@ -79,7 +80,8 @@ padding: 0;
   text-align: center;
 }
 .signup-container > button,
-.signin-container > button{
+.signin-container > button,
+.forget-password-container form > button{
   background-color: #FFA500;
   border: none;
   width: 100%;
@@ -87,7 +89,7 @@ padding: 0;
   height: 57px;
   margin-top: 22px;
   font-size: 1.25rem;
-  font-weight: 500;
+  font-weight: 700;
   cursor: pointer;
 }
 .signin-container > button{
@@ -125,6 +127,97 @@ padding: 0;
   font-weight: 600;
   font-size: 0.936rem;
 }
+/* Forgot password */
+.forget-password-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+.forget-password-container .cancel-link{
+  align-self: flex-end;
+  margin-right: 20px;
+  margin-top: 20px;
+  text-decoration: none;
+  font-size: 1.687rem;
+  color: #000000;
+}
+.forget-password-container a{
+  font-size: 1.25rem;
+   color: #000000;
+   text-decoration: none;
+   font-weight: 700;
+}
+.forget-password-container form{
+  margin: 50px;
+  display: flex;
+  flex-direction: column;
+  width: 350px;
+ gap: 20px;
+}
+/* OTP verification */
+
+.verify-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+.info-text {
+  font-size: 14px;
+  color: #888;
+  text-align: center;
+}
+
+.otp-boxes {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.otp-input {
+  width: 40px;
+  height: 50px;
+  font-size: 24px;
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #eee;
+  outline: none;
+}
+
+.otp-input:focus {
+  border: 2px solid #f5a623;
+  background-color: #fff;
+}
+
+.verify-btn {
+  background-color: #ffa500;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 25px;
+  font-size: 16px;
+  color: white;
+  cursor: pointer;
+}
+
+.resend {
+  font-size: 13px;
+  font-weight: bold;
+  align-self: flex-end;
+  margin-right: 10px;
+  color: black;
+  cursor: pointer;
+}
+
+.error-text {
+  color: red;
+  font-size: 13px;
+}
+
+
 /* FOOTER */
 footer{
   flex-shrink: 0;

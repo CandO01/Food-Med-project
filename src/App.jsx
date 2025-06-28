@@ -6,6 +6,8 @@ import Signup from './Pages/Signup'
 import Signin from './Pages/Signin'
 import ForgotPassword from './Pages/ForgotPassowrd'
 import Home from './Pages/Home' // ✅ make sure you create and import this
+import VerifyOTP from './Pages/VerifyOtp'
+import ResetPassword from './Pages/ResetPassword'
 
 function App() {
   return (
@@ -20,6 +22,8 @@ function App() {
         <Route path='signup' element={<Signup />} />
         <Route path='login' element={<Signin />} />
         <Route path='forgot-password' element={<ForgotPassword />} />
+        <Route path='verify-otp' element={<VerifyOTP />} />
+        <Route path='reset-password' element={<ResetPassword />} />
         
         {/* Protected/Home page after login */}
         <Route path='home' element={<Home />} />

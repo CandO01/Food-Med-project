@@ -1,58 +1,63 @@
 import React, { useState, useEffect } from 'react'
-import { useLocation, useNavigate, Link } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { AuthContext } from '../AuthenticationContext/Authcontext'
 import foodmedImg from '../assets/foodmed1.png'
 
 function Signin() {
-  const [loginForm, setLoginForm] = useState({ email: '', password: ''})
+  const [loginForm, setLoginForm] = useState({ email: '', password: '' })
   const [status, setStatus] = useState('idle')
   const [error, setError] = useState(null)
+  const [userName, setUserName] = useState('')
   const { login } = React.useContext(AuthContext)
-
   const navigate = useNavigate()
 
-  function handleChange(e){
+  function handleChange(e) {
     const { name, value } = e.target
-    setLoginForm(prev=>({
-      ...prev, 
+    setLoginForm(prev => ({
+      ...prev,
       [name]: value
     }))
   }
 
-  //function to handle submit
-
-  async function handleSubmit(e){
+  async function handleSubmit(e) {
     e.preventDefault()
     setStatus('logging')
-    setError('')
+    setError(null)
 
     try {
       const res = await fetch('https://foodmed-server.onrender.com/login', {
         method: 'POST',
-        headers:{ 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(loginForm)
       })
-      if(!res.ok){
-        throw new Error('Please enter your valid email address and password')
-      }
+
       const data = await res.json()
-      if(res.ok){
-        login()
-        navigate('/home')
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Please enter valid credentials')
       }
+
+      setUserName(data.name)
+      login({ name: data.name, email: data.email })
+      navigate('/home')
     } catch (error) {
-      
+      setError(error.message)
+      setStatus('idle')
     }
   }
-
 
   return (
     <div className="signin-form">
       <div className='foodmed'>
         <img src={foodmedImg} alt="food med logo" />
-         <h1>FOODMED</h1>
+        <h1>FOODMED</h1>
       </div>
-      <h1>Welcome back Michael</h1>
+
+      <h1>Welcome back {userName || '!'}</h1>
+
+      {/* Show error message if any */}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+
       <form className='signin-container' onSubmit={handleSubmit}>
         <input
           type="email"
@@ -72,11 +77,14 @@ function Signin() {
           required
         />
 
-        <button>Log in</button>
+        <button type="submit" disabled={status === 'logging'}>
+          {status === 'logging' ? 'Logging in...' : 'Log in'}
+        </button>
       </form>
+
       <div className="forgot-password">
         <Link to='/forgot-password'>Forgot password?</Link>
-        <p>Not Michael<span>Switch account</span></p>
+        <p>Not {userName}? <span>Switch account</span></p>
       </div>
     </div>
   )
