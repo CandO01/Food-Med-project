@@ -34,7 +34,7 @@ function VerifyOTP({ email: propEmail, onVerified }) {
     setResendMsg(null)
 
     try {
-      const res = await fetch('http://localhost:5223/verify-otp', {
+      const res = await fetch('https://foodmed-server.onrender.com/verify-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, otp: fullOtp })
