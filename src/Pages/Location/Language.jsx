@@ -18,10 +18,10 @@ function Language() {
 
   return (
     <div className='language-container'>
-      <h1>Select preferred language</h1>
-
+      <h1 style={{fontSize: 25, marginBottom: 0}}>WELCOME TO FOODMED</h1>
+      <p style={{fontSize: 22, fontWeight: 500}}>Please select preferred language</p>
       <div className="english-language">
-        <label htmlFor="english">English</label>
+        <label htmlFor="english" style={{fontSize: 20}}>English</label>
         <input 
           type="radio" 
           name="language"
@@ -32,7 +32,7 @@ function Language() {
       </div>
 
       <div className="pidgin-language">
-        <label htmlFor="pidgin">Pidgin</label>
+        <label htmlFor="pidgin" style={{fontSize: 20}}>Pidgin</label>
         <input 
           type="radio" 
           name="language"
