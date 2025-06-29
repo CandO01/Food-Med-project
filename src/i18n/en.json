@@ -62,5 +62,8 @@
       "message": "CONGRATULATIONS!!!",
       "nextPage": "Now continue",
       "account":"New account has been created"
+  },
+  "terms": {
+    "header":"Terms and Conditions for FoodMed Application"
   }
 }
