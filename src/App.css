@@ -20,7 +20,11 @@ padding: 0;
 }
 .signup-form, 
 .signin-container,
-.reset-form {
+.reset-form,
+.welcome-message,
+.location-container,
+.language-container,
+.congratulations-container {
   padding-inline: 27px;
 }
 .heading-one{
@@ -31,7 +35,10 @@ padding: 0;
 }
 .signup-container,
 .signin-container,
-.reset-form{
+.reset-form,
+.location-container,
+.language-container,
+.congratulations-container{
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -86,7 +93,11 @@ padding: 0;
 .signup-container > button,
 .signin-container > button,
 .forget-password-container form > button,
-.reset-form > button{
+.reset-form > button,
+.welcome-message > button,
+.location-container > button,
+.language-container > button,
+.congratulations-container > button {
   background-color: #FFA500;
   border: none;
   width: 100%;
@@ -96,6 +107,24 @@ padding: 0;
   font-size: 1.25rem;
   font-weight: 700;
   cursor: pointer;
+}
+/* WELCOME MESSAGE */
+.welcome-message, 
+.congratulations-container,
+.language-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+.welcome-message p{
+  margin-top: 0;
+  text-align: center;
+  line-height: 1.5;
+  font-size: 1.5rem;
+  margin-bottom: 5.6rem;
+  font-weight: 500;
 }
 .signin-container > button{
   margin-bottom: 20px;
@@ -241,6 +270,53 @@ padding: 0;
   font-size: 13px;
 }
 
+/* MAP LOCATION */
+.search-field {
+  display: flex;
+  align-items: center;
+  height: 57px;
+  background-color: #D9D9D9;
+  border-radius: 50px;
+  padding:  0 8px;
+}
+.search-field .icon{
+  font-size: 30px;
+}
+
+.search-field input {
+  padding: 8px;
+  width: 100%;
+  background: transparent;
+  font-size: 1.5rem;
+  border: none;
+  outline: none;
+}
+.search-field input::placeholder{
+  font-size: 1.2rem;
+}
+
+.map-placeholder {
+  width: 100%;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+}
+/* LANGUAGE */
+.language-container h1{
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+.language-container label{
+  font-size: 1.5rem;
+}
+.english-language,
+.pidgin-language{
+  display: flex;
+  gap: 30px;
+  align-items: center;
+}
+input[type="radio"] {
+  transform: scale(1.5);
+}
 
 /* FOOTER */
 footer{

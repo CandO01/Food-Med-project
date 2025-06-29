@@ -1,0 +1,69 @@
+{
+  "home": {
+    "hi": "How far",
+    "description": "Abeg show us where you dey so we fit show you nearby places and people wey wan share with you.",
+    "button": "Make we go"
+  },
+    "language": {
+    "select": "Choose your language",
+    "english": "English",
+    "pidgin": "Pidgin",
+    "next": "Next"
+  },
+  "signup": {
+    "heading": "Create account with FoodMed",
+    "fullName": "Full name",
+    "email": "Email",
+    "password": "Password",
+    "confirm": "Confirm password",
+    "haveAccount": "You don get account?",
+    "login": "Log in",
+    "terms": "If you register, na say you gree to our terms and condition.",
+    "learnMore": "Learn more.",
+    "signup": "Sign Up",
+    "signingUp": "We dey sign you up...",
+    "success": "Tuale! You don sign up well. We go carry you go login soon.",
+    "failed": "Wetin happen? Try sign up again."
+    
+  },
+  "signin": {
+    "welcomeBack": "Welcome back",
+    "email": "Enter your email",
+    "password": "Enter your password",
+    "login": "Log in",
+    "loggingIn": "We dey log you in...",
+    "forgotPassword": "You forget password?",
+    "switchAccount": "No be you? Change account"
+  },
+   "resetPassword": {
+    "newPassword": "New Password",
+    "confirmPassword": "Confirm Password",
+    "continue": "Continue",
+    "error": "We no fit reset your password",
+    "success": "Password don change. Carry go!"
+  },
+    "verifyOtp": {
+    "infoText": "We don send OTP go your email. Put the OTP here:",
+    "resend": "Send OTP again",
+    "verify": "Verify am",
+    "otpResent": "OTP don send again wella",
+    "error": "Wetin be dis? OTP no correct."
+  },
+  "forgotPassword": {
+    "placeholder": "Put your email here",
+    "reset": "Reset",
+    "createAccount": "You no get account? Oya create one"
+  },
+  "location": {
+    "heading": "Set where you dey",
+    "searchPlaceholder": "Type am here",
+    "setLocationBtn": "Set your place"
+  },
+  "congrats": {
+      "message": "CONGRATS OOO!!!",
+      "nextPage": "Oya press continue"
+  }
+}
+
+
+

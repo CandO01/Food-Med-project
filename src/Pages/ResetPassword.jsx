@@ -2,11 +2,14 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { IoArrowBack } from "react-icons/io5";
+import { useTranslation } from 'react-i18next';
+
 function ResetPassword() {
   const [form, setForm] = useState({ password: '', confirm: '' })
   const [error, setError] = useState('')
   const [message, setMessage] = useState('')
   const navigate = useNavigate()
+  const { t } = useTranslation()
 
   const email = sessionStorage.getItem('resetEmail') // ✅ Load email
 
@@ -69,7 +72,7 @@ function ResetPassword() {
         placeholder="Confirm Password"
         required
         />
-      <button type="submit">Continue</button>
+      <button type="submit" onClick={()=>navigate('/home')}>Continue</button>
       {message && <p style={{ color: 'green' }}>{message}</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}
     </form>

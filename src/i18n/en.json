@@ -1,0 +1,65 @@
+{
+  "home": {
+    "hi": "Hi",
+    "description": "We need to know your location so we can show nearby listings and how many others are waiting to share with you.",
+    "button": "Let's go"
+  },
+  "language": {
+    "select": "Select preferred language",
+    "english": "English",
+    "pidgin": "Pidgin",
+    "next": "Next"
+  },
+  "signup": {
+    "heading": "Create an account with FoodMed",
+    "fullName": "Full name",
+    "email": "Email",
+    "password": "Password",
+    "confirm": "Confirm password",
+    "haveAccount": "Have an account?",
+    "login": "Log in",
+    "terms": "By registering, you agree to all terms and conditions.",
+    "learnMore": "Learn more.",
+    "signup": "Sign Up",
+    "signingUp": "Signing up...",
+    "success": "Thank you for signing up successfully! Redirecting you to the login section",
+    "failed": "Signup failed"
+  },
+  "signin": {
+    "welcomeBack": "Welcome back!",
+    "email": "Enter email",
+    "password": "Enter password",
+    "login": "Log in",
+    "loggingIn": "Logging in...",
+    "forgotPassword": "Forgot password?",
+    "switchAccount": "Switch account"
+  },
+  "resetPassword": {
+    "newPassword": "New Password",
+    "confirmPassword": "Confirm Password",
+    "continue": "Continue",
+    "error": "Your password has been reset",
+    "success": "Password changed! Let's go"
+  },
+  "verifyOtp": {
+    "infoText": "An OTP has been sent to your email. Please input the OTP:",
+    "resend": "Resend OTP",
+    "verify": "Verify",
+    "otpResent": "OTP resent successfully",
+    "error": "WIncorrect OTP"
+  },
+  "forgotPassword": {
+    "placeholder": "Enter your email address",
+    "reset": "Reset",
+    "createAccount": "Create a new account"
+  },
+    "location": {
+    "heading": "Set your location",
+    "searchPlaceholder": "Search here",
+    "setLocationBtn": "Set home location"
+  },
+  "congrats": {
+      "message": "CONGRATULATIONS!!!",
+      "nextPage": "Now continue"
+  }
+}

@@ -1,12 +1,14 @@
 // ForgotPassword.jsx
 import React, { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 function ForgotPassword() {
   const [forgot, setForgot] = useState({ email: '' })
   const [error, setError] = useState('')
   const [message, setMessage] = useState('')
   const navigate = useNavigate()
+  const { t } = useTranslation();
 
   function handlePassword(e) {
     const { name, value } = e.target
@@ -47,14 +49,14 @@ function ForgotPassword() {
         name="email"
         value={forgot.email}
         onChange={handlePassword}
-        placeholder="Enter your email address"
+        placeholder={t('forgotPassword.placeholder')}
         required
         />
-      <button type="submit">Reset</button>
+      <button type="submit">{t('forgotPassword.reset')}</button>
       {message && <p style={{ color: 'green' }}>{message}</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}
     </form>
-    <Link className='create' to='/signup'>Create a new account</Link>
+    <Link className='create' to='/signup'>{t('forgotPassword.createAccount')}</Link>
   </div>
   )
 }

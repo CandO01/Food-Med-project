@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import Confetti from 'react-confetti'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 function Signup() {
   const [form, setForm] = useState({
     name: '',
@@ -15,6 +16,7 @@ function Signup() {
   const [error, setError] = useState(null)
   const [success, setSuccess] = useState(false)
   const navigate = useNavigate()
+  const { t } = useTranslation()
 
   function handleChange(e) {
     const { name, value } = e.target
@@ -49,7 +51,7 @@ function Signup() {
     // Delay 3 seconds before redirecting
       setTimeout(() => {
         navigate('/login')
-      }, 3000)
+      }, 4500)
      
     } catch (err) {
       setError(err.message)
@@ -57,9 +59,9 @@ function Signup() {
     }
   }
 
-  return (
+ return (
     <div className="signup-form">
-      <h1 className='heading-one'>Create an account with FoodMed</h1>
+      <h1 className='heading-one'>{t('signup.heading')}</h1>
 
       {success && <Confetti />}
       {message && <p style={{ color: 'green' }}>{message}</p>}
@@ -69,44 +71,46 @@ function Signup() {
         <input
           type="text"
           name="name"
-          placeholder="Full name"
+          placeholder={t('signup.fullName')}
           onChange={handleChange}
           value={form.name}
           required
         />
-
         <input
           type="email"
           name="email"
-          placeholder="Email"
+          placeholder={t('signup.email')}
           onChange={handleChange}
           value={form.email}
           required
         />
-
         <input
           type="password"
           name="password"
-          placeholder="Password"
+          placeholder={t('signup.password')}
           onChange={handleChange}
           value={form.password}
           required
         />
-
         <input
           type="password"
           name="confirm"
-          placeholder="Confirm password"
+          placeholder={t('signup.confirm')}
           onChange={handleChange}
           value={form.confirm}
           required
         />
+
         <p className='have-account'>
-          Have an account? <Link to="/login">Log in</Link>
+          {t('signup.haveAccount')}<Link to="/login">{t('signup.login')}</Link>
         </p>
-        <p className='terms-and-condi'>By registering, you agree to all terms and conditions. <span style={{fontWeight: 700}}>Learn more.</span></p>
+
+        <p className='terms-and-condi'>
+          {t('signup.terms')} <span style={{fontWeight: 700}}>{t('signup.learnMore')}</span>
+        </p>
+
         <button type="submit" disabled={status === 'signing-up'}>
-            {status === 'signing-up' ? 'Signing up...' : 'Sign Up'}
+          {status === 'signing-up' ? t('signup.signingUp') : t('signup.signup')}
         </button>
       </form>
     </div>

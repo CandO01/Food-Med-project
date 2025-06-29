@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { AuthContext } from '../AuthenticationContext/Authcontext'
 import foodmedImg from '../assets/foodmed1.png'
+import { useTranslation } from 'react-i18next'
 
 function Signin() {
   const [loginForm, setLoginForm] = useState({ email: '', password: '' })
@@ -10,6 +11,8 @@ function Signin() {
   const [userName, setUserName] = useState('')
   const { login } = React.useContext(AuthContext)
   const navigate = useNavigate()
+  const { t } = useTranslation()
+  const names = userName || 'Guest'
 
   // Load saved username from localStorage if available
   useEffect(() => {
@@ -63,7 +66,7 @@ function Signin() {
         <h1>FOODMED</h1>
       </div>
 
-      <h1>Welcome back {userName || '!'}</h1>
+      <h1>{t('signin.welcomeBack')} {names}</h1>
 
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
@@ -71,7 +74,7 @@ function Signin() {
         <input
           type="email"
           name="email"
-          placeholder="Enter email"
+          placeholder={t('signin.email')}
           onChange={handleChange}
           value={loginForm.email}
           required
@@ -80,20 +83,21 @@ function Signin() {
         <input
           type="password"
           name="password"
-          placeholder="Enter password"
+          placeholder={t('signin.password')}
           onChange={handleChange}
           value={loginForm.password}
           required
         />
 
         <button type="submit" disabled={status === 'logging'}>
-          {status === 'logging' ? 'Logging in...' : 'Log in'}
+          {status === 'logging' ? t('signin.loggingIn') : t('signin.login')}
         </button>
       </form>
 
       <div className="forgot-password">
-        <Link to='/forgot-password'>Forgot password?</Link>
-        <p>Not {userName || 'you'}? <Link to='/signup'>Switch account</Link></p>
+        <Link to='/forgot-password'>{t('signin.forgotPassword')}</Link>
+
+        <p><Link to='/signup'>{t('signin.switchAccount')}</Link></p>
       </div>
     </div>
   )

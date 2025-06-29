@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { IoArrowBack } from "react-icons/io5";
+import { useTranslation } from 'react-i18next';
 
 function VerifyOTP({ email: propEmail, onVerified }) {
   const [otp, setOtp] = useState(['', '', '', '', '', ''])
@@ -8,6 +9,7 @@ function VerifyOTP({ email: propEmail, onVerified }) {
   const [resendMsg, setResendMsg] = useState(null)
   const inputsRef = useRef([])
   const navigate = useNavigate()
+  const { t } = useTranslation()
 
   const email = propEmail || sessionStorage.getItem('resetEmail')
 
@@ -80,7 +82,7 @@ function VerifyOTP({ email: propEmail, onVerified }) {
       <Link className='cancel-otp' to='/reset-password'>X</Link>
     </div>
     <form onSubmit={handleSubmit} className="verify-form">
-      <p className="info-text">An OTP has been sent to your email. Please input the OTP:</p>
+      <p className="info-text">{t('verifyOtp.infoText')}</p>
 
       <div className="otp-boxes">
         {otp.map((digit, idx) => (
@@ -96,9 +98,9 @@ function VerifyOTP({ email: propEmail, onVerified }) {
         ))}
       </div>
 
-      <p className="resend" onClick={resendOTP}>Resend OTP</p>
+      <p className="resend" onClick={resendOTP}>{t('verifyOtp.resend')}</p>
 
-      <button className="verify-btn" type="submit">Verify</button>
+      <button className="verify-btn" type="submit">{t('verifyOtp.verify')}</button>
 
       {resendMsg && <p className="info-text" style={{ color: 'green' }}>{resendMsg}</p>}
       {error && <p className="error-text">{error}</p>}
