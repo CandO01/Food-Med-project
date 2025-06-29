@@ -60,6 +60,7 @@
   },
   "congrats": {
       "message": "CONGRATULATIONS!!!",
-      "nextPage": "Now continue"
+      "nextPage": "Now continue",
+      "account":"New account has been created"
   }
 }

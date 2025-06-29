@@ -61,7 +61,8 @@
   },
   "congrats": {
       "message": "CONGRATS OOO!!!",
-      "nextPage": "Oya press continue"
+      "nextPage": "Oya press continue",
+      "account":"Confirm we don create new account for you"
   }
 }
 

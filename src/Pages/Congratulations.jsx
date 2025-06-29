@@ -12,6 +12,7 @@ function Congratulations() {
       <Confetti />
       <div className='congratulations-container'>
         <h1>{t('congrats.message')}</h1>
+        <p style={{marginTop: 0, fontSize: 18, color: 'green', fontWeight: 700}}>{t('congrats.account')}</p>
         <button type='click' onClick={()=> navigate('/landing-page')}>{t('congrats.nextPage')}</button>
       </div>
     </>
