@@ -38,7 +38,9 @@ padding: 0;
 .reset-form,
 .location-container,
 .language-container,
-.congratulations-container{
+.congratulations-container,
+.new-password-container,
+.verify-container{
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -46,7 +48,9 @@ padding: 0;
   gap: 20px;
 }
 .language-container,
-.location-container{
+.location-container,
+.new-password-container,
+.verify-container{
   margin: auto;
 }
 .signup-container > input{

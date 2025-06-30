@@ -50,7 +50,7 @@ function ResetPassword() {
   }
 
   return (
-    <>
+    <div className='new-password-container'>
     <div className="icon">
       <Link to='/verify-otp'><IoArrowBack className='arrow-back' /></Link>
       <Link className='cancel-otp' to='/forgot-password'>X</Link>
@@ -76,7 +76,7 @@ function ResetPassword() {
       {message && <p style={{ color: 'green' }}>{message}</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}
     </form>
-  </>
+  </div>
 
   )
 }

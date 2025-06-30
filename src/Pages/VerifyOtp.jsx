@@ -76,7 +76,7 @@ function VerifyOTP({ email: propEmail, onVerified }) {
   }
 
   return (
-    <>
+    <div className='verify-container'>
     <div className="icon">
       <Link to='/forgot-password'><IoArrowBack className='arrow-back' /></Link>
       <Link className='cancel-otp' to='/reset-password'>X</Link>
@@ -105,7 +105,7 @@ function VerifyOTP({ email: propEmail, onVerified }) {
       {resendMsg && <p className="info-text" style={{ color: 'green' }}>{resendMsg}</p>}
       {error && <p className="error-text">{error}</p>}
     </form>
-  </>
+  </div>
   )
 }
 
