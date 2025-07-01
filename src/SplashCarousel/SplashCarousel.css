@@ -1,0 +1,70 @@
+.carousel-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+  background: white;
+  padding: 1rem;
+}
+
+.carousel-page {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.logo {
+  width: 120px;
+  margin-bottom: 1rem;
+}
+
+.get-started-btn {
+  background-color: #FFA500;
+  border: none;
+  width: 100%;
+  border-radius: 57px;
+  height: 57px;
+  margin-top: 22px;
+  font-size: 1.25rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.skip-btn {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  background: none;
+  border: 1px solid #FFA500;
+  background-color: #FFA500;
+  color: black;
+  padding: 8px 14px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+
+.carousel-indicators {
+  display: flex;
+  gap: 10px;
+  margin: 1rem 0;
+}
+
+.dot {
+  height: 12px;
+  width: 40px;
+  background-color:whitesmoke;
+  border-radius: 15px;
+  border: none;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.dot.active {
+  background-color: #FFA500;
+}

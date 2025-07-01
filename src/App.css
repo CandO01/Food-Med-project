@@ -25,7 +25,7 @@ padding: 0;
 .location-container,
 .language-container,
 .congratulations-container {
-  padding-inline: 27px;
+  padding-inline: 1.687rem;
 }
 .heading-one{
   font-size: 1.5rem;

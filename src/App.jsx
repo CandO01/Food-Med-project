@@ -13,13 +13,15 @@ import Location from './Pages/Location/Location'
 import Language from './Pages/Location/Language'
 import Congratulations from './Pages/Congratulations'
 import GeneralHomePage from './Food & Med Page/GeneralHomePage'
+import SplashCarousel from './SplashCarousel/SplashCarousel'
 
 function App() {
   return (
       <Routes>
         <Route path='/' element={<Layouts />}>
+        <Route index element={<SplashCarousel />} />
           {/* Show language screen first */}
-          <Route index element={<Language />} />
+          <Route path='language' element={<Language />} />
 
           {/* Auth routes */}
           <Route path='signup' element={<Signup />} />
