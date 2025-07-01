@@ -1,3 +1,4 @@
+
 .carousel-container {
   position: relative;
   display: flex;
@@ -35,7 +36,7 @@
 }
 .skip-btn {
   position: absolute;
-  bottom: 20px;
+  bottom: 40px;
   left: 20px;
   background: none;
   border: 1px solid #FFA500;
@@ -56,15 +57,44 @@
 }
 
 .dot {
-  height: 12px;
+  height: 6px;
   width: 40px;
   background-color:whitesmoke;
   border-radius: 15px;
   border: none;
   display: inline-block;
   cursor: pointer;
+  margin-bottom: 30px;
 }
 
 .dot.active {
   background-color: #FFA500;
 }
+/* Background image */
+.bg-page {
+  height: 100%;
+  width: 100%;
+  padding: 2rem;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  background-size: cover;
+  background-position: center;
+}
+
+/* Custom backgrounds */
+.bg2 {
+  background-image: url('../assets/bg2.png');
+}
+
+.bg3 {
+  background-image: url('../assets/bg3.png');
+}
+
+.bg4 {
+  background-image: url('../assets/bg4.png');
+}
+
