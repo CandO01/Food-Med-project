@@ -1,0 +1,341 @@
+/* App.css */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f7f9fc;
+  color: #333;
+}
+
+.container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.header {
+  text-align: center;
+  background-color: #0052cc;
+  color: white;
+  padding: 1.5rem 0;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+}
+
+.featured-section,
+.categories-section,
+.top-rated-section {
+  margin-bottom: 2rem;
+}
+
+h3 {
+  margin-bottom: 1rem;
+  color: #0052cc;
+}
+
+.doctor-card {
+  background: white;
+  border: 1px solid #e0e0e0;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+  text-align: center;
+}
+
+.doctor-card button {
+  margin-top: 0.5rem;
+  background-color: #0052cc;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.doctor-card button:hover {
+  background-color: #003d99;
+}
+
+.categories {
+  /* App.css */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: #f7f9fc;
+  color: #333;
+}
+
+.app {
+  max-width: 800px;
+  margin: auto;
+  padding: 2rem;
+}
+
+.header {
+  text-align: center;
+  background: #0052cc;
+  color: #fff;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+/* DoctorProfile.css */
+.profile-card {
+  background: #fff;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  margin-top: 2rem;
+}
+
+.profile-header h2 {
+  margin: 0;
+}
+
+.specialty {
+  color: #0052cc;
+  margin-top: 0.25rem;
+}
+
+/* StatsCard.css */
+.stats-container {
+  display: flex;
+  justify-content: space-between;
+  margin: 1rem 0;
+}
+
+.stat {
+  text-align: center;
+}
+
+.value {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.label {
+  display: block;
+  color: #666;
+  margin-top: 0.25rem;
+}
+
+/* AskQuestion.css */
+.ask-question {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem 0;
+}
+
+.ask-question textarea {
+  resize: vertical;
+  min-height: 80px;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.ask-question button {
+  align-self: flex-end;
+  margin-top: 0.5rem;
+  background: #0052cc;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* /* App.css */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: #f7f9fc;
+  color: #333;
+}
+
+.app {
+  max-width: 800px;
+  margin: auto;
+  padding: 2rem;
+}
+
+.header {
+  text-align: center;
+  background: #0052cc;
+  color: #fff;
+  padding: 1rem;
+  border-radius: 8px;
+}
+
+
+
+/* StatsCard.css */
+.stats-container {
+  display: flex;
+  justify-content: space-between;
+  margin: 1rem 0;
+}
+
+.stat {
+  text-align: center;
+}
+
+.value {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.label {
+  display: block;
+  color: #666;
+  margin-top: 0.25rem;
+}
+
+/* index.css */
+.ask-question {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem 0;
+}
+
+.ask-question textarea {
+  resize: vertical;
+  min-height: 80px;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.ask-question button {
+  align-self: flex-end;
+  margin-top: 0.5rem;
+  background: #0052cc;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* index.css */
+.overview h3 {
+  color: #0052cc;
+  margin-bottom: 0.5rem;
+}
+
+.overview p {
+  line-height: 1.6;
+} */
+.overview h3 {
+  color: #0052cc;
+  margin-bottom: 0.5rem;
+}
+
+.overview p {
+  line-height: 1.6;
+}
+/* App.css */
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background: #f1f3f5;
+}
+
+/* ChatPage.css */
+.chat-container {
+  max-width: 480px;
+  height: 100vh;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+}
+
+/* ChatHeader.css */
+.chat-header {
+  padding: 1rem;
+  background: #0052cc;
+  color: #fff;
+  text-align: center;
+}
+
+/* MessageList.css */
+.message-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+}
+.typing-indicator {
+  font-style: italic;
+  color: #666;
+  margin: 0.5rem 0;
+}
+
+/* Message.css */
+.message {
+  display: flex;
+  margin-bottom: 0.75rem;
+  align-items: flex-end;
+}
+.message.doctor { justify-content: flex-start; }
+.message.user   { justify-content: flex-end; }
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  margin: 0 0.5rem;
+  font-size: 1.5rem;
+}
+.user-avatar { order: 2; }
+
+.bubble {
+  max-width: 70%;
+  background: #e6f0ff;
+  padding: 0.6rem;
+  border-radius: 12px;
+  position: relative;
+}
+.message.user .bubble {
+  background: #0052cc;
+  color: #fff;
+}
+
+.timestamp {
+  display: block;
+  font-size: 0.65rem;
+  color: #555;
+  margin-top: 0.3rem;
+}
+
+/* ChatInput.css */
+.chat-input {
+  display: flex;
+  border-top: 1px solid #ddd;
+}
+.chat-input input {
+  flex: 1;
+  border: none;
+  padding: 0.75rem;
+}
+.chat-input input:focus { outline: none; }
+.chat-input button {
+  border: none;
+  background: #0052cc;
+  color: #fff;
+  padding: 0 1rem;
+  cursor: pointer;
+}
+/* App.css */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: #f7f9fc;
+  color: #333;
+}
+
+.app {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+}

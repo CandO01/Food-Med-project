@@ -1,0 +1,136 @@
+/* ProfilePage.css */
+.profile-page {
+  width: 100%;
+  max-width: 400px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  overflow: hidden;
+}
+/* ProfileHeader.css */
+.profile-header {
+  display: flex;
+  align-items: center;
+  padding: 1.5rem;
+  background: #0052cc;
+  color: white;
+}
+
+.avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 1rem;
+}
+
+.info h2 {
+  margin: 0;
+}
+
+.specialty {
+  margin: 0.25rem 0;
+  font-style: italic;
+}
+
+.rating {
+  margin: 0;
+}/* ProfileHeader.css */
+.profile-header {
+  display: flex;
+  align-items: center;
+  padding: 1.5rem;
+  background: #0052cc;
+  color: white;
+}
+
+.avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 1rem;
+}
+
+.info h2 {
+  margin: 0;
+}
+
+.specialty {
+  margin: 0.25rem 0;
+  font-style: italic;
+}
+
+.rating {
+  margin: 0;
+}
+/* ContactIcons.css */
+.contact-icons {
+  display: flex;
+  justify-content: space-around;
+  padding: 1rem;
+  background: #e6f0ff;
+}
+
+.contact-icons svg {
+  font-size: 1.25rem;
+  color: #0052cc;
+  cursor: pointer;
+}
+/* AboutSection.css */
+.about-section {
+  padding: 1rem 1.5rem;
+}
+
+.about-section h3 {
+  margin-bottom: 0.5rem;
+  color: #0052cc;
+}
+
+.about-section p {
+  line-height: 1.5;
+  margin: 0;
+}
+/* WorkingTime.css */
+.working-time {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #f0f0f0;
+}
+
+.working-time h4 {
+  margin: 0 0 0.5rem 0;
+  color: #0052cc;
+}
+
+.working-time p {
+  margin: 0;
+}
+/* Schedule.css */
+.schedule {
+  padding: 1rem 1.5rem 1.5rem;
+  border-top: 1px solid #f0f0f0;
+}
+
+.schedule h4 {
+  margin: 0 0 0.5rem 0;
+  color: #0052cc;
+}
+
+.month {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.dates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.date {
+  background: #e6f0ff;
+  padding: 0.5rem;
+  border-radius: 4px;
+  flex: 1 0 30%;
+  text-align: center;
+}
