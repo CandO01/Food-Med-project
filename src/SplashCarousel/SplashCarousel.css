@@ -36,8 +36,8 @@
 }
 .skip-btn {
   position: absolute;
-  bottom: 40px;
-  left: 20px;
+  top: 40px;
+  right: 20px;
   background: none;
   border: 1px solid #FFA500;
   background-color: #FFA500;

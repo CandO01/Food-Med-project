@@ -14,6 +14,8 @@ import Language from './Pages/Location/Language'
 import Congratulations from './Pages/Congratulations'
 import GeneralHomePage from './Food & Med Page/GeneralHomePage'
 import SplashCarousel from './SplashCarousel/SplashCarousel'
+import FoodForms from './components/FoodForm/FoodForms'
+import FoodSubmissionDashboard from './components/FoodSubmissionDashboard'
 
 function App() {
   return (
@@ -35,6 +37,10 @@ function App() {
           <Route path='location' element={<Location />} />
           <Route path='congratulations' element={<Congratulations />} />
           <Route path='landing-page' element={<GeneralHomePage />} />
+
+          {/* Food Form */}
+          <Route path='food-form' element={<FoodForms />} />
+          <Route path='food-dashboard' element={<FoodSubmissionDashboard />} />
         </Route>
       </Routes>
   )
