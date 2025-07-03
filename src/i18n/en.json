@@ -44,14 +44,15 @@
   "verifyOtp": {
     "infoText": "An OTP has been sent to your email. Please input the OTP:",
     "resend": "Resend OTP",
-    "verify": "Verify",
+    "verify": "Verify and proceed",
     "otpResent": "OTP resent successfully",
     "error": "WIncorrect OTP"
   },
   "forgotPassword": {
     "placeholder": "Enter your email address",
     "reset": "Reset",
-    "createAccount": "Create a new account"
+    "createAccount": "Create a new account",
+    "text": "Enter the email address associated with your account."
   },
     "location": {
     "heading": "Set your location",

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { FaBell } from 'react-icons/fa';
 import notificationSound from '../assets/notification.mp3.mp3'; 
@@ -12,7 +12,7 @@ const SubmissionsDashboard = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [hasNewNotification, setHasNewNotification] = useState(false);
 
-  const audioRef = React.useRef(null);
+  const audioRef = useRef(null);
 
   useEffect(() => {
     fetch('https://foodmed-server2.onrender.com/submissions')
@@ -27,18 +27,67 @@ const SubmissionsDashboard = () => {
       });
   }, []);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetch('https://foodmed-server2.onrender.com/requests')
+        .then(res => res.json())
+        .then(data => {
+          const confirmed = data.filter(req => req.status === 'confirmed')
+          if (confirmed.length > 0) {
+            setNotifications(prev => {
+              const newNotifs = confirmed
+                .filter(c => !prev.find(p => p.id === c.id))
+                .map(c => ({
+                  id: c.id,
+                  message: `✅ Request for ${c.foodName} has been confirmed.`,
+                  type: 'confirmed'
+                }))
+              if (newNotifs.length > 0) {
+                setHasNewNotification(true);
+                return [...prev, ...newNotifs];
+              }
+              return prev;
+            })
+          }
+        })
+        .catch(err => console.error('📡 Error checking confirmations:', err))
+    }, 10000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   const handleRequest = async (item) => {
+    const userEmail = prompt("Enter your email:");
+    const userPhone = prompt("Enter your phone number (with +234...):");
+
+    if (!userEmail || !userPhone) {
+      alert("Email and phone number are required to place a request.");
+      return;
+    }
+
     const response = await fetch('https://foodmed-server2.onrender.com/request', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ itemId: item.id, foodName: item.foodName })
+      body: JSON.stringify({
+        itemId: item.id,
+        foodName: item.foodName,
+        email: userEmail,
+        phone: userPhone
+      })
     });
+
     const result = await response.json();
     alert(result.message);
+
     if (audioRef.current) {
       audioRef.current.play();
     }
-    setNotifications(prev => [...prev, { message: `Request sent for ${item.foodName}` }]);
+
+    setNotifications(prev => [...prev, {
+      id: Date.now(),
+      message: `Request sent for ${item.foodName}`,
+      type: 'request'
+    }]);
     setHasNewNotification(true);
   };
 
@@ -68,7 +117,14 @@ const SubmissionsDashboard = () => {
           onClick={toggleNotifications}
         >
           <FaBell size={24} color="orange" />
-          {hasNewNotification && <span style={styles.dot} />}
+          {hasNewNotification && (
+            <span
+              style={{
+                ...styles.dot,
+                background: notifications.some(n => n.type === 'confirmed') ? 'green' : 'red'
+              }}
+            />
+          )}
         </motion.div>
       </div>
 
@@ -77,7 +133,7 @@ const SubmissionsDashboard = () => {
           <h4>Notifications</h4>
           <ul>
             {notifications.map((n, i) => (
-              <li key={i}>{n.message}</li>
+              <li key={i} style={{ color: n.type === 'confirmed' ? 'green' : 'black' }}>{n.message}</li>
             ))}
           </ul>
           <button style={styles.closeBtn} onClick={toggleNotifications}>Close</button>
@@ -102,16 +158,13 @@ const SubmissionsDashboard = () => {
             transition={{ duration: 0.3 }}
             onClick={() => setSelectedItem(item)}
           >
-          {item.imageUrl?.startsWith('/uploads/') && (
-            <img
-              src={`https://foodmed-server2.onrender.com${item.imageUrl}`}
-              alt={item.foodName}
-              style={styles.image}
-              onError={() => console.log('❌ Image failed to load:', item.imageUrl)}
-            />
-          )}
-
-
+            {item.imageUrl?.startsWith('/uploads/') && (
+              <img
+                src={`https://foodmed-server2.onrender.com${item.imageUrl}`}
+                alt={item.foodName}
+                style={styles.image}
+              />
+            )}
             <h3>{item.foodName}</h3>
             <p>{item.description}</p>
             <button onClick={(e) => { e.stopPropagation(); handleRequest(item); }} style={styles.requestBtn}>Request</button>
@@ -147,11 +200,12 @@ const SubmissionsDashboard = () => {
 
 const styles = {
   dashboard: {
-    padding: '2rem',
+    padding: '1.2rem',
     background: '#1a1a1a',
     minHeight: '100vh',
     color: 'white',
-    position: 'relative'
+    position: 'relative',
+    marginBottom: '3.0rem',
   },
   topBar: {
     display: 'flex',
@@ -198,7 +252,7 @@ const styles = {
   },
   grid: {
     display: 'grid',
-    gap: '1.5rem',
+    gap: '0.5rem',
     gridTemplateColumns: 'repeat(2, 1fr)',
   },
   card: {
@@ -211,15 +265,15 @@ const styles = {
     boxShadow: '0 0 10px rgba(0,0,0,0.1)',
   },
   image: {
-    width: '100%',
-    height: 150,
+    width: '50%',
+    height: 90,
     objectFit: 'cover',
     borderRadius: '8px',
     marginBottom: '1rem',
   },
   requestBtn: {
     marginTop: '0.5rem',
-    padding: '0.5rem 1rem',
+    padding: '0.5rem 1.5rem',
     background: 'orange',
     color: 'white',
     border: 'none',
@@ -267,6 +321,8 @@ const styles = {
 };
 
 export default SubmissionsDashboard;
+
+
 
 
 

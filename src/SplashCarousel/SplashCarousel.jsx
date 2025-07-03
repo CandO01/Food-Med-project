@@ -43,7 +43,8 @@ function SplashCarousel() {
           height: '100vh',
           width: '100vw',
           padding: '2rem',
-          color: 'white',
+          color: 'whitesmoke',
+          textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'end',
@@ -67,6 +68,7 @@ function SplashCarousel() {
           width: '100vw',
           padding: '2rem',
           color: 'black',
+          textShadow: '2px 2px 4px rgba(255, 255, 255, 0.5)',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'end',
@@ -107,7 +109,7 @@ function SplashCarousel() {
     if (currentPage < pages.length - 1) {
       intervalRef.current = setInterval(() => {
         setCurrentPage(prevPage => prevPage + 1)
-      }, 3000)
+      }, 6000)
     }
     return () => clearInterval(intervalRef.current)
   }, [currentPage]);

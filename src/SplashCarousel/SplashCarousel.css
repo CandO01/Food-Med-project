@@ -40,8 +40,8 @@
   right: 20px;
   background: none;
   border: 1px solid #FFA500;
-  background-color: #FFA500;
-  color: black;
+  background-color: black;
+  color: whitesmoke;
   padding: 8px 14px;
   font-size: 0.9rem;
   font-weight: 700;
@@ -75,7 +75,7 @@
   height: 100%;
   width: 100%;
   padding: 2rem;
-  color: white;
+  color: black;
   display: flex;
   flex-direction: column;
   justify-content: center;

@@ -66,7 +66,7 @@ function Signin() {
         <h1>FOODMED</h1>
       </div>
 
-      <h1>{t('signin.welcomeBack')} {names}</h1>
+      <h1 style={{color: '#FFA500'}}>{t('signin.welcomeBack')} {names}</h1>
 
       {error && <p style={{ color: 'red' }}>{error}</p>}
 

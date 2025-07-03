@@ -45,14 +45,15 @@
     "verifyOtp": {
     "infoText": "We don send OTP go your email. Put the OTP here:",
     "resend": "Send OTP again",
-    "verify": "Verify am",
+    "verify": "Verify am and continue",
     "otpResent": "OTP don send again wella",
     "error": "Wetin be dis? OTP no correct."
   },
   "forgotPassword": {
     "placeholder": "Put your email here",
     "reset": "Reset",
-    "createAccount": "You no get account? Oya create one"
+    "createAccount": "You no get account? Oya create one",
+    "text": "Enter the email wey you use register."
   },
   "location": {
     "heading": "Set where you dey",

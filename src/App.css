@@ -31,7 +31,7 @@ padding: 0;
   font-size: 1.5rem;
   font-weight: 600;
   line-height: 30px;
-  color: #000000;
+  color: #FFA500;
 }
 .signup-container,
 .signin-container,
@@ -141,7 +141,7 @@ padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #D9D9D9;
+  background-color: #FFA50080;
   height: 300px;
   width: 100%;
   border-bottom-left-radius: 10px;
@@ -176,34 +176,30 @@ padding: 0;
   align-items: center;
   width: 100%;
 }
- .icon{
+ .icons{
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: inherit;
+  padding: 0 1.687rem;
+  margin-top: 30px;
 }
-.icon .arrow-back{
+.icons .arrow-back{
   font-size: 28px;
-  margin-top: 20px;
-  margin-left: 10px;
 }
-.icon .cancel-otp{
-  align-self: flex-end;
-  margin-right: 20px;
-  margin-top: 20px;
+.icons .cancel-otp{
+
   text-decoration: none;
   font-size: 1.687rem;
   color: #000000;
 }
 
+/* FORM STYLES */
 .forget-password-container a{
   font-size: 1.25rem;
    color: #000000;
    text-decoration: none;
    font-weight: 700;
-   align-self: flex-end;
-   margin-right: 20px;
-   margin-top: 20px;
 }
 .forget-password-container .create{
   align-self: center;
@@ -216,6 +212,49 @@ padding: 0;
   width: 350px;
  gap: 20px;
 }
+.form-group {
+  position: relative;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px 10px 10px 35px; /* leave space for icon */
+  font-size: 16px;
+  border: 2px solid #FFA500;
+  border-radius: 10px;
+  outline: none;
+  height: 48px;
+}
+
+.form-group label {
+  position: absolute;
+  top: 12px;
+  left: 35px;
+  color: gray;
+  background-color: white;
+  padding: 0 4px;
+  transition: 0.2s ease;
+  pointer-events: none;
+}
+
+.form-group input:focus + label,
+.form-group label.active {
+  top: -10px;
+  font-size: 12px;
+  color: #FFA500;
+}
+
+.form-group .icon {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  color: #aaa;
+  font-size: 16px;
+}
+
 /* OTP verification */
 
 .verify-form {
@@ -230,6 +269,7 @@ padding: 0;
   font-size: 14px;
   color: #888;
   text-align: center;
+  margin-top: 0;
 }
 
 .otp-boxes {
@@ -276,6 +316,61 @@ padding: 0;
 .error-text {
   color: red;
   font-size: 13px;
+}
+/* RESET PASSWORD */
+.form-group2 {
+  position: relative;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.form-group2 input {
+  width: 100%;
+  padding: 10px 40px 10px 10px;
+  font-size: 16px;
+  border: 2px solid #FFA500;
+  border-radius: 10px;
+  outline: none;
+  height: 48px;
+}
+
+.form-group2 label {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  color: gray;
+  background-color: white;
+  padding: 0 4px;
+  transition: 0.2s ease;
+  pointer-events: none;
+}
+
+.form-group2 input:focus ~ label,
+.form-group2 label.active {
+  top: -10px;
+  font-size: 1.0rem;
+  color: #FFA500;
+}
+
+.form-group2 .toggle-icon {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  font-size: 18px;
+  color: #aaa;
+  cursor: pointer;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.form-group2 .toggle-icon.showing {
+  opacity: 1;
+  transform: translateY(-50%) scale(1);
+}
+
+.form-group2 .toggle-icon.hiding {
+  opacity: 1;
+  transform: translateY(-50%) scale(0.9);
 }
 
 /* MAP LOCATION */

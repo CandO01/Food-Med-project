@@ -1,5 +1,5 @@
 import React from 'react'
-import {  Routes, Route, Navigate } from 'react-router-dom'
+import {  Routes, Route } from 'react-router-dom'
 import './App.css'
 import './i18n/i18n'
 import Layouts from './components/layouts'
@@ -16,6 +16,7 @@ import GeneralHomePage from './Food & Med Page/GeneralHomePage'
 import SplashCarousel from './SplashCarousel/SplashCarousel'
 import FoodForms from './components/FoodForm/FoodForms'
 import FoodSubmissionDashboard from './components/FoodSubmissionDashboard'
+import RequestDashboard from './components/FoodRequestDashboard'
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
           {/* Food Form */}
           <Route path='food-form' element={<FoodForms />} />
           <Route path='food-dashboard' element={<FoodSubmissionDashboard />} />
+          <Route path='admin-dashboard' element={<RequestDashboard />} />
         </Route>
       </Routes>
   )

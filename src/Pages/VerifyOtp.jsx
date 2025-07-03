@@ -77,11 +77,13 @@ function VerifyOTP({ email: propEmail, onVerified }) {
 
   return (
     <div className='verify-container'>
-    <div className="icon">
+    <div className="icons">
       <Link to='/forgot-password'><IoArrowBack className='arrow-back' /></Link>
+      <h2>OTP</h2>
       <Link className='cancel-otp' to='/reset-password'>X</Link>
     </div>
     <form onSubmit={handleSubmit} className="verify-form">
+      <h2 style={{ marginBottom: '0', color: '#FFA500' }}>Get your code</h2>
       <p className="info-text">{t('verifyOtp.infoText')}</p>
 
       <div className="otp-boxes">
