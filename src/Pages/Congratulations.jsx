@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import Confetti from 'react-confetti'
-import successIcon from '../assets/success-icon.png'
+import successIcon from '../assets/check1.gif'
 
 function Congratulations() {
  const [showConfetti, setShowConfetti] = useState(false)

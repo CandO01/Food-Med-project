@@ -9,7 +9,9 @@ const FoodForm = () => {
     quantity: '',
     expiryDate: '',
     location: '',
+    donorEmail: localStorage.getItem('donorEmail') || '',
   });
+
   const [images, setImages] = useState([]);
   const [previews, setPreviews] = useState([]);
   const [unexpiredItems, setUnexpiredItems] = useState([]);
@@ -18,7 +20,12 @@ const FoodForm = () => {
   const navigate = useNavigate();
 
   const handleChange = e => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+
+    if (name === 'donorEmail') {
+      localStorage.setItem('donorEmail', value);
+    }
   };
 
   const handleImageChange = e => {
@@ -27,7 +34,7 @@ const FoodForm = () => {
     setPreviews(files.map(file => URL.createObjectURL(file)));
   };
 
-  const handleDrop = (e) => {
+  const handleDrop = e => {
     e.preventDefault();
     const files = Array.from(e.dataTransfer.files);
     setImages(files);
@@ -48,8 +55,11 @@ const FoodForm = () => {
         body: data,
       });
       const result = await res.json();
+      console.log('Submission result:', result);
       alert(result.message || 'Submitted!');
       fetchUnexpiredItems();
+      const donorEmail = localStorage.getItem("donorEmail");
+      data.append('donorEmail', donorEmail);
     } catch (err) {
       console.error('Error submitting:', err);
       alert('Failed to submit');
@@ -61,7 +71,9 @@ const FoodForm = () => {
       const res = await fetch('https://foodmed-server2.onrender.com/submissions');
       const items = await res.json();
       const now = Date.now();
-      const filtered = items.filter(item => new Date(item.expiryDate).getTime() > now);
+      const filtered = items.filter(
+        item => new Date(item.expiryDate).getTime() > now && item.donorEmail === formData.donorEmail
+      );
       setUnexpiredItems(filtered);
     } catch (err) {
       console.error('Failed to fetch items:', err);
@@ -85,6 +97,10 @@ const FoodForm = () => {
       console.error('Error sending request:', err);
     }
   };
+
+  useEffect(() => {
+    fetchUnexpiredItems();
+  }, [formData.donorEmail]);
 
   useEffect(() => {
     const interval = setInterval(async () => {
@@ -131,60 +147,82 @@ const FoodForm = () => {
         </div>
 
         <input
-          type="text"
-          name="foodName"
-          placeholder="Food Name"
-          value={formData.foodName}
+          type="email"
+          name="donorEmail"
+          placeholder="Your Email"
+          value={formData.donorEmail}
           onChange={handleChange}
           style={styles.input}
           required
         />
-        <input
-          type="text"
-          name="description"
-          placeholder="Description"
-          value={formData.description}
-          onChange={handleChange}
-          style={styles.input}
-          required
+        <input 
+          type="text" 
+          name="foodName" 
+          placeholder="Food Name" 
+          value={formData.foodName} 
+          onChange={handleChange} 
+          style={styles.input} 
+          required 
         />
-        <input
-          type="text"
-          name="quantity"
-          placeholder="Quantity"
-          value={formData.quantity}
-          onChange={handleChange}
-          style={styles.input}
-          required
+        <input 
+          type="text" 
+          name="description" 
+          placeholder="Description" 
+          value={formData.description} 
+          onChange={handleChange} 
+          style={styles.input} 
+          required 
         />
-        <input
-          type="date"
-          name="expiryDate"
-          value={formData.expiryDate}
-          onChange={handleChange}
-          style={styles.input}
-          required
+        <input 
+          type="text" 
+          name="quantity" 
+          placeholder="Quantity" 
+          value={formData.quantity} 
+          onChange={handleChange} 
+          style={styles.input} 
+          required 
         />
-        <input
-          type="text"
-          name="location"
-          placeholder="Confirm Location"
-          value={formData.location}
-          onChange={handleChange}
-          style={styles.input}
-          required
+        <div style={{width: '100%', display: 'flex', flexDirection: 'column'}}> 
+          <input 
+            type="date" 
+            name="expiryDate" 
+            value={formData.expiryDate} 
+            onChange={handleChange} 
+            style={styles.input} 
+            required 
+          />
+          <p style={{marginTop:'-10px', fontSize: '0.8rem', color: '#999'}}>Expiry Date</p>
+        </div>
+        <input 
+          type="text" 
+          name="location" 
+          placeholder="Confirm Location" 
+          value={formData.location} 
+          onChange={handleChange} 
+          style={styles.input} 
+          required 
         />
 
         <button type="submit" style={styles.button}>Submit</button>
       </form>
-        <button onClick={()=>navigate('/food-dashboard')}>Trial button to request</button>
+
       <div style={{ padding: '1rem' }}>
-        <h3>Unexpired Food Items</h3>
-        <ul>
+        <h3>My Unexpired Food Items</h3>
+        <ul style={{ listStyle: 'none', padding: 0 }}>
+          
           {unexpiredItems.map(item => (
-            <li key={item.id}>
-              {item.foodName} (Expires on: {item.expiryDate})
-              <button onClick={() => handleRequest(item)} style={styles.reqBtn}>Request</button>
+            <li key={item.id} style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+              {console.log(item.imageUrl)}
+              <img
+                src={item.imageUrl}
+                alt={item.foodName}
+                style={{ width: '60px', height: '60px', borderRadius: '8px', objectFit: 'cover', border: '1px solid #ccc' }}
+              />
+              <div>
+                <strong>{item.foodName}</strong><br />
+                <small>Expires on: {item.expiryDate}</small><br />
+                <button onClick={() => handleRequest(item)} style={styles.reqBtn}>Request</button>
+              </div>
             </li>
           ))}
         </ul>
@@ -204,83 +242,87 @@ const FoodForm = () => {
 
 const styles = {
   form: {
-    background: '#fff',
-    padding: '1.5rem',
-    borderRadius: '10px',
-    width: '90%',
-    maxWidth: '400px',
-    margin: '2rem auto',
-    display: 'flex',
-    flexDirection: 'column',
+    background: '#fff', 
+    padding: '1.5rem', 
+    borderRadius: '10px', 
+    width: '90%', 
+    maxWidth: '400px', 
+    margin: '2rem auto', 
+    display: 'flex', 
+    flexDirection: 'column', 
     boxShadow: '0 0 10px rgba(0,0,0,0.2)',
   },
   imageBox: {
-    border: '2px dashed orange',
-    borderRadius: '10px',
-    padding: '1rem',
-    marginBottom: '1rem',
-    textAlign: 'center',
+    border: '2px dashed orange', 
+    borderRadius: '10px', 
+    padding: '1rem', 
+    marginBottom: '1rem', 
+    textAlign: 'center', 
     cursor: 'pointer',
   },
   uploadLabel: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    display: 'flex', 
+    flexDirection: 'column', 
+    alignItems: 'center', 
     cursor: 'pointer',
   },
-  hiddenInput: {
-    display: 'none',
+  hiddenInput: { 
+    display: 'none' 
   },
   note: {
-    display: 'block',
-    color: '#999',
-    fontSize: '0.85rem',
+    display: 'block', 
+    color: '#999', 
+    fontSize: '0.85rem', 
     marginTop: '0.5rem',
   },
   previewContainer: {
-    marginTop: '1rem',
-    display: 'flex',
-    gap: '0.5rem',
-    flexWrap: 'wrap',
+    marginTop: '1rem', 
+    display: 'flex', 
+    gap: '0.5rem', 
+    flexWrap: 'wrap', 
     justifyContent: 'center',
   },
   previewImage: {
-    width: 60,
-    height: 60,
-    objectFit: 'cover',
-    borderRadius: 8,
+    width: 60, 
+    height: 60, 
+    objectFit: 'cover', 
+    borderRadius: 8, 
     border: '1px solid #ccc',
   },
   input: {
-    padding: '0.6rem',
-    margin: '1.2rem 0',
-    border: 'none',
-    borderBottom: '2px solid orange',
-    outline: 'none',
+    padding: '0.6rem', 
+    margin: '1.2rem 0', 
+    border: 'none', 
+    borderBottom: '2px solid orange', 
+    outline: 'none', 
     fontSize: '1rem',
   },
   button: {
-    background: 'orange',
-    color: '#fff',
-    padding: '0.8rem',
-    border: 'none',
-    borderRadius: '20px',
-    fontSize: '1rem',
-    cursor: 'pointer',
+    background: 'orange', 
+    color: '#fff', 
+    padding: '0.8rem', 
+    border: 'none', 
+    borderRadius: '20px', 
+    fontSize: '1rem', 
+    cursor: 'pointer', 
     marginTop: '1rem',
   },
   reqBtn: {
-    marginLeft: '1rem',
-    background: 'orange',
-    color: 'white',
-    border: 'none',
-    padding: '0.4rem 0.8rem',
-    borderRadius: '5px',
+    marginTop: '0.4rem',
+    background: 'orange', 
+    color: 'white', 
+    border: 'none', 
+    padding: '0.4rem 0.8rem', 
+    borderRadius: '5px', 
     cursor: 'pointer',
   },
 };
 
 export default FoodForm;
+
+
+
+
 
 
 

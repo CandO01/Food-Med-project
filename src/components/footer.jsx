@@ -10,7 +10,7 @@ function Footer() {
   return (
     <footer style={footerStyle.container}>
       <div style={footerStyle.iconContainer}>
-        <Link to="/">
+        <Link to="/landing-page">
           <IoHomeSharp style={footerStyle.icon} />
         </Link>
         <p style={footerStyle.p}>Home</p>
@@ -34,7 +34,7 @@ function Footer() {
         <p style={footerStyle.p}>Chat</p>
       </div>
       <div style={footerStyle.iconContainer}>
-        <Link to="/profile">
+        <Link to="/donor-request-dashboard">
           <FaUser style={footerStyle.icon} />
         </Link>
         <p style={footerStyle.p}>Profile</p>
