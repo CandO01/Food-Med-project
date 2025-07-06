@@ -209,10 +209,9 @@ const FoodForm = () => {
       <div style={{ padding: '1rem' }}>
         <h3>My Unexpired Food Items</h3>
         <ul style={{ listStyle: 'none', padding: 0 }}>
-          
+          {unexpiredItems.length === 0 && <li>No unexpired food items found.</li>}
           {unexpiredItems.map(item => (
-            <li key={item.id} style={{ marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-              {console.log(item.imageUrl)}
+            <li key={item.id} style={{ marginBottom: '3.5rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
               <img
                 src={item.imageUrl}
                 alt={item.foodName}

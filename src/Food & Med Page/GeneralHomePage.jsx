@@ -34,10 +34,10 @@ const FoodMedHomePage = () => {
           <h2>Dashboard</h2>
           <ul>
             <li>Overview</li>
-            <li><Link to='food-dashboard'>Requests</Link></li>
-            <li><Link to='food-form'>Donors</Link></li>
-            <li><Link to='medical-records'>Medical Records</Link></li>
-            <li><Link to='settings'>Settings</Link></li>
+            <li><Link to='/food-dashboard'>Requests</Link></li>
+            <li><Link to='/food-form'>Donors</Link></li>
+            <li><Link to='/medical-records'>Medical Records</Link></li>
+            <li><Link to='/settings'>Settings</Link></li>
           </ul>
         </motion.div>
       )}
