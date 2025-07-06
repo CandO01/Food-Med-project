@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FaCloudUploadAlt, FaBell } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
-const FoodForm = () => {
+function FoodForm (){
   const [formData, setFormData] = useState({
     foodName: '',
     description: '',
@@ -21,7 +21,12 @@ const FoodForm = () => {
 
   const handleChange = e => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData(
+                { 
+                  ...formData, 
+                  [name]: value 
+                }
+              );
 
     if (name === 'donorEmail') {
       localStorage.setItem('donorEmail', value);
@@ -55,7 +60,6 @@ const FoodForm = () => {
         body: data,
       });
       const result = await res.json();
-      console.log('Submission result:', result);
       alert(result.message || 'Submitted!');
       fetchUnexpiredItems();
       const donorEmail = localStorage.getItem("donorEmail");
@@ -92,11 +96,16 @@ const FoodForm = () => {
         })
       });
       const result = await response.json();
-      setNotifications(prev => [...prev, `Request for "${item.foodName}" sent`]);
-    } catch (err) {
-      console.error('Error sending request:', err);
-    }
-  };
+         if (response.ok) {
+              setNotifications(prev => [...prev, result.message || `Request for "${item.foodName}" sent`]);
+            } else {
+              console.error('Server Error:', result.error || result);
+              setNotifications(prev => [...prev, `Failed to request "${item.foodName}"`]);
+            }
+  } catch (err) {
+    console.error('Error sending request:', err);
+  }
+};
 
   useEffect(() => {
     fetchUnexpiredItems();
