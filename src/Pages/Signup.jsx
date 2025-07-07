@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import Confetti from 'react-confetti'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+
 function Signup() {
   const [form, setForm] = useState({
     name: '',
@@ -16,6 +17,7 @@ function Signup() {
   const [error, setError] = useState(null)
   const [success, setSuccess] = useState(false)
   const [showModal, setShowModal] = useState(false)
+  const [searchParams, setSearchParams] = useSearchParams()
   const navigate = useNavigate()
   const { t } = useTranslation()
 

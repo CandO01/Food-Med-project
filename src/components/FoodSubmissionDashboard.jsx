@@ -279,7 +279,7 @@ const SubmissionsDashboard = () => {
               style={styles.image}
             />
             <h3>{item.foodName}</h3>
-            <p>{item.description}</p>
+            <p style={styles.description}>{item.description}</p>
             <button
               onClick={(e) => {
                 e.stopPropagation();
@@ -463,22 +463,31 @@ const styles = {
     borderRadius: '50px',
     border: '1px solid orange',
   },
-  grid: {
-    display: 'grid',
-    gap: '0.5rem',
-    gridTemplateColumns: 'repeat(2, 1fr)',
-    width: '100%',
-  },
-  card: {
-    background: '#fff',
-    color: '#000',
-    borderRadius: '10px',
-    padding: '1rem',
-    textAlign: 'center',
-    cursor: 'pointer',
-    boxShadow: '0 0 10px rgba(0,0,0,0.1)',
-    width: '100%',
-  },
+grid: {
+  display: 'grid',
+  gap: '0.5rem',
+  gridTemplateColumns: 'repeat(2, 1fr)',
+  width: '100%',
+  padding: '0.5rem',
+  boxSizing: 'border-box',
+},
+card: {
+  background: '#fff',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'space-between', // <-- KEY TO ALIGNMENT
+  alignItems: 'center',
+  color: '#000',
+  borderRadius: '10px',
+  padding: '1rem 0rem',
+  textAlign: 'center',
+  cursor: 'pointer',
+  boxShadow: '0 0 10px rgba(0,0,0,0.1)',
+  minHeight: '250px', 
+  width: '100%',
+  maxWidth: '100%',
+  boxSizing: 'border-box'
+},
   image: {
     width: '50%',
     height: 90,
@@ -495,6 +504,17 @@ const styles = {
     borderRadius: '5px',
     cursor: 'pointer',
   },
+  description: {
+  whiteSpace: 'normal',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  display: 'block',
+  width: '100%',
+  maxWidth: '100%',
+  height: '1.2em',
+  lineHeight: '1.2em',
+},
+
   modalOverlay: {
     position: 'fixed',
     top: 0,
