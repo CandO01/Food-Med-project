@@ -10,6 +10,12 @@ import thirdFood from '../assets/food3.jpeg';
 import fourthFood from '../assets/food4.jpeg';
 import fifthFood from '../assets/food5.jpeg';
 import sixthFood from '../assets/food6.jpeg';
+import fruits from '../assets/fruit.png';
+import vegetables from '../assets/vegetables.png';
+import palliative from '../assets/palliative.png';
+import protein from '../assets/protein.png';
+import beverages from '../assets/beverages.png';
+import grains from '../assets/grains.png';
 
 const SubmissionsDashboard = () => {
   const [submissions, setSubmissions] = useState([]);
@@ -20,6 +26,7 @@ const SubmissionsDashboard = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [hasNewNotification, setHasNewNotification] = useState(false);
   const [darkMode, setDarkMode] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState('');
   const audioRef = useRef(null);
 
   const carouselSlides = [
@@ -31,6 +38,15 @@ const SubmissionsDashboard = () => {
     { image: sixthFood },
   ];
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+   const categories = [
+    { name: 'Fruits', image: fruits },
+    { name: 'Proteins', image: protein },
+    { name: 'Palliatives', image: palliative },
+    { name: 'Vegetables', image: vegetables },
+    { name: 'Beverages', image: beverages },
+    { name: 'Grains', image: grains },
+  ];
 
   const nextImage = () =>
     setCurrentImageIndex((prev) => (prev + 1) % carouselSlides.length);
@@ -44,19 +60,34 @@ const SubmissionsDashboard = () => {
     return () => clearInterval(interval);
   }, []);
 
+  // useEffect(() => {
+  //   setLoading(true);
+  //   fetch('https://foodmed-server2.onrender.com/submissions')
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       setSubmissions(data);
+  //       setLoading(false);
+  //     })
+  //     .catch((err) => {
+  //       console.error('Failed to fetch submissions:', err);
+  //       setLoading(false);
+  //     });
+  // }, []);
   useEffect(() => {
-    setLoading(true);
-    fetch('https://foodmed-server2.onrender.com/submissions')
-      .then((res) => res.json())
-      .then((data) => {
-        setSubmissions(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error('Failed to fetch submissions:', err);
-        setLoading(false);
-      });
-  }, []);
+  setLoading(true);
+  const query = selectedCategory ? `?type=${selectedCategory}` : '';
+  fetch(`https://foodmed-server2.onrender.com/submissions${query}`)
+    .then((res) => res.json())
+    .then((data) => {
+      setSubmissions(data);
+      setLoading(false);
+    })
+    .catch((err) => {
+      console.error('Failed to fetch submissions:', err);
+      setLoading(false);
+    });
+}, [selectedCategory]);
+
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -127,9 +158,15 @@ const SubmissionsDashboard = () => {
     setHasNewNotification(false);
   };
 
-  const filtered = submissions.filter((item) =>
-    item.foodName.toLowerCase().includes(search.toLowerCase())
-  );
+  const filtered = submissions.filter((item) => {
+    const matchesSearch = item.foodName
+      .toLowerCase()
+      .includes(search.toLowerCase());
+    const matchesCategory = selectedCategory
+      ? item.foodType?.toLowerCase() === selectedCategory.toLowerCase()
+      : true;
+    return matchesSearch && matchesCategory;
+  });
 
   const closeModal = () => setSelectedItem(null);
 
@@ -254,6 +291,77 @@ const SubmissionsDashboard = () => {
           </button>
         </div>
       )}
+      {/* new features filter by food items button */}
+      <div style={{ padding: '1rem' }}>
+
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+          <h2>Categories</h2>
+          <button
+              onClick={() => setSelectedCategory('')}
+              style={{
+                padding: '0.5rem 1rem',
+                background: selectedCategory === '' ? 'orange' : '#eee',
+                color: selectedCategory === '' ? 'white' : '#000',
+                borderRadius: '20px',
+                border: 'none',
+                cursor: 'pointer'
+              }}
+        >
+          See All
+        </button>
+        </div>
+
+        <div
+          style={{
+            overflowX: 'auto',
+            display: 'flex',
+            gap: '1rem',
+            marginBottom: '2rem',
+            paddingBottom: '0.5rem',
+          }}
+        >
+          {categories.map((cat) => (
+            <div
+              key={cat.name}
+              onClick={() =>
+                setSelectedCategory(selectedCategory === cat.name ? '' : cat.name)
+              }
+              style={{
+                minWidth: '140px',
+                padding: '0.5rem',
+                borderRadius: '100%',
+                cursor: 'pointer',
+                background: selectedCategory === cat.name ? 'orange' : '#eee',
+                color: selectedCategory === cat.name ? 'white' : '#000',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}
+            >
+              <img
+                src={cat.image}
+                alt={cat.name}
+                style={{
+                  width: '100%',
+                  height: '100px',
+                  objectFit: 'cover',
+                  borderRadius: '100%',
+                  marginBottom: '0.3rem'
+                }}
+              />
+              <span
+                style={{
+                  fontSize: '0.9rem',
+                  fontWeight: 'bold',
+                  textAlign: 'center',
+                  color: selectedCategory === cat.name ? 'white' : '#000',
+                }}
+              >
+                {cat.name}
+              </span>
+            </div>
+          ))}
+        </div>
 
       <input
         type="text"
@@ -330,6 +438,7 @@ const SubmissionsDashboard = () => {
         </motion.div>
       )}
     </div>
+  </div>
   );
 };
 
@@ -475,7 +584,7 @@ card: {
   background: '#fff',
   display: 'flex',
   flexDirection: 'column',
-  justifyContent: 'space-between', // <-- KEY TO ALIGNMENT
+  justifyContent: 'space-between',
   alignItems: 'center',
   color: '#000',
   borderRadius: '10px',
@@ -489,7 +598,7 @@ card: {
   boxSizing: 'border-box'
 },
   image: {
-    width: '50%',
+    width: '80%',
     height: 90,
     objectFit: 'cover',
     borderRadius: '8px',
@@ -537,7 +646,7 @@ card: {
     textAlign: 'center',
   },
   modalImage: {
-    width: '100%',
+    width: '70%',
     height: 'auto',
     borderRadius: '10px',
     marginBottom: '1rem',
@@ -556,41 +665,6 @@ card: {
 };
 
 export default SubmissionsDashboard;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

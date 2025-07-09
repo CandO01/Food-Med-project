@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { FaCloudUploadAlt, FaBell } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
-function FoodForm (){
+function FoodForm () {
   const [formData, setFormData] = useState({
     foodName: '',
     description: '',
     quantity: '',
     expiryDate: '',
     location: '',
+    foodType: '', 
     donorEmail: localStorage.getItem('donorEmail') || '',
   });
 
@@ -21,12 +22,10 @@ function FoodForm (){
 
   const handleChange = e => {
     const { name, value } = e.target;
-    setFormData(
-                { 
-                  ...formData, 
-                  [name]: value 
-                }
-              );
+    setFormData({ 
+      ...formData, 
+      [name]: value 
+    });
 
     if (name === 'donorEmail') {
       localStorage.setItem('donorEmail', value);
@@ -96,16 +95,16 @@ function FoodForm (){
         })
       });
       const result = await response.json();
-         if (response.ok) {
-              setNotifications(prev => [...prev, result.message || `Request for "${item.foodName}" sent`]);
-            } else {
-              console.error('Server Error:', result.error || result);
-              setNotifications(prev => [...prev, `Failed to request "${item.foodName}"`]);
-            }
-  } catch (err) {
-    console.error('Error sending request:', err);
-  }
-};
+      if (response.ok) {
+        setNotifications(prev => [...prev, result.message || `Request for "${item.foodName}" sent`]);
+      } else {
+        console.error('Server Error:', result.error || result);
+        setNotifications(prev => [...prev, `Failed to request "${item.foodName}"`]);
+      }
+    } catch (err) {
+      console.error('Error sending request:', err);
+    }
+  };
 
   useEffect(() => {
     fetchUnexpiredItems();
@@ -211,6 +210,23 @@ function FoodForm (){
           style={styles.input} 
           required 
         />
+
+        {/* ✅ New Food Type Dropdown */}
+        <select
+          name="foodType"
+          value={formData.foodType}
+          onChange={handleChange}
+          style={{ ...styles.input, borderBottom: '2px solid orange' }}
+          required
+        >
+          <option value="">Select Food Type</option>
+          <option value="Fruits">Fruits</option>
+          <option value="Proteins">Proteins</option>
+          <option value="Palliatives">Palliatives</option>
+          <option value="Vegetables">Vegetables</option>
+          <option value="Beverages">Beverages</option>
+          <option value="Grains">Grains</option>
+        </select>
 
         <button type="submit" style={styles.button}>Submit</button>
       </form>
@@ -327,6 +343,7 @@ const styles = {
 };
 
 export default FoodForm;
+
 
 
 

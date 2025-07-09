@@ -21,6 +21,7 @@ function Signup() {
   const navigate = useNavigate()
   const { t } = useTranslation()
 
+  //to filter out the query params
   function handleChange(e) {
     const { name, value } = e.target
     setForm(prev => ({
