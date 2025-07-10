@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { io } from 'socket.io-client'
 import dayjs from 'dayjs'
 
-const socket = io('http://localhost:3001')
+const socket = io('https://foodmed-server3.onrender.com/')
 
 function ChatPage() {
   const [username, setUsername] = useState('')
