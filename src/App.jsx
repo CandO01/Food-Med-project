@@ -18,6 +18,7 @@ import FoodForms from './components/FoodForm/FoodDonorForms'
 import FoodSubmissionDashboard from './components/FoodSubmissionDashboard'
 import DonorRequestsDashboard from './components/FoodForm/FoodDonorRequestForm'
 import FoodSubmissionDetails from './components/FoodSubmissionDetails'
+import ChatPage from './Food & Med Page/Chat'
 
 function App() {
   return (
@@ -45,6 +46,9 @@ function App() {
           <Route path='donor-request-dashboard' element={<DonorRequestsDashboard />} />
           <Route path='food-dashboard' element={<FoodSubmissionDashboard />} />
           <Route path='food-dashboard/:id' element={<FoodSubmissionDetails />} />
+
+          {/* chatting platform */}
+          <Route path='chat' element={<ChatPage />} />
 
           {/* Catch-all route */}
           <Route path='*' element={<div>404 Not Found</div>} />
