@@ -8,12 +8,11 @@ import { CiMedicalCross } from "react-icons/ci";
 import { IoSettingsOutline } from "react-icons/io5";
 import { RiInformation2Line } from "react-icons/ri";
 import './FoodMedHomePage.css';
-import { AuthContext } from '../AuthenticationContext/Authcontext';
 
 const FoodMedHomePage = () => {
   const [isSliding, setIsSliding] = useState(false);
   const navigate = useNavigate();
-  const {logout } = React.useContext(AuthContext);
+ const name = localStorage.getItem('userName') || 'Guest'
 
   const handleUserClick = () => {
     setIsSliding(true);
@@ -61,7 +60,8 @@ const FoodMedHomePage = () => {
       <div className={`main-content ${isSliding ? 'slide-out' : ''}`}>
         <header className="foodmed-header">
           <div className="user-icon" onClick={handleUserClick}>
-            <FaUser />
+            <FaUser style={{color: 'black'}} />
+            Hello {name}
           </div>
           <div className="logo">FoodMed</div>
         </header>

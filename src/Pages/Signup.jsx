@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next'
 function Signup() {
   const [form, setForm] = useState({
     name: '',
+    phone: '',
     email: '',
     password: '',
     confirm: ''
@@ -17,7 +18,6 @@ function Signup() {
   const [error, setError] = useState(null)
   const [success, setSuccess] = useState(false)
   const [showModal, setShowModal] = useState(false)
-  const [searchParams, setSearchParams] = useSearchParams()
   const navigate = useNavigate()
   const { t } = useTranslation()
 
@@ -30,12 +30,14 @@ function Signup() {
     }))
   }
 
+  // function to display terms and conditions modal
   function displayModal(){
     setShowModal(prev=>{
       return prev = !prev
     })
   }
 
+  //function to remove the terms and conditions modal
    function removeModal(){
     setShowModal(prev=> !prev)
   }
@@ -47,7 +49,7 @@ function Signup() {
     setError(null)
 
     try {
-      const res = await fetch('https://foodmed-server.onrender.com/signup', {
+      const res = await fetch('http://localhost:5223/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form)
@@ -64,7 +66,7 @@ function Signup() {
       setStatus('done')
     // Delay 3 seconds before redirecting
       setTimeout(() => {
-        navigate('/login')
+        navigate('/home')
       }, 4500)
      
     } catch (err) {
@@ -88,6 +90,14 @@ function Signup() {
           placeholder={t('signup.fullName')}
           onChange={handleChange}
           value={form.name}
+          required
+        />
+        <input
+          type="tel"
+          name="phone"
+          placeholder={t('signup.phone')}
+          onChange={handleChange}
+          value={form.phone}
           required
         />
         <input

@@ -36,7 +36,7 @@ function Signin() {
     setError(null)
 
     try {
-      const res = await fetch('https://foodmed-server.onrender.com/login', {
+      const res = await fetch('http://localhost:5223/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(loginForm)
@@ -52,7 +52,7 @@ function Signin() {
       localStorage.setItem('userName', data.name) // ✅ Save name to localStorage
 
       login({ name: data.name, email: data.email })
-      navigate('/home')
+      navigate('/landing-page')
     } catch (error) {
       setError(error.message)
       setStatus('idle')
