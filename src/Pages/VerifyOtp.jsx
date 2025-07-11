@@ -37,7 +37,7 @@ function VerifyOTP({ email: propEmail, onVerified }) {
     setResendMsg(null)
 
     try {
-      const res = await fetch('https://foodmed-server.onrender.com/verify-otp', {
+      const res = await fetch('https://foodmed-firstserver-backup.onrender.com/verify-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, otp: fullOtp })
@@ -60,7 +60,7 @@ function VerifyOTP({ email: propEmail, onVerified }) {
     setError(null)
     setResendMsg(null)
     try {
-      const res = await fetch('https://foodmed-server.onrender.com/send-otp', {
+      const res = await fetch('https://foodmed-firstserver-backup.onrender.com/send-otp', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email })
