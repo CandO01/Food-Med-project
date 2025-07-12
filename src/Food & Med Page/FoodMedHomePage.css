@@ -100,27 +100,23 @@
 .button-group {
   margin-top: 2rem;
   display: flex;
-  justify-content: center;
-  gap: 1rem;
+  justify-content: space-between;
+  gap: 0.2rem;
 }
 
-.btn-orange {
-  background-color: orange;
+.btn-orange, .btn-green {
+  background-color: #aea9a9;
   border: none;
   padding: 0.7rem 1.2rem;
   color: white;
   border-radius: 5px;
   cursor: pointer;
+  font-size: 0.8rem;
+}
+.btn-orange:hover{
+  background-color: #FFA500;
 }
 
-.btn-green {
-  background-color: green;
-  border: none;
-  padding: 0.7rem 1.2rem;
-  color: white;
-  border-radius: 5px;
-  cursor: pointer;
-}
 
 /* Cancel Button */
 .cancel-button {

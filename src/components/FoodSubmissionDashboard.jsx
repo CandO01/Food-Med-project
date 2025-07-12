@@ -1,7 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { FaBell } from 'react-icons/fa';
+import { FaRegUser } from "react-icons/fa";
+import { MdOutlineWavingHand } from "react-icons/md";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
+import { MdOutlineTimer } from "react-icons/md";
+import { MdLocationPin } from "react-icons/md";
+import { LocationContext } from '../LocationContext/LocationContext';
 import notificationSound from '../assets/notification.mp3.mp3';
 import loadingImg from '../assets/loading3.gif';
 import firstFood from '../assets/food1.jpg';
@@ -17,6 +22,20 @@ import protein from '../assets/protein.png';
 import beverages from '../assets/beverages.png';
 import grains from '../assets/grains.png';
 
+//this is to handle the time the food item is posted 
+ function timeAgo(dateString) {
+  const date = new Date(dateString);
+  const now = new Date();
+  const diff = Math.floor((now - date) / 1000); // in seconds
+
+  if (diff < 60) return 'Just now';
+  if (diff < 3600) return `${Math.floor(diff / 60)} minute(s) ago`;
+  if (diff < 86400) return `${Math.floor(diff / 3600)} hour(s) ago`;
+  if (diff < 172800) return 'Yesterday';
+  return `${Math.floor(diff / 86400)} day(s) ago`;
+ }
+
+
 const SubmissionsDashboard = () => {
   const [submissions, setSubmissions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -28,6 +47,9 @@ const SubmissionsDashboard = () => {
   const [darkMode, setDarkMode] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('');
   const audioRef = useRef(null);
+
+  const name = localStorage.getItem('userName') || 'Guest'
+  const { state, country } = React.useContext(LocationContext)
 
   const carouselSlides = [
     { image: firstFood },
@@ -224,6 +246,17 @@ const SubmissionsDashboard = () => {
         )}
       </motion.div>
 
+        {/* User name and location */}
+      <div style={styles.greetings}>
+        <div style={{display: 'flex', alignItems: 'center', gap: '4px'}}>
+          <p>Hi {name}</p>
+          <MdOutlineWavingHand style={styles.greetingIcons} />
+        </div>
+        <div style={{display: 'flex', alignItems: 'center', gap: '4px', marginRight: -25}}>
+        <MdLocationPin style={styles.greetingIcons}/>
+        {state}, {country}
+        </div>
+      </div>
       <div style={styles.carouselWrapper}>
         <motion.div
           key={currentImageIndex}
@@ -386,17 +419,38 @@ const SubmissionsDashboard = () => {
               alt={item.foodName}
               style={styles.image}
             />
-            <h3>{item.foodName}</h3>
-            <p style={styles.description}>{item.description}</p>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                handleRequest(item);
+            <div style={{display: 'flex', flexDirection: 'column', flexBasis: '70%'}}>
+             <small 
+              style={{
+                backgroundColor: 'white',
+                color: item.mode?.toLowerCase()=== 'barter' ? 'orange' : 'green' ,
+                width: '40px',
+                padding: '2px',
+                borderRadius: '4px',
+                fontSize: '0.75rem',
+                fontWeight: 700
               }}
-              style={styles.requestBtn}
             >
-              Request
-            </button>
+              {item.mode?.toLowerCase() === 'barter' ? 'Barter' : 'Share'}
+            </small>
+
+              <h3 style={{margin: 0}}>{item.foodName}</h3>
+              <p style={styles.description}>{item.description}</p>
+              <div>
+                <small><FaRegUser /> {item.donorName} </small>
+                <small><MdLocationPin /> {item.location} </small>
+                <small><MdOutlineTimer /> Posted on: {timeAgo(item.createdAt)} </small>
+              </div>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleRequest(item);
+                }}
+                style={styles.requestBtn}
+              >
+                 {item.mode?.toLowerCase() === 'barter' ? 'Trade Now' : 'Request Now'}
+              </button>
+            </div>
           </motion.div>
         ))}
       </div>
@@ -433,6 +487,9 @@ const SubmissionsDashboard = () => {
             </p>
             <p>
               <strong>Location:</strong> {selectedItem.location}
+            </p>
+            <p>
+              <strong>Mode:</strong> {selectedItem.mode}
             </p>
           </motion.div>
         </motion.div>
@@ -484,6 +541,19 @@ const styles = {
     height: 10,
     borderRadius: '50%',
     background: 'red',
+  },
+  greetings: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: '30px',
+    // position: 'fixed',
+    // top: '0'
+  },
+  greetingIcons: {
+    color: 'orange', 
+    fontSize: '20px', 
+    fontWeight: 800
   },
   carouselWrapper: {
     position: 'relative',
@@ -575,30 +645,30 @@ const styles = {
 grid: {
   display: 'grid',
   gap: '0.5rem',
-  gridTemplateColumns: 'repeat(2, 1fr)',
+  gridTemplateColumns: 'repeat(1, 1fr)',
   width: '100%',
-  padding: '0.5rem',
+  // padding: '0.5rem',
   boxSizing: 'border-box',
 },
 card: {
   background: '#fff',
   display: 'flex',
-  flexDirection: 'column',
   justifyContent: 'space-between',
   alignItems: 'center',
   color: '#000',
   borderRadius: '10px',
-  padding: '1rem 0rem',
-  textAlign: 'center',
+  padding: '1.2rem 1rem',
+  border: '2px solid orange',
   cursor: 'pointer',
   boxShadow: '0 0 10px rgba(0,0,0,0.1)',
-  minHeight: '250px', 
+  // minHeight: '250px', 
   width: '100%',
   maxWidth: '100%',
   boxSizing: 'border-box'
 },
   image: {
-    width: '80%',
+    width: '200px',
+    flexBasis: '30%',
     height: 90,
     objectFit: 'cover',
     borderRadius: '8px',

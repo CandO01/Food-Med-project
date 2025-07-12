@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaUser } from 'react-icons/fa';
 import { CiLogout } from "react-icons/ci";
 import { FaRegUser } from "react-icons/fa";
 import { IoFastFoodOutline } from "react-icons/io5";
 import { CiMedicalCross } from "react-icons/ci";
 import { IoSettingsOutline } from "react-icons/io5";
 import { RiInformation2Line } from "react-icons/ri";
+import { LocationContext } from '../LocationContext/LocationContext';
+import { MdLocationPin } from "react-icons/md";
+import menuIcon from '../assets/menu.png'
 import './FoodMedHomePage.css';
 
 const FoodMedHomePage = () => {
   const [isSliding, setIsSliding] = useState(false);
+  const { state, country } = React.useContext(LocationContext)
   const navigate = useNavigate();
  const name = localStorage.getItem('userName') || 'Guest'
 
@@ -60,28 +63,30 @@ const FoodMedHomePage = () => {
       <div className={`main-content ${isSliding ? 'slide-out' : ''}`}>
         <header className="foodmed-header">
           <div className="user-icon" onClick={handleUserClick}>
-            <FaUser style={{color: 'black'}} />
-            Hello {name}
+            <img src={menuIcon} alt='Menu icon' style={{width: '18.5px', height: '14px'}} />
+            Hello {name}!
           </div>
-          <div className="logo">FoodMed</div>
         </header>
+        <div style={{display: 'flex', alignItems: 'center', gap: 2}}>
+          <MdLocationPin />
+          <p style={{textAlign: 'start', margin: '1px'}}>{state}, {country}</p>
+        </div>
 
         {isSliding && (
           <button className="cancel-button" onClick={handleCancelClick}>
             X
           </button>
         )}
-
-        <h2>Welcome to FoodMed</h2>
-        <p>
-          Bridging the gap between food donation and medical care — because everyone deserves good food and good health.
-        </p>
+        
         <div className="button-group">
-          <button onClick={() => navigate('/food-dashboard')} className="btn-orange">
-            Go to Food Home
+          <button onClick={() => navigate('/food-form')} className="btn-orange">
+            Add food
           </button>
-          <button onClick={() => navigate('/medical')} className="btn-green">
-            Go to Medical Home
+          <button onClick={() => navigate('/chat')} className="btn-green">
+            Ask a doctor
+          </button>
+           <button onClick={() => navigate('/food-dashboard')} className="btn-green">
+            Find food nearby
           </button>
         </div>
       </div>
