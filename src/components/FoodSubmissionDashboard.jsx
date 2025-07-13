@@ -98,7 +98,7 @@ const SubmissionsDashboard = () => {
   useEffect(() => {
   setLoading(true);
   const query = selectedCategory ? `?type=${selectedCategory}` : '';
-  fetch(`https://foodmed-server2.onrender.com/submissions${query}`)
+  fetch(`http://localhost:3001/submissions${query}`)
     .then((res) => res.json())
     .then((data) => {
       setSubmissions(data);
@@ -113,7 +113,7 @@ const SubmissionsDashboard = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      fetch('https://foodmed-server2.onrender.com/requests')
+      fetch('http://localhost:3001/requests')
         .then((res) => res.json())
         .then((data) => {
           const confirmed = data.filter((req) => req.status === 'confirmed');
@@ -149,7 +149,7 @@ const SubmissionsDashboard = () => {
       return;
     }
     const response = await fetch(
-      'https://foodmed-server2.onrender.com/request',
+      'http://localhost:3001/request',
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -200,7 +200,7 @@ const SubmissionsDashboard = () => {
   const renderImage = (url) => {
     return url?.startsWith('http')
       ? url
-      : `https://foodmed-server2.onrender.com${url}`;
+      : `http://localhost:3001${url}`;
   };
 
   if (loading)

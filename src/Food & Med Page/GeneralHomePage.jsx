@@ -9,6 +9,7 @@ import { RiInformation2Line } from "react-icons/ri";
 import { LocationContext } from '../LocationContext/LocationContext';
 import { MdLocationPin } from "react-icons/md";
 import menuIcon from '../assets/menu.png'
+import { IoCartOutline } from "react-icons/io5";
 import './FoodMedHomePage.css';
 
 const FoodMedHomePage = () => {
@@ -31,13 +32,17 @@ const FoodMedHomePage = () => {
       {isSliding && (
         <div className="sidebar">
           <ul>
-            <li onClick={() => navigate('/donor-request-dashboard')}>
+            <li onClick={() => navigate('/donor-profile')}>
               <FaRegUser style={{ marginRight: '8px', color: 'black' }} />
               Profile
             </li>
             <li onClick={() => navigate('/food-dashboard')}>
               <IoFastFoodOutline style={{ marginRight: '8px', color: 'black' }} />
               Food
+            </li>
+            <li onClick={() => navigate('/user-request')}>
+              <IoCartOutline style={{ marginRight: '8px', color: 'black' }} />
+              My food Request
             </li>
             <li onClick={() => navigate('/medical')}>
               <CiMedicalCross style={{ marginRight: '8px', color: 'black' }} />

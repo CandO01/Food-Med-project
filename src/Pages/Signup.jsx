@@ -10,7 +10,8 @@ function Signup() {
     phone: '',
     email: '',
     password: '',
-    confirm: ''
+    confirm: '',
+    role: '',
   })
 
   const [message, setMessage] = useState('')
@@ -42,38 +43,47 @@ function Signup() {
     setShowModal(prev=> !prev)
   }
 
-  async function handleSubmit(e) {
-    e.preventDefault()
-    setStatus('signing-up')
-    setMessage('')
-    setError(null)
+    async function handleSubmit(e) {
+          e.preventDefault();
+          setStatus('signing-up');
+          setMessage('');
+          setError(null);
 
-    try {
-      const res = await fetch('https://foodmed-firstserver-backup.onrender.com/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form)
-      })
+          const { name, email, password, confirm, role } = form; // ✅ Extract fields from state
 
-      const data = await res.json()
+          try {
+            const res = await fetch('http://localhost:5223/signup', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ name, email, password, confirm, role }) // ✅ Include role
+            });
 
-      if (!res.ok) {
-        throw new Error(data.error || 'Signup failed')
-      }
+            const data = await res.json();
 
-      setSuccess(true)
-      setMessage(data.message || 'Thank you for signing up successfully! Redirecting you to the login section')
-      setStatus('done')
-    // Delay 3 seconds before redirecting
-      setTimeout(() => {
-        navigate('/home')
-      }, 4500)
-     
-    } catch (err) {
-      setError(err.message)
-      setStatus('failed')
-    }
-  }
+            if (!res.ok) {
+              throw new Error(data.error || 'Signup failed');
+            }
+
+            setSuccess(true);
+            setMessage(data.message || 'Thank you for signing up successfully! Redirecting you to the login section');
+            setStatus('done');
+
+            // Save to localStorage (if needed later)
+            localStorage.setItem('userName', name);
+            localStorage.setItem('userEmail', email);
+            localStorage.setItem('role', role);
+
+            // Redirect after delay
+            setTimeout(() => {
+              navigate('/home');
+            }, 4500);
+
+          } catch (err) {
+            setError(err.message);
+            setStatus('failed');
+          }
+        }
+
 
  return (
     <div className="signup-form">
@@ -124,6 +134,19 @@ function Signup() {
           value={form.confirm}
           required
         />
+        <select
+        name='role'
+          value={form.role}
+          onChange={handleChange}
+          required
+          className='input'
+        >
+          <option value="">Select Role</option>
+          <option value="user">User</option>
+          <option value="donor">Donor</option>
+          <option value="doctor">Doctor</option>
+        </select>
+
 
         <p className='have-account'>
           {t('signup.haveAccount')}<Link to="/login">{t('signup.login')}</Link>

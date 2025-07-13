@@ -7,6 +7,8 @@ import { GiHealthNormal } from "react-icons/gi";
 import { Link } from 'react-router-dom';
 
 function Footer() {
+  const recipientId = localStorage.getItem('lastRecipientId');
+
   return (
     <footer style={footerStyle.container}>
       <div style={footerStyle.iconContainer}>
@@ -28,11 +30,18 @@ function Footer() {
         <p style={footerStyle.p}>Health</p>
       </div>
       <div style={footerStyle.iconContainer}>
-        <Link to="/chat">
-          <BsFillChatTextFill style={footerStyle.icon} />
-        </Link>
+        {recipientId ? (
+          <Link to={`/chat/${recipientId}`}>
+            <BsFillChatTextFill style={footerStyle.icon} />
+          </Link>
+        ) : (
+          <div onClick={() => alert('Please select a chat first')} style={{ cursor: 'not-allowed' }}>
+            <BsFillChatTextFill style={footerStyle.icon} />
+          </div>
+        )}
         <p style={footerStyle.p}>Chat</p>
       </div>
+
       <div style={footerStyle.iconContainer}>
         <Link to="/donor-request-dashboard">
           <FaUser style={footerStyle.icon} />

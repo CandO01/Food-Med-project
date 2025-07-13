@@ -5,21 +5,20 @@ import { Link } from 'react-router-dom';
 const DonorRequestsDashboard = () => {
   const [foodItems, setFoodItems] = useState([]);
   const donorEmail = localStorage.getItem('donorEmail');
-  
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch('https://foodmed-server2.onrender.com/submissions');
+        const res = await fetch('http://localhost:3001/submissions');
         const allItems = await res.json();
 
         const donorItems = allItems.filter(item => item.donorEmail === donorEmail);
 
-        const reqRes = await fetch('https://foodmed-server2.onrender.com/requests');
+        const reqRes = await fetch('http://localhost:3001/requests');
         const allRequests = await reqRes.json();
 
         const itemsWithRequests = donorItems.map(item => {
-          const requestsForItem = allRequests.filter(r => r.foodName === item.foodName);
+          const requestsForItem = allRequests.filter(r => r.foodName === item.foodName && r.donorEmail === donorEmail);
           return { ...item, requests: requestsForItem };
         });
 
@@ -43,7 +42,7 @@ const DonorRequestsDashboard = () => {
     }
 
     try {
-      const res = await fetch(`https://foodmed-server2.onrender.com/request/update/${reqId}`, {
+      const res = await fetch(`http://localhost:3001/request/update/${reqId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ date, time, location })
@@ -61,7 +60,7 @@ const DonorRequestsDashboard = () => {
     if (!window.confirm('Are you sure you want to reject/delete this request?')) return;
 
     try {
-      const res = await fetch(`https://foodmed-server2.onrender.com/request/delete/${reqId}`, {
+      const res = await fetch(`http://localhost:3001/request/delete/${reqId}`, {
         method: 'DELETE'
       });
 
@@ -109,6 +108,10 @@ const DonorRequestsDashboard = () => {
                         <button style={styles.rejectBtn} onClick={() => rejectRequest(req.id)}>❌ Reject</button>
                       </div>
                     )}
+
+                    <Link to={`/chat/${req.email}`}>
+                      <button style={styles.chatBtn}>💬 Chat</button>
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -171,10 +174,20 @@ const styles = {
     padding: '0.4rem 1rem',
     borderRadius: '5px',
     cursor: 'pointer',
+  },
+  chatBtn: {
+    background: 'orange',
+    color: 'white',
+    border: 'none',
+    padding: '0.4rem 1rem',
+    borderRadius: '5px',
+    cursor: 'pointer',
+    marginTop: '0.5rem'
   }
 };
 
 export default DonorRequestsDashboard;
+
 
 
 

@@ -30,34 +30,47 @@ function Signin() {
     }))
   }
 
-  async function handleSubmit(e) {
-    e.preventDefault()
-    setStatus('logging')
-    setError(null)
+    async function handleSubmit(e) {
+            e.preventDefault();
+            setStatus('logging');
+            setError(null);
 
-    try {
-      const res = await fetch('https://foodmed-firstserver-backup.onrender.com/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(loginForm)
-      })
+            try {
+              const res = await fetch('http://localhost:5223/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(loginForm)  // make sure loginForm includes email & password
+              });
 
-      const data = await res.json()
+              const data = await res.json();
 
-      if (!res.ok) {
-        throw new Error(data.error || 'Please enter valid credentials')
-      }
+              if (!res.ok) {
+                throw new Error(data.error || 'Please enter valid credentials');
+              }
 
-      setUserName(data.name)
-      localStorage.setItem('userName', data.name) // ✅ Save name to localStorage
+              // If backend doesn't return email explicitly, use the one from loginForm
+              const userEmail = data.email || loginForm.email;
 
-      login({ name: data.name, email: data.email })
-      navigate('/landing-page')
-    } catch (error) {
-      setError(error.message)
-      setStatus('idle')
-    }
-  }
+              // Set to localStorage
+              localStorage.setItem('userName', data.name); 
+              localStorage.setItem('userEmail', userEmail); 
+              localStorage.setItem('role', data.role);  // ✅ Store role
+
+              // Call context login
+              login({
+                name: data.name,
+                email: userEmail,
+                role: data.role
+              });
+
+              // Redirect
+              navigate('/landing-page');
+            } catch (error) {
+              setError(error.message);
+              setStatus('idle');
+            }
+          }
+
 
   return (
     <div className="signin-form">

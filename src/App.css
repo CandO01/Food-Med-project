@@ -53,7 +53,8 @@ padding: 0;
 .verify-container{
   margin: auto;
 }
-.signup-container > input{
+.signup-container > input,
+.signup-container > .input{
   border: 1px solid rgba(209, 213, 219);
   height: 57px;
   text-indent: 10px;

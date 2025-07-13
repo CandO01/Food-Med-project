@@ -4,17 +4,18 @@ import { useNavigate } from 'react-router-dom';
 
 function FoodForm () {
   const [formData, setFormData] = useState({
-    donorName: '',
-    donorPhone: '',
-    donorEmail: localStorage.getItem('donorEmail') || '',
-    foodName: '',
-    description: '',
-    quantity: '',
-    expiryDate: '',
-    location: '',
-    foodType: '',
-    mode: ''
-  });
+        donorId: localStorage.getItem('userId') || '', // ✅ Add this line
+        donorName: '',
+        donorPhone: '',
+        donorEmail: localStorage.getItem('donorEmail') || '',
+        foodName: '',
+        description: '',
+        quantity: '',
+        expiryDate: '',
+        location: '',
+        foodType: '',
+        mode: ''
+      });
 
   const [images, setImages] = useState([]);
   const [previews, setPreviews] = useState([]);
@@ -53,7 +54,7 @@ function FoodForm () {
     });
 
     try {
-      const res = await fetch('https://foodmed-server2.onrender.com/submit', {
+      const res = await fetch('http://localhost:3001/submit', {
         method: 'POST',
         body: data,
       });
@@ -68,7 +69,7 @@ function FoodForm () {
 
   const fetchUnexpiredItems = async () => {
     try {
-      const res = await fetch('https://foodmed-server2.onrender.com/submissions');
+      const res = await fetch('http://localhost:3001/submissions');
       const items = await res.json();
       const now = Date.now();
       const filtered = items.filter(
@@ -82,15 +83,31 @@ function FoodForm () {
 
   const handleRequest = async item => {
     try {
-      const response = await fetch('https://foodmed-server2.onrender.com/request', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          itemId: item.id,
-          foodName: item.foodName,
-          status: 'pending',
-        })
-      });
+      // const response = await fetch('http://localhost:3001/request', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body: JSON.stringify({
+      //     itemId: item.id,
+      //     foodName: item.foodName,
+      //     status: 'pending',
+      //   })
+      // });
+      const response = await fetch('http://localhost:3001/request', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                id: crypto.randomUUID(), // optional here, handled by backend too
+                userId: localStorage.getItem('userId'),
+                donorId: item.donorId,
+                foodId: item.id,
+                foodName: item.foodName,
+                email: localStorage.getItem('userEmail'),  // if stored
+                phone: localStorage.getItem('userPhone'),  // if stored
+                message: `I'd like to request this item.`, // optional message
+                status: 'pending'
+              })
+            });
+
       const result = await response.json();
       if (response.ok) {
         setNotifications(prev => [...prev, result.message || `Request for "${item.foodName}" sent`]);
@@ -109,7 +126,12 @@ function FoodForm () {
   useEffect(() => {
     const interval = setInterval(async () => {
       try {
-        const res = await fetch('https://foodmed-server2.onrender.com/requests');
+        const userId = localStorage.getItem('userId');
+        const role = localStorage.getItem('role');
+
+        if (!userId || !role) return;
+
+        const res = await fetch(`http://localhost:3001/requests?role=${role}&id=${userId}`);
         const requests = await res.json();
         const accepted = requests.filter(r => r.status === 'accepted');
         setNotifications(accepted.map(r => `Your request for "${r.foodName}" was accepted`));
