@@ -1,37 +1,33 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import Confetti from 'react-confetti'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { AuthContext } from '../AuthenticationContext/Authcontext'
 
 function Signup() {
+  const { t } = useTranslation()
+  const { login } = React.useContext(AuthContext);
   const [form, setForm] = useState({
     name: '',
-    phone: '',
     email: '',
     password: '',
     confirm: '',
-    role: '',
-  })
-
+    role: ''
+  });
+  const [error, setError] = useState('');
+  const [status, setStatus] = useState('idle');
   const [message, setMessage] = useState('')
-  const [status, setStatus] = useState('idle')
-  const [error, setError] = useState(null)
   const [success, setSuccess] = useState(false)
   const [showModal, setShowModal] = useState(false)
-  const navigate = useNavigate()
-  const { t } = useTranslation()
+  const navigate = useNavigate();
 
-  //to filter out the query params
   function handleChange(e) {
-    const { name, value } = e.target
-    setForm(prev => ({
-      ...prev,
-      [name]: value
-    }))
+    const { name, value } = e.target;
+    setForm(prev => ({ ...prev, [name]: value }));
   }
 
-  // function to display terms and conditions modal
+    // function to display terms and conditions modal
   function displayModal(){
     setShowModal(prev=>{
       return prev = !prev
@@ -43,47 +39,52 @@ function Signup() {
     setShowModal(prev=> !prev)
   }
 
-    async function handleSubmit(e) {
-          e.preventDefault();
-          setStatus('signing-up');
-          setMessage('');
-          setError(null);
+  async function handleSubmit(e) {
+    e.preventDefault();
+    setStatus('signing-up');
+    setMessage('')
+    setError('');
 
-          const { name, email, password, confirm, role } = form; // ✅ Extract fields from state
+    const { name, email, password, confirm, role } = form;
 
-          try {
-            const res = await fetch('http://localhost:5223/signup', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ name, email, password, confirm, role }) // ✅ Include role
-            });
+    if (!name || !email || !password || password !== confirm || !role) {
+      setError('Please fill all fields correctly');
+      setStatus('idle');
+      return;
+    }
 
-            const data = await res.json();
+    try {
+      const res = await fetch('http://localhost:5223/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, password, confirm, role })
+      });
 
-            if (!res.ok) {
-              throw new Error(data.error || 'Signup failed');
-            }
+      const data = await res.json();
 
-            setSuccess(true);
-            setMessage(data.message || 'Thank you for signing up successfully! Redirecting you to the login section');
-            setStatus('done');
+      if (!res.ok) {
+        throw new Error(data.error || 'Signup failed');
+      }
 
-            // Save to localStorage (if needed later)
-            localStorage.setItem('userName', name);
-            localStorage.setItem('userEmail', email);
-            localStorage.setItem('role', role);
+      // Login after successful signup
+      setSuccess(true)
+      setMessage(data.message || 'Thank you for signing up successfully!')
+      setStatus('done')
 
-            // Redirect after delay
-            setTimeout(() => {
-              navigate('/home');
-            }, 4500);
-
-          } catch (err) {
-            setError(err.message);
-            setStatus('failed');
-          }
-        }
-
+      login({
+            name: data.name,
+            email: data.email,
+            role: data.role
+          });
+    
+      setTimeout(() => {
+        navigate('/home')
+      }, 4500)
+    } catch (err) {
+      setError(err.message);
+      setStatus('idle');
+    }
+  }
 
  return (
     <div className="signup-form">

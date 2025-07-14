@@ -6,21 +6,22 @@ import { MdOutlineWavingHand } from "react-icons/md";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
 import { MdOutlineTimer } from "react-icons/md";
 import { MdLocationPin } from "react-icons/md";
-import { LocationContext } from '../LocationContext/LocationContext';
-import notificationSound from '../assets/notification.mp3.mp3';
-import loadingImg from '../assets/loading3.gif';
-import firstFood from '../assets/food1.jpg';
-import secondFood from '../assets/food2.jpeg';
-import thirdFood from '../assets/food3.jpeg';
-import fourthFood from '../assets/food4.jpeg';
-import fifthFood from '../assets/food5.jpeg';
-import sixthFood from '../assets/food6.jpeg';
-import fruits from '../assets/fruit.png';
-import vegetables from '../assets/vegetables.png';
-import palliative from '../assets/palliative.png';
-import protein from '../assets/protein.png';
-import beverages from '../assets/beverages.png';
-import grains from '../assets/grains.png';
+import { LocationContext } from '../../LocationContext/LocationContext';
+import notificationSound from '../../assets/notification.mp3.mp3'
+import loadingImg from '../../assets/loading3.gif';
+import firstFood from '../../assets/food1.jpg';
+import secondFood from '../../assets/food2.jpeg';
+import thirdFood from '../../assets/food3.jpeg';
+import fourthFood from '../../assets/food4.jpeg';
+import fifthFood from '../../assets/food5.jpeg';
+import sixthFood from '../../assets/food6.jpeg';
+import fruits from '../../assets/fruit.png';
+import vegetables from '../../assets/vegetables.png';
+import palliative from '../../assets/palliative.png';
+import protein from '../../assets/protein.png';
+import beverages from '../../assets/beverages.png';
+import grains from '../../assets/grains.png';
+import RequestModal from '../RequestModal';
 
 //this is to handle the time the food item is posted 
  function timeAgo(dateString) {
@@ -82,23 +83,10 @@ const SubmissionsDashboard = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // useEffect(() => {
-  //   setLoading(true);
-  //   fetch('https://foodmed-server2.onrender.com/submissions')
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       setSubmissions(data);
-  //       setLoading(false);
-  //     })
-  //     .catch((err) => {
-  //       console.error('Failed to fetch submissions:', err);
-  //       setLoading(false);
-  //     });
-  // }, []);
   useEffect(() => {
   setLoading(true);
   const query = selectedCategory ? `?type=${selectedCategory}` : '';
-  fetch(`http://localhost:3001/submissions${query}`)
+  fetch(`http://localhost:3005/submissions${query}`)
     .then((res) => res.json())
     .then((data) => {
       setSubmissions(data);
@@ -112,69 +100,113 @@ const SubmissionsDashboard = () => {
 
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      fetch('http://localhost:3001/requests')
-        .then((res) => res.json())
-        .then((data) => {
-          const confirmed = data.filter((req) => req.status === 'confirmed');
-          if (confirmed.length > 0) {
-            setNotifications((prev) => {
-              const newNotifs = confirmed
-                .filter((c) => !prev.find((p) => p.id === c.id))
-                .map((c) => ({
-                  id: c.id,
-                  message: `✅ Request for ${c.foodName} has been confirmed.`,
-                  type: 'confirmed',
-                }));
-              if (newNotifs.length > 0) {
-                setHasNewNotification(true);
-                return [...prev, ...newNotifs];
-              }
-              return prev;
-            });
-          }
-        })
-        .catch((err) =>
-          console.error('📡 Error checking confirmations:', err)
-        );
-    }, 10000);
-    return () => clearInterval(interval);
-  }, []);
+  const interval = setInterval(() => {
+    const role = localStorage.getItem('role');
+    const userId = localStorage.getItem('userEmail') || localStorage.getItem('donorEmail');
+    
+    if (!role || !userId) return;
+            fetch(`http://localhost:3005/requests?role=${role}&id=${userId}`)
+              .then((res) => res.json())
+              .then((data) => {
+                if (!Array.isArray(data)) {
+                  console.error('Invalid response format:', data);
+                  return;
+                }
 
-  const handleRequest = async (item) => {
-    const userEmail = prompt('Enter your email:');
-    const userPhone = prompt('Enter your phone number (with +234...):');
-    if (!userEmail || !userPhone) {
-      alert('Email and phone number are required to place a request.');
-      return;
-    }
-    const response = await fetch(
-      'http://localhost:3001/request',
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          itemId: item.id,
-          foodName: item.foodName,
-          email: userEmail,
-          phone: userPhone,
-        }),
-      }
-    );
-    const result = await response.json();
-    alert(result.message);
-    if (audioRef.current) audioRef.current.play();
-    setNotifications((prev) => [
-      ...prev,
-      {
-        id: Date.now(),
-        message: `Request sent for ${item.foodName}`,
-        type: 'request',
-      },
-    ]);
-    setHasNewNotification(true);
-  };
+                const confirmed = data.filter((req) => req.status === 'confirmed');
+                if (confirmed.length > 0) {
+                  setNotifications((prev) => {
+                    const newNotifs = confirmed
+                      .filter((c) => !prev.find((p) => p.id === c.id))
+                      .map((c) => ({
+                        id: c.id,
+                        message: `✅ Request for ${c.foodName} has been confirmed.`,
+                        type: 'confirmed',
+                      }));
+                    if (newNotifs.length > 0) {
+                        // 🔊 Play notification sound
+                        if (audioRef.current) {
+                          audioRef.current.play().catch((err) =>
+                            console.warn('Audio play failed:', err)
+                          );
+                        }
+                      setHasNewNotification(true);
+                    if (confirmed.length > 0) {
+                      setNotifications((prev) => {
+                        const newNotifs = confirmed
+                          .filter((c) => !prev.find((p) => p.id === c.id))
+                          .map((c) => ({
+                            id: c.id,
+                            message: `✅ Request for ${c.foodName} has been confirmed.`,
+                            type: 'confirmed',
+                          }));
 
+                        if (newNotifs.length > 0) {
+                          setHasNewNotification(true);
+                          return [...prev, ...newNotifs].slice(-10); // ✅ Limit to last 10
+                        }
+
+                        return prev;
+                      });
+                    }
+
+
+                    }
+                    return prev;
+                  });
+                }
+              })
+              .catch((err) =>
+                console.error('📡 Error checking confirmations:', err)
+              );
+          }, 10000);
+
+          return () => clearInterval(interval);
+        }, []);
+
+    
+  const modalRequest = <RequestModal
+                      item={selectedItem}
+                      isOpen={!!selectedItem}
+                      onClose={() => setSelectedItem(null)}
+                      onSubmit={async (phone) => {
+                        const userId = localStorage.getItem('userId') || localStorage.getItem('donorId');
+                        const userEmail = localStorage.getItem('userEmail');
+                        if (!userId || !userEmail || !phone) {
+                          alert('Missing user info or phone number');
+                          return;
+                        }
+
+                        const res = await fetch('http://localhost:3005/request', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({
+                            id: crypto.randomUUID(),
+                            itemId: selectedItem.id,
+                            foodName: selectedItem.foodName,
+                            donorId: selectedItem.donorId,
+                            donorEmail: selectedItem.donorEmail,
+                            userId,
+                            email: userEmail,
+                            phone,
+                            status: 'pending'
+                          })
+                        });
+
+                        const result = await res.json();
+                        if (res.ok) {
+                          setNotifications((prev) => [...prev, { id: crypto.randomUUID(), message: `🟠 Request sent for ${selectedItem.foodName}`, type: 'sent' }].slice(-10));
+                          if (audioRef.current) audioRef.current.play().catch(console.warn);
+                          setHasNewNotification(true);
+                          alert(result.message);
+                          setSelectedItem(null);
+                        } else {
+                          alert('Request failed.');
+                        }
+                      }}
+                    />
+
+  
   const toggleNotifications = () => {
     setShowNotifications(!showNotifications);
     setHasNewNotification(false);
@@ -193,14 +225,14 @@ const SubmissionsDashboard = () => {
   const closeModal = () => setSelectedItem(null);
 
   const themeStyles = {
-    background: darkMode ? '#1a1a1a' : '#f4f4f4',
+    background: darkMode ? 'black' : 'white',
     color: darkMode ? 'white' : 'black',
   };
 
   const renderImage = (url) => {
     return url?.startsWith('http')
       ? url
-      : `http://localhost:3001${url}`;
+      : `http://localhost:3005${url}`;
   };
 
   if (loading)
@@ -444,7 +476,7 @@ const SubmissionsDashboard = () => {
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  handleRequest(item);
+                  setSelectedItem(item)
                 }}
                 style={styles.requestBtn}
               >
@@ -495,8 +527,15 @@ const SubmissionsDashboard = () => {
         </motion.div>
       )}
     </div>
+
+     {/* Request Modal */}
+      {selectedItem && (
+        modalRequest
+      )}
   </div>
   );
+
+  
 };
 
 const styles = {

@@ -31,46 +31,37 @@ function Signin() {
   }
 
     async function handleSubmit(e) {
-            e.preventDefault();
-            setStatus('logging');
-            setError(null);
+    e.preventDefault();
+    setStatus('logging-in');
+    setError('');
 
-            try {
-              const res = await fetch('http://localhost:5223/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(loginForm)  // make sure loginForm includes email & password
-              });
+    try {
+      const res = await fetch('http://localhost:5223/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(loginForm)
+      });
 
-              const data = await res.json();
+      const data = await res.json();
 
-              if (!res.ok) {
-                throw new Error(data.error || 'Please enter valid credentials');
-              }
+      if (!res.ok) {
+        throw new Error(data.error || 'Login failed');
+      }
 
-              // If backend doesn't return email explicitly, use the one from loginForm
-              const userEmail = data.email || loginForm.email;
+      login({
+        name: data.name,
+        email: data.email,
+        role: data.role
+      });
+      
+      localStorage.setItem('donorId', data.email);
 
-              // Set to localStorage
-              localStorage.setItem('userName', data.name); 
-              localStorage.setItem('userEmail', userEmail); 
-              localStorage.setItem('role', data.role);  // ✅ Store role
-
-              // Call context login
-              login({
-                name: data.name,
-                email: userEmail,
-                role: data.role
-              });
-
-              // Redirect
-              navigate('/landing-page');
-            } catch (error) {
-              setError(error.message);
-              setStatus('idle');
-            }
-          }
-
+      navigate('/landing-page');
+    } catch (err) {
+      setError(err.message);
+      setStatus('idle');
+    }
+  }
 
   return (
     <div className="signin-form">

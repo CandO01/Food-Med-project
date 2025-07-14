@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { FaCloudUploadAlt, FaBell } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
-
 function FoodForm () {
   const [formData, setFormData] = useState({
-        donorId: localStorage.getItem('userId') || '', // ✅ Add this line
+        donorId: localStorage.getItem('donorId') || '', // ✅ Add this line
         donorName: '',
         donorPhone: '',
         donorEmail: localStorage.getItem('donorEmail') || '',
@@ -21,8 +19,6 @@ function FoodForm () {
   const [previews, setPreviews] = useState([]);
   const [unexpiredItems, setUnexpiredItems] = useState([]);
   const [notifications, setNotifications] = useState([]);
-
-  const navigate = useNavigate();
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -54,12 +50,16 @@ function FoodForm () {
     });
 
     try {
-      const res = await fetch('http://localhost:3001/submit', {
+      const res = await fetch('http://localhost:3005/submit', {
         method: 'POST',
         body: data,
       });
       const result = await res.json();
       alert(result.message || 'Submitted!');
+        if (localStorage.getItem('role') !== 'donor') {
+          localStorage.setItem('role', 'donor');
+          localStorage.setItem('donorId', localStorage.getItem('userEmail'));
+        }
       fetchUnexpiredItems();
     } catch (err) {
       console.error('Error submitting:', err);
@@ -69,11 +69,11 @@ function FoodForm () {
 
   const fetchUnexpiredItems = async () => {
     try {
-      const res = await fetch('http://localhost:3001/submissions');
+      const res = await fetch('http://localhost:3005/submissions');
       const items = await res.json();
       const now = Date.now();
       const filtered = items.filter(
-        item => new Date(item.expiryDate).getTime() > now && item.donorEmail === formData.donorEmail
+        item => new Date(item.expiryDate).getTime() > now && item.donorId === formData.donorId
       );
       setUnexpiredItems(filtered);
     } catch (err) {
@@ -92,7 +92,7 @@ function FoodForm () {
       //     status: 'pending',
       //   })
       // });
-      const response = await fetch('http://localhost:3001/request', {
+      const response = await fetch('http://localhost:3005/request', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
@@ -103,7 +103,7 @@ function FoodForm () {
                 foodName: item.foodName,
                 email: localStorage.getItem('userEmail'),  // if stored
                 phone: localStorage.getItem('userPhone'),  // if stored
-                message: `I'd like to request this item.`, // optional message
+                userName: localStorage.getItem('userName'),
                 status: 'pending'
               })
             });
@@ -121,17 +121,17 @@ function FoodForm () {
 
   useEffect(() => {
     fetchUnexpiredItems();
-  }, [formData.donorEmail]);
+  }, [formData.donorId]);
 
   useEffect(() => {
     const interval = setInterval(async () => {
       try {
-        const userId = localStorage.getItem('userId');
+        const userId = localStorage.getItem('userEmail') || localStorage.getItem('donorEmail');
         const role = localStorage.getItem('role');
 
         if (!userId || !role) return;
 
-        const res = await fetch(`http://localhost:3001/requests?role=${role}&id=${userId}`);
+        const res = await fetch(`http://localhost:3005/requests?role=${role}&id=${userId}`);
         const requests = await res.json();
         const accepted = requests.filter(r => r.status === 'accepted');
         setNotifications(accepted.map(r => `Your request for "${r.foodName}" was accepted`));

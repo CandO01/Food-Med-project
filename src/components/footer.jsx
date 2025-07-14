@@ -43,7 +43,7 @@ function Footer() {
       </div>
 
       <div style={footerStyle.iconContainer}>
-        <Link to="/donor-request-dashboard">
+        <Link to="/donor-profile">
           <FaUser style={footerStyle.icon} />
         </Link>
         <p style={footerStyle.p}>Profile</p>

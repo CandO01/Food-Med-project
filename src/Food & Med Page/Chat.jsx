@@ -1,315 +1,284 @@
+// src/pages/ChatPage.jsx
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import io from 'socket.io-client';
 
-const socket = io('http://localhost:3001'); // Your backend server
+const socket = io('http://localhost:3005');
 
 const ChatPage = () => {
   const { recipientId } = useParams();
-  const storedRecipientId = localStorage.getItem('lastRecipientId');
-  const chatWith = recipientId || storedRecipientId;
-
   const email = localStorage.getItem('userEmail') || localStorage.getItem('donorEmail');
-  const role = localStorage.getItem('role');
   const userId = email;
 
   const [contacts, setContacts] = useState([]);
   const [selectedContact, setSelectedContact] = useState(null);
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState('');
-  const messagesEndRef = useRef(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
+  const [isTyping, setIsTyping] = useState(false);
 
-  // 👥 Load contacts based on food request relationship
+
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(scrollToBottom, [messages]);
+
+  useEffect(() => {
+    if (!email) return;
+    socket.emit('online', userId); 
+    socket.on('onlineUsers', (list) => {
+      console.log('🟢 Online Users List:', list);
+      setOnlineUsers(list);
+    });
+    return () => socket.off('onlineUsers');
+  }, [email]);
+
+  useEffect(() => {
+    socket.on('receiveMessage', (msg) => {
+      if (
+        (msg.senderId === userId && msg.recipientId === selectedContact?.id) ||
+        (msg.senderId === selectedContact?.id && msg.recipientId === userId)
+      ) {
+        setMessages((prev) => [...prev, msg]);
+      }
+    });
+    return () => socket.off('receiveMessage');
+  }, [selectedContact]);
+
   useEffect(() => {
     const fetchContacts = async () => {
       try {
-        const res = await fetch(`http://localhost:3001/requests?role=${role}&id=${userId}`);
+        const role = localStorage.getItem('role');
+        const id = localStorage.getItem('userId') || localStorage.getItem('donorId');
+        const res = await fetch(`http://localhost:3005/requests?role=${role}&id=${id}`);
         const data = await res.json();
 
-        const uniqueEmails = new Set();
-        const contactsList = [];
 
-        data.forEach(req => {
-          const contactEmail = role === 'donor' ? req.email : req.donorEmail;
-          if (!uniqueEmails.has(contactEmail)) {
-            uniqueEmails.add(contactEmail);
-            contactsList.push({
-              id: contactEmail,
-              name: contactEmail,
-              foodName: req.foodName
-            });
-          }
+        const unique = {};
+        
+        const formatted = data.map(r => {
+          return {
+              id: role === 'donor' ? r.userEmail : r.donorEmail,
+              name: role === 'donor' ? r.userName || r.userEmail : r.donorName || r.donorEmail
+            };
+        }).filter(c => {
+          if (unique[c.id]) return false;
+          unique[c.id] = true;
+          return true;
         });
 
-        setContacts(contactsList);
-
-        // Automatically select contact if coming via link
-        if (chatWith) {
-          const found = contactsList.find(c => c.id === chatWith);
-          if (found) setSelectedContact(found);
-        }
-
+        setContacts(formatted);
       } catch (err) {
         console.error('Failed to fetch contacts:', err);
       }
     };
 
     fetchContacts();
-  }, [role, userId, chatWith]);
+  }, []);
 
-  // 🟢 Handle online users
+
+          // Load messages from localStorage on chat change
+        useEffect(() => {
+          if (selectedContact) {
+            const savedMessages = localStorage.getItem(`chat_${userId}_${selectedContact.id}`);
+            if (savedMessages) {
+              setMessages(JSON.parse(savedMessages));
+            }
+          }
+        }, [selectedContact, userId]);
+
+        // Fetch fresh messages from backend and replace current messages
+        useEffect(() => {
+          if (!selectedContact || !userId) return;
+          const fetchMessages = async () => {
+            try {
+              const res = await fetch(
+                `http://localhost:3005/messages?senderId=${userId}&recipientId=${selectedContact.id}`
+              );
+              const data = await res.json();
+              setMessages(data);
+            } catch (err) {
+              console.error('Failed to load messages:', err);
+            }
+          };
+          fetchMessages();
+        }, [selectedContact]);
+
+        // Save messages to localStorage on every update
+        useEffect(() => {
+          if (selectedContact) {
+            localStorage.setItem(`chat_${userId}_${selectedContact.id}`, JSON.stringify(messages));
+          }
+        }, [messages, selectedContact, userId]);
+
+
   useEffect(() => {
-    if (!email) return;
+    if (recipientId && contacts.length > 0) {
+      const found = contacts.find(c => c.id === recipientId);
+      if (found) setSelectedContact(found);
+    }
+  }, [recipientId, contacts]);
 
-    socket.emit('joinRoom', { senderId: email, recipientId: null });
-    socket.emit('online', email);
-
-    socket.on('onlineUsers', (list) => setOnlineUsers(list));
-
-    return () => socket.off('onlineUsers');
-  }, [email]);
-
-  // 💬 Fetch messages & setup listener
   useEffect(() => {
-    if (!selectedContact) return;
-
-    socket.emit('joinRoom', {
-      senderId: email,
-      recipientId: selectedContact.id
-    });
-
-    fetch(`http://localhost:3001/messages?senderId=${email}&recipientId=${selectedContact.id}`)
-      .then(res => res.json())
-      .then(setMessages)
-      .catch(console.error);
-
-    socket.on('receiveMessage', (msg) => {
-      if (
-        (msg.senderId === email && msg.recipientId === selectedContact.id) ||
-        (msg.senderId === selectedContact.id && msg.recipientId === email)
-      ) {
-        setMessages(prev => [...prev, msg]);
+    if (!selectedContact || !userId) return;
+    const fetchMessages = async () => {
+      try {
+        const res = await fetch(
+          `http://localhost:3005/messages?senderId=${userId}&recipientId=${selectedContact.id}`
+        );
+        const data = await res.json();
+        setMessages(data);
+      } catch (err) {
+        console.error('Failed to load messages:', err);
       }
-    });
-
-    return () => socket.off('receiveMessage');
-  }, [selectedContact, email]);
+    };
+    fetchMessages();
+  }, [selectedContact]);
 
   const sendMessage = () => {
     if (!text.trim() || !selectedContact) return;
-
-    const msg = {
-      senderId: email,
+    socket.emit('sendMessage', {
+      senderId: userId,
       recipientId: selectedContact.id,
       text
-    };
-
-    socket.emit('sendMessage', msg);
-    setMessages(prev => [...prev, { ...msg, timestamp: new Date().toISOString() }]);
+    });
+    setMessages((prev) => [...prev, { senderId: userId, recipientId: selectedContact.id, text }]);
     setText('');
   };
 
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+  //handle change of text in the input field and showing typing while user is typing
+  const handleTextChange = (e) => {
+      setText(e.target.value);
+      socket.emit('typing', { senderId: userId, recipientId: selectedContact?.id });
+    };
+ 
+    //listening to typing
+    useEffect(() => {
+      socket.on('typing', ({ senderId }) => {
+        if (senderId === selectedContact?.id) {
+          setIsTyping(true);
+          // Clear after 3 seconds
+          setTimeout(() => setIsTyping(false), 3000);
+        }
+      });
+      return () => socket.off('typing');
+    }, [selectedContact]);
 
-  const isOnline = (id) => onlineUsers.includes(id);
+    //chat history
+    useEffect(() => {
+        if (selectedContact) {
+          localStorage.setItem(`chat_${userId}_${selectedContact.id}`, JSON.stringify(messages));
+        }
+      }, [messages, selectedContact, userId]);
+
+      //chat history 
+      useEffect(() => {
+        if (selectedContact) {
+          const savedMessages = localStorage.getItem(`chat_${userId}_${selectedContact.id}`);
+          if (savedMessages) {
+            setMessages(JSON.parse(savedMessages));
+          }
+        }
+      }, [selectedContact, userId]);
+
+
+
 
   return (
-    <div style={styles.wrapper}>
-      {/* Sidebar */}
+    <div style={styles.container}>
       <div style={styles.sidebar}>
-        <h3>Chats</h3>
-        <ul style={styles.list}>
-          {contacts.map(contact => (
-            <li
-              key={contact.id}
-              onClick={() => {
-                setSelectedContact(contact);
-                localStorage.setItem('lastRecipientId', contact.id);
-              }}
-              style={{
-                ...styles.listItem,
-                background: selectedContact?.id === contact.id ? '#ddd' : 'transparent',
-                cursor: 'pointer',
-              }}
-            >
-              <span style={{ marginRight: 8 }}>
-                {isOnline(contact.id) ? '🟢' : '🔴'}
-              </span>
-              <div>
-                <strong>{contact.name}</strong><br />
-                <small>Food: {contact.foodName}</small>
-              </div>
-            </li>
-          ))}
-
-          {contacts.length === 0 && (
-            <p style={{ padding: '1rem', color: '#555' }}>
-              No contacts available. Make or receive a food request to chat.
-            </p>
-          )}
-        </ul>
+        <h3>Contacts</h3>
+        {contacts.map((contact, idx) => (
+          <div
+            key={idx}
+            style={{
+              ...styles.contactItem,
+              backgroundColor: selectedContact?.id === contact.id ? '#ddd' : '#fff'
+            }}
+            onClick={() => setSelectedContact(contact)}
+          >
+            {contact.name} {onlineUsers.includes(contact.id) ? '🟢' : '🔴'}
+          </div>
+        ))}
       </div>
 
-      {/* Chat Box */}
-      <div style={styles.chatContainer}>
+      <div style={styles.chatArea}>
         {selectedContact ? (
           <>
-            <h3>Chat with {selectedContact.name}</h3>
-            <div style={styles.chatBox}>
-              {messages.map((msg, idx) => (
-                <div
-                  key={idx}
-                  style={{
-                    ...styles.message,
-                    alignSelf: msg.senderId === email ? 'flex-end' : 'flex-start',
-                    background: msg.senderId === email ? '#dcf8c6' : '#fff'
-                  }}
-                >
-                  <div>{msg.text}</div>
-                  <small>{new Date(msg.timestamp).toLocaleTimeString()}</small>
-                </div>
-              ))}
+            <h4>Chat with {selectedContact.name}</h4>
+            {isTyping && <div style={styles.typingIndicator}>{selectedContact.name} is typing...</div>}
+
+            <div style={styles.messages}>
+              {messages.map((msg, i) => (
+                  <div
+                    key={i}
+                    style={{
+                      ...styles.message,
+                      alignSelf: msg.senderId === userId ? 'flex-end' : 'flex-start',
+                      backgroundColor: msg.senderId === userId ? '#dcf8c6' : '#fff'
+                    }}
+                  >
+                    {msg.text}
+                    {msg.fileUrl && (
+                      <div style={{ marginTop: 5 }}>
+                        <img src={msg.fileUrl} alt="uploaded file" style={{ maxWidth: '200px', maxHeight: '200px' }} />
+                      </div>
+                    )}
+                    <div style={styles.timestamp}>
+                      {new Date(msg.timestamp || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    </div>
+                  </div>
+                ))}
+
               <div ref={messagesEndRef} />
             </div>
 
             <div style={styles.inputRow}>
               <input
                 value={text}
-                onChange={(e) => setText(e.target.value)}
-                style={styles.input}
+                onChange={handleTextChange}
                 placeholder="Type your message..."
+                style={styles.input}
               />
               <button onClick={sendMessage} style={styles.button}>Send</button>
             </div>
           </>
         ) : (
-          <p style={{ padding: '2rem' }}>Select a chat to begin.</p>
+          <p>Select a chat to begin.</p>
         )}
       </div>
     </div>
   );
 };
 
-export default ChatPage;
-
 const styles = {
-  wrapper: {
-    display: 'flex',
-    height: '100vh'
-  },
-  sidebar: {
-    width: '30%',
-    borderRight: '1px solid #ccc',
-    padding: '1rem',
-    overflowY: 'auto'
-  },
-  list: {
-    listStyle: 'none',
-    padding: 0
-  },
-  listItem: {
-    padding: '0.5rem',
-    borderBottom: '1px solid #eee'
-  },
-  chatContainer: {
-    flex: 1,
-    padding: '1rem',
-    display: 'flex',
-    flexDirection: 'column'
-  },
-  chatBox: {
-    flex: 1,
-    overflowY: 'auto',
-    marginBottom: '1rem',
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '0.5rem'
-  },
-  message: {
-    padding: '0.5rem 1rem',
-    borderRadius: '10px',
-    maxWidth: '70%'
-  },
-  inputRow: {
-    display: 'flex',
-    gap: '1rem'
-  },
-  input: {
-    flex: 1,
-    padding: '0.5rem'
-  },
-  button: {
-    padding: '0.5rem 1rem',
-    background: 'orange',
-    border: 'none',
-    color: 'white',
-    cursor: 'pointer'
-  }
+  container: { display: 'flex', height: '80vh' },
+
+  sidebar: { width: '30%', borderRight: '1px solid #ccc', padding: '1rem', overflowY: 'auto' },
+
+  chatArea: { flex: 1, display: 'flex', flexDirection: 'column', padding: '1rem' },
+
+  contactItem: { padding: '0.5rem', marginBottom: '0.5rem', cursor: 'pointer', borderRadius: '5px' },
+
+  typingIndicator: { fontStyle: 'italic', color: '#888', marginBottom: '0.5rem', }, 
+
+  messages: { flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1rem' },
+
+  message: { padding: '0.5rem 1rem', borderRadius: '10px', maxWidth: '60%' },
+
+  timestamp: { fontSize: '0.75rem', color: '#666', marginTop: 4, textAlign: 'right' },
+
+  inputRow: { display: 'flex', gap: '0.5rem', marginBottom: -70 },
+
+  input: { flex: 1, padding: '0.5rem', borderRadius: '20px', border: '1px solid #ccc' },
+
+  button: { padding: '0.5rem 1rem', borderRadius: '20px', backgroundColor: 'orange', color: 'white', border: 'none' }
 };
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+export default ChatPage;
 
 
 
@@ -329,33 +298,102 @@ const styles = {
 // import { useParams } from 'react-router-dom';
 // import io from 'socket.io-client';
 
-// const socket = io('http://localhost:3001'); // Replace with your backend server address
+// const socket = io('http://localhost:3005'); // Your backend server
 
 // const ChatPage = () => {
-//   const { recipientId } = useParams(); // URL param: /chat/:recipientId
-//   const senderId = localStorage.getItem('donorEmail'); // Used for both donor or user
+//   const { recipientId } = useParams();
+//   const storedRecipientId = localStorage.getItem('lastRecipientId');
+//   const chatWith = recipientId || storedRecipientId;
+
+//   const email = localStorage.getItem('userEmail') || localStorage.getItem('donorEmail');
+//   const role = localStorage.getItem('role');
+//   const userId = email;
+
+//   const [contacts, setContacts] = useState([]);
+//   const [selectedContact, setSelectedContact] = useState(null);
 //   const [messages, setMessages] = useState([]);
 //   const [text, setText] = useState('');
 //   const messagesEndRef = useRef(null);
+//   const [onlineUsers, setOnlineUsers] = useState([]);
 
-//   // Fetch previous chat and setup socket listeners
+//   // 👥 Load contacts based on food request relationship
 //   useEffect(() => {
-//     if (!senderId || !recipientId) return;
+//     const fetchContacts = async () => {
+//       try {
+//         const res = await fetch(`http://localhost:3005/requests?role=${role}&id=${userId}`);
+//         const data = await res.json();
 
-//     // Join sender's room (so they receive messages)
-//     socket.emit('joinRoom', senderId);
+//         const uniqueEmails = new Set();
+//         const contactsList = [];
 
-//     // Fetch chat history
-//     fetch(`http://localhost:3001/messages?senderId=${senderId}&recipientId=${recipientId}`)
+//         data.forEach(req => {
+//           const contactEmail = role === 'donor' ? req.email : req.donorEmail;
+//           if (contactEmail && !uniqueEmails.has(contactEmail)) {
+//             uniqueEmails.add(contactEmail);
+//             contactsList.push({
+//               id: contactEmail,
+//               name: contactEmail,
+//               foodName: req.foodName
+//             });
+
+//             // 🆕 Automatically create room between user & donor
+//             socket.emit('joinRoom', {
+//               senderId: email,
+//               recipientId: contactEmail
+//             });
+//           }
+//         });
+
+//         setContacts(contactsList);
+
+//         // Auto-select contact if redirected from another page
+//         if (chatWith) {
+//           const found = contactsList.find(c => c.id === chatWith);
+//           if (found) setSelectedContact(found);
+//         }
+
+//       } catch (err) {
+//         console.error('Failed to fetch contacts:', err);
+//       }
+//     };
+
+//     fetchContacts();
+//   }, [role, userId, chatWith, email]);
+
+//   // 🟢 Handle online users
+//   useEffect(() => {
+//     if (!email) return;
+
+//     socket.emit('online', email);
+
+//     socket.on('onlineUsers', (list) => setOnlineUsers(list));
+
+//     return () => {
+//       socket.off('onlineUsers');
+//     };
+//   }, [email]);
+
+//   // 💬 Fetch messages & setup listener
+//   useEffect(() => {
+//     if (!selectedContact) return;
+
+//     // Join room once contact is selected
+//     socket.emit('joinRoom', {
+//       senderId: email,
+//       recipientId: selectedContact.id
+//     });
+
+//     // Load past messages
+//     fetch(`http://localhost:3005/messages?senderId=${email}&recipientId=${selectedContact.id}`)
 //       .then(res => res.json())
 //       .then(setMessages)
-//       .catch(err => console.error('Failed to fetch messages:', err));
+//       .catch(console.error);
 
-//     // Listen for incoming messages
+//     // Receive real-time messages
 //     socket.on('receiveMessage', (msg) => {
 //       if (
-//         (msg.sender === senderId && msg.receiver === recipientId) ||
-//         (msg.sender === recipientId && msg.receiver === senderId)
+//         (msg.senderId === email && msg.recipientId === selectedContact.id) ||
+//         (msg.senderId === selectedContact.id && msg.recipientId === email)
 //       ) {
 //         setMessages(prev => [...prev, msg]);
 //       }
@@ -364,18 +402,19 @@ const styles = {
 //     return () => {
 //       socket.off('receiveMessage');
 //     };
-//   }, [senderId, recipientId]);
+//   }, [selectedContact, email]);
 
 //   const sendMessage = () => {
-//     if (text.trim() === '') return;
+//     if (!text.trim() || !selectedContact) return;
 
 //     const msg = {
-//       sender: senderId,
-//       receiver: recipientId,
-//       text,
+//       senderId: email,
+//       recipientId: selectedContact.id,
+//       text
 //     };
 
-//     socket.emit('sendMessage', msg); // Send to backend
+//     socket.emit('sendMessage', msg);
+
 //     setMessages(prev => [...prev, { ...msg, timestamp: new Date().toISOString() }]);
 //     setText('');
 //   };
@@ -384,79 +423,146 @@ const styles = {
 //     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
 //   }, [messages]);
 
+//   const isOnline = (id) => onlineUsers.includes(id);
+
 //   return (
-//     <div style={styles.container}>
-//       <h2>Chat with {recipientId}</h2>
-//       <div style={styles.chatBox}>
-//         {messages.map((msg, idx) => (
-//           <div
-//             key={idx}
-//             style={{
-//               ...styles.message,
-//               alignSelf: msg.sender === senderId ? 'flex-end' : 'flex-start',
-//               background: msg.sender === senderId ? '#dcf8c6' : '#fff'
-//             }}
-//           >
-//             <div>{msg.text}</div>
-//             <small>{new Date(msg.timestamp).toLocaleTimeString()}</small>
-//           </div>
-//         ))}
-//         <div ref={messagesEndRef} />
+//     <div style={styles.wrapper}>
+//       {/* Sidebar */}
+//       <div style={styles.sidebar}>
+//         <h3>Chats</h3>
+//         <ul style={styles.list}>
+//           {contacts.map(contact => (
+//             <li
+//               key={contact.id}
+//               onClick={() => {
+//                 setSelectedContact(contact);
+//                 localStorage.setItem('lastRecipientId', contact.id);
+//               }}
+//               style={{
+//                 ...styles.listItem,
+//                 background: selectedContact?.id === contact.id ? '#ddd' : 'transparent',
+//                 cursor: 'pointer',
+//               }}
+//             >
+//               <span style={{ marginRight: 8 }}>
+//                 {isOnline(contact.id) ? '🟢' : '🔴'}
+//               </span>
+//               <div>
+//                 <strong>{contact.name}</strong><br />
+//                 <small>Food: {contact.foodName}</small>
+//               </div>
+//             </li>
+//           ))}
+
+//           {contacts.length === 0 && (
+//             <p style={{ padding: '1rem', color: '#555' }}>
+//               No contacts available. Make or receive a food request to chat.
+//             </p>
+//           )}
+//         </ul>
 //       </div>
-//       <div style={styles.inputRow}>
-//         <input
-//           value={text}
-//           onChange={(e) => setText(e.target.value)}
-//           style={styles.input}
-//           placeholder="Type your message..."
-//         />
-//         <button onClick={sendMessage} style={styles.button}>Send</button>
+
+//       {/* Chat Box */}
+//       <div style={styles.chatContainer}>
+//         {selectedContact ? (
+//           <>
+//             <h3>Chat with {selectedContact.name}</h3>
+//             <div style={styles.chatBox}>
+//               {messages.map((msg, idx) => (
+//                 <div
+//                   key={idx}
+//                   style={{
+//                     ...styles.message,
+//                     alignSelf: msg.senderId === email ? 'flex-end' : 'flex-start',
+//                     background: msg.senderId === email ? '#dcf8c6' : '#fff'
+//                   }}
+//                 >
+//                   <div>{msg.text}</div>
+//                   <small>{new Date(msg.timestamp).toLocaleTimeString()}</small>
+//                 </div>
+//               ))}
+//               <div ref={messagesEndRef} />
+//             </div>
+
+//             <div style={styles.inputRow}>
+//               <input
+//                 value={text}
+//                 onChange={(e) => setText(e.target.value)}
+//                 style={styles.input}
+//                 placeholder="Type your message..."
+//               />
+//               <button onClick={sendMessage} style={styles.button}>Send</button>
+//             </div>
+//           </>
+//         ) : (
+//           <p style={{ padding: '2rem' }}>Select a chat to begin.</p>
+//         )}
 //       </div>
 //     </div>
 //   );
 // };
 
+// export default ChatPage;
+
+// // 🔧 Styles
 // const styles = {
-//   container: { padding: '1rem', maxWidth: '600px', margin: 'auto' },
-//   chatBox: {
-//     border: '1px solid #ccc',
-//     height: '400px',
-//     overflowY: 'auto',
+//   wrapper: {
+//     display: 'flex',
+//     height: '100vh'
+//   },
+//   sidebar: {
+//     width: '30%',
+//     borderRight: '1px solid #ccc',
+//     padding: '1rem',
+//     overflowY: 'auto'
+//   },
+//   list: {
+//     listStyle: 'none',
+//     padding: 0
+//   },
+//   listItem: {
+//     padding: '0.5rem',
+//     borderBottom: '1px solid #eee'
+//   },
+//   chatContainer: {
+//     flex: 1,
 //     padding: '1rem',
 //     display: 'flex',
+//     flexDirection: 'column'
+//   },
+//   chatBox: {
+//     flex: 1,
+//     overflowY: 'auto',
+//     marginBottom: '1rem',
+//     display: 'flex',
 //     flexDirection: 'column',
-//     background: '#f5f5f5',
-//     borderRadius: '8px',
-//     marginBottom: '1rem'
+//     gap: '0.5rem'
 //   },
 //   message: {
-//     padding: '0.6rem 1rem',
-//     borderRadius: '20px',
-//     margin: '0.3rem 0',
-//     maxWidth: '80%',
-//     wordBreak: 'break-word'
+//     padding: '0.5rem 1rem',
+//     borderRadius: '10px',
+//     maxWidth: '70%'
 //   },
 //   inputRow: {
 //     display: 'flex',
-//     gap: '1rem'
+//     gap: '1rem',
+//     marginBottom:'48px'
 //   },
 //   input: {
 //     flex: 1,
-//     padding: '0.6rem',
-//     borderRadius: '20px',
-//     border: '1px solid #ccc'
+//     padding: '0.5rem',
+//     borderRadius: '50px',
+//     border:'1px solid grey'
 //   },
 //   button: {
-//     padding: '0.6rem 1rem',
+//     padding: '0.5rem 1rem',
 //     background: 'orange',
-//     color: 'white',
 //     border: 'none',
-//     borderRadius: '20px',
+//     color: 'white',
 //     cursor: 'pointer'
 //   }
 // };
 
-// export default ChatPage;
 
 
 

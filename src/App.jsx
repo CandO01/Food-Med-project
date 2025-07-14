@@ -15,11 +15,10 @@ import Congratulations from './Pages/Congratulations'
 import GeneralHomePage from './Food & Med Page/GeneralHomePage'
 import SplashCarousel from './SplashCarousel/SplashCarousel'
 import FoodForms from './components/FoodForm/FoodDonorForms'
-import FoodSubmissionDashboard from './components/FoodSubmissionDashboard'
-import DonorRequestsDashboard from './components/FoodForm/FoodDonorRequestForm'
+import FoodSubmissionDashboard from './components/FoodForm/FoodSubmissionDashboard'
 import ChatPage from './Food & Med Page/Chat'
 import DonorProfile from './components/FoodForm/DonorProfile'
-import UserRequests from './Food & Med Page/UserRequestChat'
+import UserRequests from './components/FoodForm/UserRequestChat'
 
 function App() {
   return (
@@ -44,13 +43,13 @@ function App() {
 
           {/* Food Form */}
           <Route path='food-form' element={<FoodForms />} />
-          <Route path='donor-request-dashboard' element={<DonorRequestsDashboard />} />
           <Route path='food-dashboard' element={<FoodSubmissionDashboard />} />
 
           {/* chatting platform */}
           <Route path="/chat/:recipientId" element={<ChatPage />} />
           <Route path='donor-profile' element={<DonorProfile />} />
           <Route path='user-request' element={<UserRequests />} />
+          {/* <Route path='user-request' element={<UserRequests />} /> */}
 
           {/* Catch-all route */}
           <Route path='*' element={<div>404 Not Found</div>} />

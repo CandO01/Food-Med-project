@@ -1,26 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { IoArrowBack } from 'react-icons/io5';
-import { Link } from 'react-router-dom';
-import io from 'socket.io-client';
-
-const socket = io('http://localhost:3001'); // adjust if hosted elsewhere
+import { Link, useNavigate } from 'react-router-dom';
+import ConfirmModal from './DonorConfirmationModal';
 
 const DonorProfile = () => {
   const [foodItems, setFoodItems] = useState([]);
-  const donorEmail = localStorage.getItem('donorEmail');
+  const [showModal, setShowModal] = useState(false);
+  const [selectedRequest, setSelectedRequest] = useState(null);
+  const donorId = localStorage.getItem('donorId');
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchData();
-    return () => socket.disconnect();
   }, []);
 
   const fetchData = async () => {
     try {
-      const res = await fetch('http://localhost:3001/submissions');
+      const res = await fetch(`http://localhost:3005/submissions?email=${donorId}`);
       const allItems = await res.json();
-      const donorItems = allItems.filter(item => item.donorEmail === donorEmail);
+      const donorItems = allItems.filter(item => item.donorEmail === donorId);
 
-      const reqRes = await fetch('http://localhost:3001/requests');
+      const reqRes = await fetch(`http://localhost:3005/requests?role=donor&id=${donorId}`);
       const allRequests = await reqRes.json();
 
       const itemsWithRequests = donorItems.map(item => {
@@ -34,24 +34,21 @@ const DonorProfile = () => {
     }
   };
 
-  const confirmRequest = async (reqId) => {
-    const date = prompt('Enter delivery date');
-    const time = prompt('Enter delivery time');
-    const location = prompt('Enter pickup location');
+  const handleConfirmClick = (req) => {
+    setSelectedRequest(req);
+    setShowModal(true);
+  };
 
-    if (!date || !time || !location) {
-      alert('All fields are required');
-      return;
-    }
-
+  const confirmRequest = async ({ date, time, location }) => {
     try {
-      const res = await fetch(`http://localhost:3001/request/update/${reqId}`, {
+      const res = await fetch(`http://localhost:3005/request/update/${selectedRequest.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ date, time, location })
+        body: JSON.stringify({ status: 'confirmed', date, time, location })
       });
       const result = await res.json();
       alert(result.message);
+      setShowModal(false);
       fetchData();
     } catch (err) {
       console.error('Failed to confirm request:', err);
@@ -59,9 +56,9 @@ const DonorProfile = () => {
   };
 
   const rejectRequest = async (reqId) => {
-    if (!window.confirm('Are you sure to reject?')) return;
+    if (!window.confirm('Are you sure you want to reject this request?')) return;
     try {
-      const res = await fetch(`http://localhost:3001/request/delete/${reqId}`, {
+      const res = await fetch(`http://localhost:3005/request/delete/${reqId}`, {
         method: 'DELETE'
       });
       const result = await res.json();
@@ -74,8 +71,8 @@ const DonorProfile = () => {
 
   return (
     <div style={{ padding: '2rem' }}>
-      <Link to='/food-form' style={styles.backLink}><IoArrowBack /> Back to Food Form</Link>
-      <h2 style={styles.heading}>Donor Profile & Requests</h2>
+      <Link to='/food-form' style={styles.backLink}><IoArrowBack /> Back</Link>
+      <h2>Donor Profile</h2>
 
       {foodItems.length === 0 ? (
         <p>No food requests yet.</p>
@@ -87,42 +84,43 @@ const DonorProfile = () => {
             <p><strong>Mode:</strong> {item.mode}</p>
             <p><strong>Expiry:</strong> {item.expiryDate}</p>
 
-            <h4 style={{ marginTop: '1rem' }}>User Requests:</h4>
+            <h4>User Requests:</h4>
             {item.requests.length === 0 ? (
               <p style={{ color: 'gray' }}>No requests.</p>
             ) : (
-              <ul style={styles.list}>
-                {item.requests.map((req, idx) => (
-                  <li key={idx} style={styles.requestItem}>
-                    <p><strong>Email:</strong> {req.email}</p>
-                    <p><strong>Status:</strong>
-                      <span style={{
-                        color: req.status === 'confirmed' ? 'green' : 'orange',
-                        fontWeight: 'bold',
-                        marginLeft: '0.5rem'
-                      }}>{req.status}</span>
-                    </p>
+              item.requests.map((req, idx) => (
+                <div key={idx} style={styles.requestItem}>
+                  <p><strong>Email:</strong> {req.userEmail}</p>
+                  <p><strong>Status:</strong>
+                    <span style={{ color: req.status === 'confirmed' ? 'green' : 'orange' }}>
+                      {req.status}
+                    </span>
+                  </p>
 
-                    {req.status !== 'confirmed' && (
-                      <div style={styles.buttonGroup}>
-                        <button style={styles.confirmBtn} onClick={() => confirmRequest(req.id)}>✅ Confirm</button>
-                        <button style={styles.rejectBtn} onClick={() => rejectRequest(req.id)}>❌ Reject</button>
-                      </div>
-                    )}
+                  {req.status !== 'confirmed' && (
+                    <div style={styles.buttonGroup}>
+                      <button onClick={() => handleConfirmClick(req)} style={styles.confirmBtn}>✅ Confirm</button>
+                      <button onClick={() => rejectRequest(req.id)} style={styles.rejectBtn}>❌ Reject</button>
+                    </div>
+                  )}
 
-                    <Link
-                      to={`/chat/${req.email}`}
-                      onClick={() => localStorage.setItem('lastRecipientId', req.email)}
-                    >
-                      <button style={styles.chatBtn}>💬 Chat with User</button>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
+                  <Link to={`/chat/${req.userEmail}`}>
+                    <button style={styles.chatBtn}>💬 Chat</button>
+                  </Link>
+                </div>
+              ))
             )}
           </div>
         ))
       )}
+
+      {/* Modal for confirming delivery */}
+      <ConfirmModal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        onConfirm={confirmRequest}
+        foodName={selectedRequest?.foodName}
+      />
     </div>
   );
 };
@@ -133,9 +131,6 @@ const styles = {
     color: 'orange',
     marginBottom: '1rem',
     display: 'inline-block'
-  },
-  heading: {
-    marginBottom: '1rem'
   },
   card: {
     border: '1px solid #ccc',
@@ -160,27 +155,259 @@ const styles = {
     backgroundColor: 'green',
     color: 'white',
     padding: '0.4rem 0.8rem',
-    border: 'none',
     borderRadius: '5px',
-    cursor: 'pointer'
+    border: 'none'
   },
   rejectBtn: {
     backgroundColor: 'red',
     color: 'white',
     padding: '0.4rem 0.8rem',
-    border: 'none',
     borderRadius: '5px',
-    cursor: 'pointer'
+    border: 'none'
   },
   chatBtn: {
     marginTop: '0.5rem',
     padding: '0.4rem 0.8rem',
-    border: 'none',
     background: 'orange',
     color: 'white',
     borderRadius: '5px',
-    cursor: 'pointer'
+    border: 'none'
   }
 };
 
 export default DonorProfile;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// // DonorProfile.jsx
+// import React, { useEffect, useState } from 'react';
+// import { IoArrowBack } from 'react-icons/io5';
+// import { Link } from 'react-router-dom';
+
+// const DonorProfile = () => {
+//   const [foodItems, setFoodItems] = useState([]);
+//   const donorId = localStorage.getItem('donorId');
+
+//   useEffect(() => {
+//     fetchData();
+//   }, []);
+
+//   const fetchData = async () => {
+//     try {
+//       const res = await fetch('http://localhost:3001/submissions');
+//       const allItems = await res.json();
+//       const donorItems = allItems.filter(item => item.donorEmail === donorId);
+
+//       const reqRes = await fetch(`http://localhost:3001/requests?role=donor&id=${donorId}`);
+//       const allRequests = await reqRes.json();
+
+//       const itemsWithRequests = donorItems.map(item => {
+//         const requestsForItem = allRequests.filter(r => r.foodName === item.foodName);
+//         return { ...item, requests: requestsForItem };
+//       });
+
+//       setFoodItems(itemsWithRequests);
+//     } catch (err) {
+//       console.error('Failed to load data:', err);
+//     }
+//   };
+
+//   const confirmRequest = async (reqId) => {
+//     const date = prompt('Enter delivery date');
+//     const time = prompt('Enter delivery time');
+//     const location = prompt('Enter pickup location');
+
+//     if (!date || !time || !location) {
+//       alert('All fields are required');
+//       return;
+//     }
+
+//     try {
+//       const res = await fetch(`http://localhost:3001/request/update/${reqId}`, {
+//         method: 'PATCH',
+//         headers: { 'Content-Type': 'application/json' },
+//         body: JSON.stringify({ status: 'confirmed', date, time, location })
+//       });
+//       const result = await res.json();
+//       alert(result.message);
+//       fetchData();
+//     } catch (err) {
+//       console.error('Failed to confirm request:', err);
+//     }
+//   };
+
+//   const rejectRequest = async (reqId) => {
+//     if (!window.confirm('Are you sure you want to reject this request?')) return;
+//     try {
+//       const res = await fetch(`http://localhost:3001/request/delete/${reqId}`, {
+//         method: 'DELETE'
+//       });
+//       const result = await res.json();
+//       alert(result.message);
+//       fetchData();
+//     } catch (err) {
+//       console.error('Failed to reject request:', err);
+//     }
+//   };
+
+//   return (
+//     <div style={{ padding: '2rem' }}>
+//       <Link to='/food-form' style={styles.backLink}><IoArrowBack /> Back</Link>
+//       <h2>Donor Profile</h2>
+
+//       {foodItems.length === 0 ? (
+//         <p>No food requests yet.</p>
+//       ) : (
+//         foodItems.map((item, index) => (
+//           <div key={index} style={styles.card}>
+//             <h3>{item.foodName}</h3>
+//             <p><strong>Quantity:</strong> {item.quantity}</p>
+//             <p><strong>Mode:</strong> {item.mode}</p>
+//             <p><strong>Expiry:</strong> {item.expiryDate}</p>
+
+//             <h4>User Requests:</h4>
+//             {item.requests.length === 0 ? (
+//               <p style={{ color: 'gray' }}>No requests.</p>
+//             ) : (
+//               item.requests.map((req, idx) => (
+//                 <div key={idx} style={styles.requestItem}>
+//                   <p><strong>Email:</strong> {req.userEmail}</p>
+//                   <p><strong>Status:</strong>
+//                     <span style={{ color: req.status === 'confirmed' ? 'green' : 'orange' }}>
+//                       {req.status}
+//                     </span>
+//                   </p>
+//                   {req.status !== 'confirmed' && (
+//                     <div style={styles.buttonGroup}>
+//                       <button onClick={() => confirmRequest(req.id)} style={styles.confirmBtn}>✅ Confirm</button>
+//                       <button onClick={() => rejectRequest(req.id)} style={styles.rejectBtn}>❌ Reject</button>
+//                     </div>
+//                   )}
+//                   <Link to={`/chat/${req.userEmail}`}>
+//                     <button style={styles.chatBtn}>💬 Chat</button>
+//                   </Link>
+//                 </div>
+//               ))
+//             )}
+//           </div>
+//         ))
+//       )}
+//     </div>
+//   );
+// };
+
+// const styles = {
+//   backLink: {
+//     textDecoration: 'none',
+//     color: 'orange',
+//     marginBottom: '1rem',
+//     display: 'inline-block'
+//   },
+//   card: {
+//     border: '1px solid #ccc',
+//     padding: '1rem',
+//     borderRadius: '8px',
+//     marginBottom: '1.5rem',
+//     background: '#f9f9f9'
+//   },
+//   requestItem: {
+//     marginTop: '1rem',
+//     padding: '0.8rem',
+//     backgroundColor: '#fff',
+//     borderRadius: '5px',
+//     border: '1px solid #ddd'
+//   },
+//   buttonGroup: {
+//     display: 'flex',
+//     gap: '1rem',
+//     marginTop: '0.5rem'
+//   },
+//   confirmBtn: {
+//     backgroundColor: 'green',
+//     color: 'white',
+//     padding: '0.4rem 0.8rem',
+//     borderRadius: '5px',
+//     border: 'none'
+//   },
+//   rejectBtn: {
+//     backgroundColor: 'red',
+//     color: 'white',
+//     padding: '0.4rem 0.8rem',
+//     borderRadius: '5px',
+//     border: 'none'
+//   },
+//   chatBtn: {
+//     marginTop: '0.5rem',
+//     padding: '0.4rem 0.8rem',
+//     background: 'orange',
+//     color: 'white',
+//     borderRadius: '5px',
+//     border: 'none'
+//   }
+// };
+
+// export default DonorProfile;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
