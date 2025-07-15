@@ -50,7 +50,7 @@ function FoodForm () {
     });
 
     try {
-      const res = await fetch('http://localhost:3005/submit', {
+      const res = await fetch('https://foodmed-server3.onrender.com/submit', {
         method: 'POST',
         body: data,
       });
@@ -69,7 +69,7 @@ function FoodForm () {
 
   const fetchUnexpiredItems = async () => {
     try {
-      const res = await fetch('http://localhost:3005/submissions');
+      const res = await fetch('https://foodmed-server3.onrender.com/submissions');
       const items = await res.json();
       const now = Date.now();
       const filtered = items.filter(
@@ -83,16 +83,7 @@ function FoodForm () {
 
   const handleRequest = async item => {
     try {
-      // const response = await fetch('http://localhost:3001/request', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({
-      //     itemId: item.id,
-      //     foodName: item.foodName,
-      //     status: 'pending',
-      //   })
-      // });
-      const response = await fetch('http://localhost:3005/request', {
+      const response = await fetch('https://foodmed-server3.onrender.com/request', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
@@ -131,7 +122,7 @@ function FoodForm () {
 
         if (!userId || !role) return;
 
-        const res = await fetch(`http://localhost:3005/requests?role=${role}&id=${userId}`);
+        const res = await fetch(`https://foodmed-server3.onrender.com/requests?role=${role}&id=${userId}`);
         const requests = await res.json();
         const accepted = requests.filter(r => r.status === 'accepted');
         setNotifications(accepted.map(r => `Your request for "${r.foodName}" was accepted`));

@@ -54,7 +54,7 @@ function Signup() {
     }
 
     try {
-      const res = await fetch('http://localhost:5223/signup', {
+      const res = await fetch('https://foodmed-firstserver-backup.onrender.com/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, password, confirm, role })
@@ -74,7 +74,8 @@ function Signup() {
       login({
             name: data.name,
             email: data.email,
-            role: data.role
+            role: data.role,
+            phone: data.phone
           });
     
       setTimeout(() => {

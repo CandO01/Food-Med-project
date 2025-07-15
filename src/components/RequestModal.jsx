@@ -2,18 +2,21 @@
 import React, { useState } from 'react';
 
 const RequestModal = ({ item, onClose, onSubmit }) => {
+  if (!item) return null;
   const [phone, setPhone] = useState('');
 
   const handleSubmit = () => {
-    onSubmit(phone);
+    if (onSubmit) onSubmit(item);
     onClose();
   };
+
+
 
   return (
     <div style={styles.overlay}>
       <div style={styles.modal}>
         <h3>Request {item.foodName}</h3>
-        <label>Email address</label>
+        <label>Enter your phone number</label>
         <input
           type="number"
           placeholder="Enter your phone number..."

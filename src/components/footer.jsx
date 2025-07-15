@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react';
 import { IoHomeSharp } from "react-icons/io5";
 import { BsFillChatTextFill } from "react-icons/bs";
 import { FaUser } from "react-icons/fa";
@@ -8,64 +8,86 @@ import { Link } from 'react-router-dom';
 
 function Footer() {
   const recipientId = localStorage.getItem('lastRecipientId');
+  const [showModal, setShowModal] = useState(false);
+
+  const handleChatClick = () => {
+    if (!recipientId) {
+      setShowModal(true);
+    }
+  };
 
   return (
-    <footer style={footerStyle.container}>
-      <div style={footerStyle.iconContainer}>
-        <Link to="/landing-page">
-          <IoHomeSharp style={footerStyle.icon} />
-        </Link>
-        <p style={footerStyle.p}>Home</p>
-      </div>
-      <div style={footerStyle.iconContainer}>
-        <Link to="/food-dashboard">
-          <MdFastfood style={footerStyle.icon} />
-        </Link>
-        <p style={footerStyle.p}>Food</p>
-      </div>
-      <div style={footerStyle.iconContainer}>
-        <Link to="/health">
-          <GiHealthNormal style={footerStyle.icon} />
-        </Link>
-        <p style={footerStyle.p}>Health</p>
-      </div>
-      <div style={footerStyle.iconContainer}>
-        {recipientId ? (
-          <Link to={`/chat/${recipientId}`}>
-            <BsFillChatTextFill style={footerStyle.icon} />
+    <>
+      <footer style={footerStyle.container}>
+        <div style={footerStyle.iconContainer}>
+          <Link to="/landing-page">
+            <IoHomeSharp style={footerStyle.icon} />
           </Link>
-        ) : (
-          <div onClick={() => alert('Please select a chat first')} style={{ cursor: 'not-allowed' }}>
-            <BsFillChatTextFill style={footerStyle.icon} />
-          </div>
-        )}
-        <p style={footerStyle.p}>Chat</p>
-      </div>
+          <p style={footerStyle.p}>Home</p>
+        </div>
 
-      <div style={footerStyle.iconContainer}>
-        <Link to="/donor-profile">
-          <FaUser style={footerStyle.icon} />
-        </Link>
-        <p style={footerStyle.p}>Profile</p>
-      </div>
-    </footer>
-  )
+        <div style={footerStyle.iconContainer}>
+          <Link to="/food-dashboard">
+            <MdFastfood style={footerStyle.icon} />
+          </Link>
+          <p style={footerStyle.p}>Food</p>
+        </div>
+
+        <div style={footerStyle.iconContainer}>
+          <Link to="/health">
+            <GiHealthNormal style={footerStyle.icon} />
+          </Link>
+          <p style={footerStyle.p}>Health</p>
+        </div>
+
+        <div style={footerStyle.iconContainer}>
+          {recipientId ? (
+            <Link to={`/chat/${recipientId}`}>
+              <BsFillChatTextFill style={footerStyle.icon} />
+            </Link>
+          ) : (
+            <div onClick={handleChatClick} style={{ cursor: 'pointer' }}>
+              <BsFillChatTextFill style={footerStyle.icon} />
+            </div>
+          )}
+          <p style={footerStyle.p}>Chat</p>
+        </div>
+
+        <div style={footerStyle.iconContainer}>
+          <Link to="/donor-profile">
+            <FaUser style={footerStyle.icon} />
+          </Link>
+          <p style={footerStyle.p}>Profile</p>
+        </div>
+      </footer>
+
+      {/* Modal */}
+      {showModal && (
+        <div style={modalStyle.overlay}>
+          <div style={modalStyle.modal}>
+            <p>Please select a chat first.</p>
+            <button onClick={() => setShowModal(false)} style={modalStyle.button}>Close</button>
+          </div>
+        </div>
+      )}
+    </>
+  );
 }
 
-export default Footer
+export default Footer;
 
+// Footer styles
 const footerStyle = {
-  container : {
+  container: {
     position: 'fixed',
     bottom: 0,
     left: 0,
     right: 0,
-    background: '#1a1a1a',
+    background: 'orange',
     color: 'white',
     display: 'flex',
     justifyContent: 'space-around',
     padding: '0.5rem 0',
-    background: 'orange'
   },
   icon: {
     fontSize: '26px',
@@ -83,5 +105,33 @@ const footerStyle = {
     fontSize: '12px',
     color: 'white',
   }
+};
 
- }
+// Modal styles
+const modalStyle = {
+  overlay: {
+    position: 'fixed',
+    top: 0, left: 0, right: 0, bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1000
+  },
+  modal: {
+    backgroundColor: '#fff',
+    padding: '2rem',
+    borderRadius: '8px',
+    textAlign: 'center',
+    boxShadow: '0 4px 8px rgba(0,0,0,0.2)'
+  },
+  button: {
+    marginTop: '1rem',
+    padding: '0.5rem 1rem',
+    backgroundColor: 'orange',
+    color: 'white',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer'
+  }
+};

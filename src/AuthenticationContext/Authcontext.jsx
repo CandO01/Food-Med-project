@@ -19,20 +19,27 @@ function AuthcontextProvider({ children }) {
     }
   }, []);
 
-  const login = ({ name, email, role }) => {
-    setUser({ name, email, role });
-    setIsLoggedIn(true);
-    localStorage.setItem('userName', name);
-    localStorage.setItem('userEmail', email);
-    localStorage.setItem('role', role);
+  const login = ({ name, email, role, phone }) => {
+  localStorage.clear(); // clear previous user data first
 
-      // Set userId and/or donorId based on role
-     localStorage.setItem('userId', email); // Set for both roles
-        if (role === 'donor') {
-          localStorage.setItem('donorId', email);
-        }
+  setUser({ name, email, role });
+  setIsLoggedIn(true);
+  localStorage.setItem('userName', name);
+  localStorage.setItem('userEmail', email);
+  localStorage.setItem('role', role);
+  localStorage.setItem('userPhone', phone); // ✅ Save phone directly here
 
-  };
+  // Set userId and/or donorId based on role
+  localStorage.setItem('userId', email); // Set for both roles
+
+  if (role === 'donor') {
+    localStorage.setItem('donorId', email);
+    localStorage.removeItem('userId');
+  } else {
+    localStorage.setItem('userId', email);
+    localStorage.removeItem('donorId');
+  }
+};
 
   const logout = () => {
     setUser(null);

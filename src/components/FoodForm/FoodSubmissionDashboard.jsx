@@ -41,7 +41,8 @@ const SubmissionsDashboard = () => {
   const [submissions, setSubmissions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
-  const [selectedItem, setSelectedItem] = useState(null);
+  const [selectedItem, setSelectedItem] = useState(null);      // for Food Details Modal
+  const [requestItem, setRequestItem] = useState(null);        // for Request Modal
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
   const [hasNewNotification, setHasNewNotification] = useState(false);
@@ -86,7 +87,7 @@ const SubmissionsDashboard = () => {
   useEffect(() => {
   setLoading(true);
   const query = selectedCategory ? `?type=${selectedCategory}` : '';
-  fetch(`http://localhost:3005/submissions${query}`)
+  fetch(`https://foodmed-server3.onrender.com/submissions${query}`)
     .then((res) => res.json())
     .then((data) => {
       setSubmissions(data);
@@ -105,7 +106,7 @@ const SubmissionsDashboard = () => {
     const userId = localStorage.getItem('userEmail') || localStorage.getItem('donorEmail');
     
     if (!role || !userId) return;
-            fetch(`http://localhost:3005/requests?role=${role}&id=${userId}`)
+            fetch(`https://foodmed-server3.onrender.com/requests?role=${role}&id=${userId}`)
               .then((res) => res.json())
               .then((data) => {
                 if (!Array.isArray(data)) {
@@ -166,36 +167,46 @@ const SubmissionsDashboard = () => {
 
     
   const modalRequest = <RequestModal
-                      item={selectedItem}
-                      isOpen={!!selectedItem}
-                      onClose={() => setSelectedItem(null)}
-                      onSubmit={async (phone) => {
+                        item={requestItem}
+                        isOpen={!!requestItem}
+                        onClose={() => setRequestItem(null)}
+                        onSubmit={async (item) => {
                         const userId = localStorage.getItem('userId') || localStorage.getItem('donorId');
-                        const userEmail = localStorage.getItem('userEmail');
-                        if (!userId || !userEmail || !phone) {
+                        const userEmail = localStorage.getItem('userEmail') ||  localStorage.getItem('donorEmail')
+                         const userPhone = localStorage.getItem('userPhone');
+                         const userName = localStorage.getItem('userName');
+
+                        if (!item.donorEmail || !item.donorId || !item.donorName) {
+                            alert("This food item is missing some donor information. Please select a newer one.");
+                            return;
+                          }
+
+                        if (!userId || !userEmail || !userPhone || !item) {
                           alert('Missing user info or phone number');
                           return;
                         }
 
-                        const res = await fetch('http://localhost:3005/request', {
-                          method: 'POST',
-                          headers: { 'Content-Type': 'application/json' },
-                          body: JSON.stringify({
-                            id: crypto.randomUUID(),
-                            itemId: selectedItem.id,
-                            foodName: selectedItem.foodName,
-                            donorId: selectedItem.donorId,
-                            donorEmail: selectedItem.donorEmail,
-                            userId,
-                            email: userEmail,
-                            phone,
-                            status: 'pending'
-                          })
-                        });
+                        const res = await fetch('https://foodmed-server3.onrender.com/request', {
+                              method: 'POST',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify({
+                                    itemId: item.id,
+                                    foodName: item.foodName,
+                                    donorId: item.donorId,
+                                    donorEmail: item.donorEmail,
+                                    donorName: item.donorName,
+                                    userId,
+                                    userName,
+                                    email: userEmail,
+                                    phone: userPhone,
+                                    status: 'pending'
+                                  })
+                            });
+
 
                         const result = await res.json();
                         if (res.ok) {
-                          setNotifications((prev) => [...prev, { id: crypto.randomUUID(), message: `🟠 Request sent for ${selectedItem.foodName}`, type: 'sent' }].slice(-10));
+                          setNotifications((prev) => [...prev, { id: crypto.randomUUID(), message: `🟠 Request sent for ${item.foodName}`, type: 'sent' }].slice(-10));
                           if (audioRef.current) audioRef.current.play().catch(console.warn);
                           setHasNewNotification(true);
                           alert(result.message);
@@ -232,7 +243,7 @@ const SubmissionsDashboard = () => {
   const renderImage = (url) => {
     return url?.startsWith('http')
       ? url
-      : `http://localhost:3005${url}`;
+      : `https://foodmed-server3.onrender.com${url}`;
   };
 
   if (loading)
@@ -476,12 +487,13 @@ const SubmissionsDashboard = () => {
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  setSelectedItem(item)
+                  setRequestItem(item); // open the Request Modal
                 }}
                 style={styles.requestBtn}
               >
-                 {item.mode?.toLowerCase() === 'barter' ? 'Trade Now' : 'Request Now'}
+                {item.mode?.toLowerCase() === 'barter' ? 'Trade Now' : 'Request Now'}
               </button>
+
             </div>
           </motion.div>
         ))}
@@ -529,13 +541,9 @@ const SubmissionsDashboard = () => {
     </div>
 
      {/* Request Modal */}
-      {selectedItem && (
-        modalRequest
-      )}
+      { modalRequest }
   </div>
   );
-
-  
 };
 
 const styles = {

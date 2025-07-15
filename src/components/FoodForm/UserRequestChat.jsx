@@ -13,7 +13,7 @@ const UserRequests = () => {
       if (!role || !userId) return;
 
       try {
-        const res = await fetch(`http://localhost:3005/requests?role=${role}&id=${userId}`);
+        const res = await fetch(`https://foodmed-server3.onrender.com/requests?role=${role}&id=${userId}`);
         const data = await res.json();
         setRequests(data);
       } catch (error) {

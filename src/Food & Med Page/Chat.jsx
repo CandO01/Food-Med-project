@@ -3,7 +3,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import io from 'socket.io-client';
 
-const socket = io('http://localhost:3005');
+const socket = io('https://foodmed-server3.onrender.com');
 
 const ChatPage = () => {
   const { recipientId } = useParams();
@@ -53,8 +53,9 @@ const ChatPage = () => {
       try {
         const role = localStorage.getItem('role');
         const id = localStorage.getItem('userId') || localStorage.getItem('donorId');
-        const res = await fetch(`http://localhost:3005/requests?role=${role}&id=${id}`);
+        const res = await fetch(`https://foodmed-server3.onrender.com/requests?role=${role}&id=${id}`);
         const data = await res.json();
+        console.log('🔍 Fetching contacts for:', { role, id });
 
 
         const unique = {};
@@ -70,6 +71,7 @@ const ChatPage = () => {
           return true;
         });
 
+
         setContacts(formatted);
       } catch (err) {
         console.error('Failed to fetch contacts:', err);
@@ -78,7 +80,7 @@ const ChatPage = () => {
 
     fetchContacts();
   }, []);
-
+      
 
           // Load messages from localStorage on chat change
         useEffect(() => {
@@ -96,7 +98,7 @@ const ChatPage = () => {
           const fetchMessages = async () => {
             try {
               const res = await fetch(
-                `http://localhost:3005/messages?senderId=${userId}&recipientId=${selectedContact.id}`
+                `https://foodmed-server3.onrender.com/messages?senderId=${userId}&recipientId=${selectedContact.id}`
               );
               const data = await res.json();
               setMessages(data);
@@ -127,7 +129,7 @@ const ChatPage = () => {
     const fetchMessages = async () => {
       try {
         const res = await fetch(
-          `http://localhost:3005/messages?senderId=${userId}&recipientId=${selectedContact.id}`
+          `https://foodmed-server3.onrender.com/messages?senderId=${userId}&recipientId=${selectedContact.id}`
         );
         const data = await res.json();
         setMessages(data);
