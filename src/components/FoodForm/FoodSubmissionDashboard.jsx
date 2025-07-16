@@ -48,6 +48,8 @@ const SubmissionsDashboard = () => {
   const [hasNewNotification, setHasNewNotification] = useState(false);
   const [darkMode, setDarkMode] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [modalMessage, setModalMessage] = useState('');
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const audioRef = useRef(null);
 
   const name = localStorage.getItem('userName') || 'Guest'
@@ -176,15 +178,19 @@ const SubmissionsDashboard = () => {
                          const userPhone = localStorage.getItem('userPhone');
                          const userName = localStorage.getItem('userName');
 
-                        if (!item.donorEmail || !item.donorId || !item.donorName) {
-                            alert("This food item is missing some donor information. Please select a newer one.");
-                            return;
-                          }
+                    if (!item.donorEmail || !item.donorId || !item.donorName) {
+                        setModalMessage("This food item is missing some donor information. Please select a newer one.");
+                        setShowFeedbackModal(true);
+                        setTimeout(() => setShowFeedbackModal(false), 3000);
+                        return;
+                      }
 
-                        if (!userId || !userEmail || !userPhone || !item) {
-                          alert('Missing user info or phone number');
-                          return;
-                        }
+                      if (!userId || !userEmail || !userPhone || !item) {
+                        setModalMessage("Missing user info or phone number");
+                        setShowFeedbackModal(true);
+                        setTimeout(() => setShowFeedbackModal(false), 3000);
+                        return;
+                      }
 
                         const res = await fetch('https://foodmed-server3.onrender.com/request', {
                               method: 'POST',
@@ -206,14 +212,20 @@ const SubmissionsDashboard = () => {
 
                         const result = await res.json();
                         if (res.ok) {
-                          setNotifications((prev) => [...prev, { id: crypto.randomUUID(), message: `🟠 Request sent for ${item.foodName}`, type: 'sent' }].slice(-10));
-                          if (audioRef.current) audioRef.current.play().catch(console.warn);
-                          setHasNewNotification(true);
-                          alert(result.message);
-                          setSelectedItem(null);
-                        } else {
-                          alert('Request failed.');
-                        }
+                                  setNotifications((prev) => [...prev, { id: crypto.randomUUID(), message: `🟠 Request sent for ${item.foodName}`, type: 'sent' }].slice(-10));
+                                  if (audioRef.current) audioRef.current.play().catch(console.warn);
+                                  setHasNewNotification(true);
+                                  
+                                  setModalMessage(result.message || '✅ Request sent successfully');
+                                  setShowFeedbackModal(true);
+                                  setTimeout(() => setShowFeedbackModal(false), 4000);
+
+                                  setRequestItem(null);
+                                } else {
+                                  setModalMessage("Request failed.");
+                                  setShowFeedbackModal(true);
+                                  setTimeout(() => setShowFeedbackModal(false), 3000);
+                                }
                       }}
                     />
 
@@ -541,7 +553,16 @@ const SubmissionsDashboard = () => {
     </div>
 
      {/* Request Modal */}
-      { modalRequest }
+      {modalRequest}
+      <audio ref={audioRef} src={notificationSound} preload="auto" />
+
+      {showFeedbackModal && (
+        <div style={styles.overlay}>
+          <div style={styles.modalBox}>
+            <p style={styles.modalText}>{modalMessage}</p>
+          </div>
+        </div>
+      )}
   </div>
   );
 };
@@ -771,6 +792,32 @@ image: {
     borderRadius: '5px',
     cursor: 'pointer',
   },
+ overlay: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '100vw',
+    height: '100vh',
+    background: 'rgba(0,0,0,0.5)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 1000,
+  },
+  modalBox: {
+    background: '#fff',
+    padding: '20px 30px',
+    borderRadius: '10px',
+    boxShadow: '0 5px 15px rgba(0,0,0,0.3)',
+    animation: 'fadeIn 0.4s ease',
+    minWidth: '250px',
+  },
+  modalText: {
+    margin: 0,
+    color: '#333',
+    fontSize: '16px',
+    textAlign: 'center',
+  }
 };
 
 export default SubmissionsDashboard;
