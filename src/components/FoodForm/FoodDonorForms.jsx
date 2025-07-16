@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { FaCloudUploadAlt, FaBell } from 'react-icons/fa';
+import successIcon from '../../assets/check1.gif'
 function FoodForm () {
   const [formData, setFormData] = useState({
-        donorId: localStorage.getItem('donorId') || '', // ✅ Add this line
+        donorId: localStorage.getItem('donorId') || '',
         donorName: '',
         donorPhone: '',
         donorEmail: localStorage.getItem('donorEmail') || '',
@@ -19,6 +20,7 @@ function FoodForm () {
   const [previews, setPreviews] = useState([]);
   const [unexpiredItems, setUnexpiredItems] = useState([]);
   const [notifications, setNotifications] = useState([]);
+  const [showModal, setShowModal] = useState(false)
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -55,7 +57,12 @@ function FoodForm () {
         body: data,
       });
       const result = await res.json();
-      alert(result.message || 'Submitted!');
+      //show success upload
+      setShowModal(true)
+      setTimeout(()=>{
+        setShowModal(false)
+      },5000)
+
         if (localStorage.getItem('role') !== 'donor') {
           localStorage.setItem('role', 'donor');
           localStorage.setItem('donorId', localStorage.getItem('userEmail'));
@@ -87,7 +94,7 @@ function FoodForm () {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
-                id: crypto.randomUUID(), // optional here, handled by backend too
+                id: crypto.randomUUID(), 
                 userId: localStorage.getItem('userId'),
                 donorId: item.donorId,
                 foodId: item.id,
@@ -299,6 +306,16 @@ function FoodForm () {
           </ul>
         )}
       </div>
+      {/* Success modal upload */}
+      {showModal && (
+        <div style={styles.modalOverlay}>
+          <div style={styles.modalContent}>
+            <img style={styles.imageIcon}  src={successIcon} alt="uploaded successfully animation" />
+            <p style={{fontSize: 20, fontWeight: 600}}>Your food is uploaded successfully.</p>
+            <button onClick={() => setShowModal(false)} style={styles.modalBtn}>OK</button>
+          </div>
+        </div>
+      )}
     </>
   );
 };
@@ -377,6 +394,36 @@ const styles = {
     borderRadius: '5px',
     cursor: 'pointer',
   },
+   modalOverlay: {
+    position: 'fixed',
+    top: 0, left: 0, right: 0, bottom: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 999,
+  },
+  modalContent: {
+    background: '#fff',
+    padding: '2rem',
+    borderRadius: '10px',
+    textAlign: 'center',
+    maxWidth: '300px',
+    width: '90%',
+  },
+  modalBtn: {
+    marginTop: '1rem',
+    padding: '0.5rem 1.2rem',
+    background: 'orange',
+    color: '#fff',
+    border: 'none',
+    borderRadius: '5px',
+    cursor: 'pointer',
+  },
+  imageIcon:{
+    width: '180px',
+
+  }
 };
 
 export default FoodForm;
