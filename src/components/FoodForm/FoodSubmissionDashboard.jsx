@@ -462,7 +462,7 @@ const SubmissionsDashboard = () => {
               alt={item.foodName}
               style={styles.image}
             />
-            <div style={{display: 'flex', flexDirection: 'column', flexBasis: '70%'}}>
+            <div style={{display: 'flex', flexDirection: 'column', flexBasis: '68%'}}>
              <small 
               style={{
                 backgroundColor: 'white',
@@ -689,38 +689,37 @@ const styles = {
     borderRadius: '50px',
     border: '1px solid orange',
   },
-grid: {
-  display: 'grid',
+grid:{
+  display: 'flex',
+  flexDirection: 'column',
   gap: '0.5rem',
-  gridTemplateColumns: 'repeat(1, 1fr)',
-  width: '100%',
-  // padding: '0.5rem',
-  boxSizing: 'border-box',
+  alignItems: 'flex-start',
 },
+
 card: {
   background: '#fff',
   display: 'flex',
   justifyContent: 'space-between',
-  alignItems: 'center',
+  alignItems: 'flex-start',
   color: '#000',
   borderRadius: '10px',
   padding: '1.2rem 1rem',
-  border: '2px solid orange',
+  border: '2px solid gray',
   cursor: 'pointer',
   boxShadow: '0 0 10px rgba(0,0,0,0.1)',
-  // minHeight: '250px', 
   width: '100%',
   maxWidth: '100%',
   boxSizing: 'border-box'
 },
-  image: {
-    width: '200px',
-    flexBasis: '30%',
-    height: 90,
-    objectFit: 'cover',
-    borderRadius: '8px',
-    marginBottom: '1rem',
-  },
+image: {
+  width: '20%',
+  height: '100px',
+  objectFit: 'cover',
+  flexBasis: '20%',
+  borderRadius: '8px',
+  marginBottom: '1rem',
+  alignSelf: 'flex-start', // keeps image aligned to top of card
+},
   requestBtn: {
     marginTop: '0.5rem',
     padding: '0.5rem 1.5rem',
@@ -730,16 +729,16 @@ card: {
     borderRadius: '5px',
     cursor: 'pointer',
   },
-  description: {
-  whiteSpace: 'normal',
-  overflow: 'hidden',
-  textOverflow: 'ellipsis',
-  display: 'block',
-  width: '100%',
-  maxWidth: '100%',
-  height: '1.2em',
-  lineHeight: '1.2em',
-},
+//   description: {
+//   whiteSpace: 'normal',
+//   overflow: 'hidden',
+//   textOverflow: 'ellipsis',
+//   display: 'block',
+//   width: '100%',
+//   maxWidth: '100%',
+//   height: '1.2em',
+//   lineHeight: '1.2em',
+// },
 
   modalOverlay: {
     position: 'fixed',
