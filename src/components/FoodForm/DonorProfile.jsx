@@ -13,8 +13,10 @@ const DonorProfile = () => {
   const donorEmail = localStorage.getItem('donorEmail');
 
   useEffect(() => {
+     if (donorEmail && donorId) {
     fetchData();
-  }, []);
+    }
+  }, [donorEmail, donorId]);
 
   const fetchData = async () => {
     try {
@@ -77,7 +79,7 @@ const DonorProfile = () => {
   return (
     <div style={{ padding: '2rem' }}>
       <Link to='/food-form' style={styles.backLink}><IoArrowBack /> Back</Link>
-      <h2>🍽️ Donor Profile</h2>
+      <h2> Donor Profile</h2>
 
       {foodItems.length === 0 ? (
         <p>No food items uploaded yet.</p>
