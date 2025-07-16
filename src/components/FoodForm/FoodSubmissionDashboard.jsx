@@ -729,16 +729,9 @@ image: {
     borderRadius: '5px',
     cursor: 'pointer',
   },
-//   description: {
-//   whiteSpace: 'normal',
-//   overflow: 'hidden',
-//   textOverflow: 'ellipsis',
-//   display: 'block',
-//   width: '100%',
-//   maxWidth: '100%',
-//   height: '1.2em',
-//   lineHeight: '1.2em',
-// },
+  description: {
+   fontWeight: 600,
+},
 
   modalOverlay: {
     position: 'fixed',
