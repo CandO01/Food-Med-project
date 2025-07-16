@@ -13,33 +13,39 @@ const DonorProfile = () => {
   const donorEmail = localStorage.getItem('donorEmail');
 
   useEffect(() => {
-     if (donorEmail && donorId) {
-    fetchData();
-    }
-  }, [donorEmail, donorId]);
+    fetchData()
+  }, []);
 
+  // 
   const fetchData = async () => {
-    try {
-      // Fetch food submissions
-      const foodRes = await fetch(`https://foodmed-server3.onrender.com/submissions?email=${donorEmail}`);
-      const allFood = await foodRes.json();
-
-      // Fetch requests
-      const reqRes = await fetch(`https://foodmed-server3.onrender.com/requests?role=donor&id=${donorEmail}`);
-      const allRequests = await reqRes.json();
-
-      // Match requests to food items
-      const itemsWithRequests = allFood.map(item => {
-        const itemRequests = allRequests.filter(req => req.itemId === item.id);
-        return { ...item, requests: itemRequests };
-      });
-
-      setFoodItems(itemsWithRequests);
-      setRequests(allRequests);
-    } catch (err) {
-      console.error('❌ Failed to load data:', err);
+  try {
+    // Ensure donorId and donorEmail exist
+    if (!donorId || !donorEmail) {
+      console.warn('Missing donor credentials');
+      return;
     }
-  };
+
+    // Fetch food submissions using donorId (if backend supports it) or fallback to email
+    const foodRes = await fetch(`https://foodmed-server3.onrender.com/submissions?email=${donorEmail}`);
+    const allFood = await foodRes.json();
+
+    // Fetch requests made to this donor
+    const reqRes = await fetch(`https://foodmed-server3.onrender.com/requests?role=donor&id=${donorId}`);
+    const allRequests = await reqRes.json();
+
+    // Match requests to food items
+    const itemsWithRequests = allFood.map(item => {
+      const itemRequests = allRequests.filter(req => req.itemId === item.id);
+      return { ...item, requests: itemRequests };
+    });
+
+    setFoodItems(itemsWithRequests);
+    setRequests(allRequests);
+  } catch (err) {
+    console.error('❌ Failed to load data:', err);
+  }
+};
+
 
   const handleConfirmClick = (req) => {
     setSelectedRequest(req);

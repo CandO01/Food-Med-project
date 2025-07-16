@@ -712,7 +712,7 @@ card: {
   boxSizing: 'border-box'
 },
 image: {
-  width: '20%',
+  width: '30%',
   height: '100px',
   objectFit: 'cover',
   flexBasis: '20%',
