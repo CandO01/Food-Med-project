@@ -47,7 +47,7 @@ function ForgotPassword() {
       </div>
 
       <div style={forgotPasswordStyle.passwordh3}>
-        <h3 style={{ color: '#FFA500', fontSize: '1.25rem', marginBottom: '2px' }}>Forgotten Password?</h3>
+        <h3 style={{ color: '#FFFFF', fontSize: '1.25rem', marginBottom: '2px' }}>Forgotten Password?</h3>
         <p style={{ marginTop: '0px', fontSize: '0.93rem' }}>{t('forgotPassword.text')}</p>
       </div>
 

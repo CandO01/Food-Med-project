@@ -1,4 +1,4 @@
-// 📁 DonorProfile.js with:
+
 // ✅ Chat icon with tooltip and unread count
 // ✅ Clears unread status when chat is opened
 // ✅ Animated pulsing notification dot
@@ -123,7 +123,7 @@ const DonorProfile = () => {
   return (
     <div style={{ padding: '2rem' }}>
       <audio ref={audioRef} src="/notification.mp3" preload="auto" />
-      <Link to='/food-form' style={styles.backLink}><IoArrowBack /> Back</Link>
+      <Link to='/food-form' style={styles.backLink}><IoArrowBack style={{color: 'white'}} /> Back</Link>
       <h2>Donor Profile</h2>
 
       {foodItems.length === 0 ? (
@@ -131,20 +131,20 @@ const DonorProfile = () => {
       ) : (
         foodItems.map((item, index) => (
           <div key={index} style={styles.card}>
-            <h3>{item.foodName}</h3>
-            <p><strong>Quantity:</strong> {item.quantity}</p>
-            <p><strong>Mode:</strong> {item.mode}</p>
-            <p><strong>Expiry:</strong> {item.expiryDate}</p>
+            <h3 style={{color: 'black'}}>{item.foodName}</h3>
+            <p style={{color: 'black'}}><strong>Quantity:</strong> {item.quantity}</p>
+            <p style={{color: 'black'}}><strong>Mode:</strong> {item.mode}</p>
+            <p style={{color: 'black'}}><strong>Expiry:</strong> {item.expiryDate}</p>
 
             <h4>User Requests:</h4>
             {item.requests.length === 0 ? (
-              <p style={{ color: 'gray' }}>No requests.</p>
+              <p style={{ color: 'white' }}>No requests.</p>
             ) : (
               item.requests.map((req, idx) => (
                 <div key={idx} style={styles.requestItem}>
-                  <p><strong>User:</strong> {req.userName || req.userEmail}</p>
-                  <p><strong>Email:</strong> {req.userEmail}</p>
-                  <p><strong>Status:</strong> <span style={{ color: req.status === 'confirmed' ? 'green' : 'orange' }}>{req.status}</span></p>
+                  <p style={{color: 'black'}}><strong>User:</strong> {req.userName || req.userEmail}</p>
+                  <p style={{color: 'black'}}><strong>Email:</strong> {req.userEmail}</p>
+                  <p style={{color: 'black'}}><strong>Status:</strong> <span style={{ color: req.status === 'confirmed' ? 'green' : 'red' }}>{req.status}</span></p>
 
                   {req.status !== 'confirmed' && (
                     <div style={styles.buttonGroup}>
@@ -190,7 +190,7 @@ const DonorProfile = () => {
       {showRejectConfirm && (
         <div style={styles.modalOverlay}>
           <div style={styles.modalContent}>
-            <p>Are you sure you want to reject this request?</p>
+            <p style={{color: 'black'}}>Are you sure you want to reject this request?</p>
             <div style={{ marginTop: '1rem', display: 'flex', gap: '1rem', justifyContent: 'center' }}>
               <button onClick={confirmReject} style={styles.confirmBtn}>Yes</button>
               <button onClick={() => setShowRejectConfirm(false)} style={styles.rejectBtn}>No</button>
@@ -203,7 +203,7 @@ const DonorProfile = () => {
 };
 
 const styles = {
-  backLink: { display: 'inline-flex', gap: '0.5rem', color: 'orange', marginBottom: '1rem' },
+  backLink: { display: 'inline-flex', gap: '0.5rem', color: 'white', marginBottom: '1rem' },
   card: { background: '#fff', padding: '1rem', borderRadius: '10px', marginBottom: '2rem', boxShadow: '0 0 10px rgba(0,0,0,0.1)' },
   requestItem: { padding: '0.8rem', border: '1px solid #ccc', borderRadius: '8px', marginTop: '1rem' },
   buttonGroup: { display: 'flex', gap: '1rem', marginTop: '0.5rem' },

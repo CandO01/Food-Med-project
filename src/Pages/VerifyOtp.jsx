@@ -83,7 +83,7 @@ function VerifyOTP({ email: propEmail, onVerified }) {
       <Link className='cancel-otp' to='/reset-password'>X</Link>
     </div>
     <form onSubmit={handleSubmit} className="verify-form">
-      <h2 style={{ marginBottom: '0', color: '#FFA500' }}>Get your code</h2>
+      <h2 style={{ marginBottom: '0', color: '#FFFF' }}>Get your code</h2>
       <p className="info-text">{t('verifyOtp.infoText')}</p>
 
       <div className="otp-boxes">

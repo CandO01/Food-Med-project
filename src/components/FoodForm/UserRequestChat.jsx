@@ -15,6 +15,7 @@ const UserRequests = () => {
       try {
         const res = await fetch(`https://foodmed-server3.onrender.com/requests?role=${role}&id=${userId}`);
         const data = await res.json();
+        console.log("Fetched Requests:", data);
         setRequests(data);
       } catch (error) {
         console.error('Failed to load requests:', error);
@@ -32,15 +33,15 @@ const UserRequests = () => {
       ) : (
         requests.map((req, idx) => (
             <div key={idx} style={styles.card}>
-              <h3>{req.foodName}</h3>
-              <p>
+              <h3 style={{color: 'black'}}>{req.foodName}</h3>
+              <p style={{color: 'black'}}>
                 <strong>Status:</strong>{' '}
-                <span style={{ color: req.status === 'confirmed' ? 'green' : 'orange' }}>
+                <span style={{ color: req.status === 'confirmed' ? 'green' : 'red' }}>
                   {req.status}
                 </span>
               </p>
               {req.donorName && (
-                <p><strong>Donor:</strong> {req.donorName}</p>
+                <p style={{color: 'black'}}><strong>Donor:</strong> {req.donorName}</p>
               )}
              {req.donorEmail && (
                 <Link to={`/chat/${req.donorEmail}`}>

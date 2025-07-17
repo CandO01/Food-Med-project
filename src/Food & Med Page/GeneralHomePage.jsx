@@ -73,8 +73,8 @@ const FoodMedHomePage = () => {
           </div>
         </header>
         <div style={{display: 'flex', alignItems: 'center', gap: 2}}>
-          <MdLocationPin />
-          <p style={{textAlign: 'start', margin: '1px'}}>{state}, {country}</p>
+          <MdLocationPin style={{color: 'black'}} />
+          <p style={{textAlign: 'start', margin: '1px', color: 'black'}}>{state}, {country}</p>
         </div>
 
         {isSliding && (

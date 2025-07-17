@@ -311,7 +311,7 @@ function FoodForm () {
         <div style={styles.modalOverlay}>
           <div style={styles.modalContent}>
             <img style={styles.imageIcon}  src={successIcon} alt="uploaded successfully animation" />
-            <p style={{fontSize: 20, fontWeight: 600}}>Your food is uploaded successfully.</p>
+            <p style={{fontSize: 20, fontWeight: 600, color: 'black'}}>Your food is uploaded successfully.</p>
             <button onClick={() => setShowModal(false)} style={styles.modalBtn}>OK</button>
           </div>
         </div>

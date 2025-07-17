@@ -10,10 +10,11 @@ function Signup() {
   const { login } = React.useContext(AuthContext);
   const [form, setForm] = useState({
     name: '',
+    phone: '',
     email: '',
     password: '',
     confirm: '',
-    role: ''
+    role: '',
   });
   const [error, setError] = useState('');
   const [status, setStatus] = useState('idle');
@@ -21,6 +22,7 @@ function Signup() {
   const [success, setSuccess] = useState(false)
   const [showModal, setShowModal] = useState(false)
   const navigate = useNavigate();
+  
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -45,9 +47,9 @@ function Signup() {
     setMessage('')
     setError('');
 
-    const { name, email, password, confirm, role } = form;
+    const { name,  phone, email, password, confirm, role } = form;
 
-    if (!name || !email || !password || password !== confirm || !role) {
+    if (!name || !email || !phone || !password || password !== confirm || !role ) {
       setError('Please fill all fields correctly');
       setStatus('idle');
       return;
@@ -57,11 +59,10 @@ function Signup() {
       const res = await fetch('https://foodmed-firstserver-backup.onrender.com/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, password, confirm, role })
+        body: JSON.stringify({ name, phone,  email, password, confirm, role })
       });
 
       const data = await res.json();
-
       if (!res.ok) {
         throw new Error(data.error || 'Signup failed');
       }
@@ -92,7 +93,7 @@ function Signup() {
       <h1 className='heading-one'>{t('signup.heading')}</h1>
 
       {success && <Confetti />}
-      {message && <p style={{ color: 'green' }}>{message}</p>}
+      {message && <p style={{ color: 'white', fontSize: 20 }}>{message}</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
       <form className='signup-container' onSubmit={handleSubmit}>
