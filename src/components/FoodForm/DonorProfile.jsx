@@ -123,7 +123,7 @@ const DonorProfile = () => {
   return (
     <div style={{ padding: '2rem' }}>
       <audio ref={audioRef} src="/notification.mp3" preload="auto" />
-      <Link to='/food-form' style={styles.backLink}><IoArrowBack style={{color: 'white'}} /> Back</Link>
+      <Link to='/food-form' style={styles.backLink}><IoArrowBack style={{color: 'orange'}} /> Back</Link>
       <h2>Donor Profile</h2>
 
       {foodItems.length === 0 ? (
@@ -203,7 +203,7 @@ const DonorProfile = () => {
 };
 
 const styles = {
-  backLink: { display: 'inline-flex', gap: '0.5rem', color: 'white', marginBottom: '1rem' },
+  backLink: { display: 'inline-flex', gap: '0.5rem', color: 'orange', marginBottom: '1rem', textDecoration: 'none' },
   card: { background: '#fff', padding: '1rem', borderRadius: '10px', marginBottom: '2rem', boxShadow: '0 0 10px rgba(0,0,0,0.1)' },
   requestItem: { padding: '0.8rem', border: '1px solid #ccc', borderRadius: '8px', marginTop: '1rem' },
   buttonGroup: { display: 'flex', gap: '1rem', marginTop: '0.5rem' },

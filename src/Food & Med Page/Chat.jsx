@@ -81,6 +81,17 @@ const ChatPage = () => {
     fetchContacts();
   }, []);
       
+          useEffect(() => {
+          const savedContact = localStorage.getItem("lastSelectedContact");
+          if (savedContact && contacts.length > 0) {
+            const parsed = JSON.parse(savedContact);
+            const match = contacts.find(c => c.id === parsed.id);
+            if (match) {
+              setSelectedContact(match);
+            }
+          }
+        }, [contacts]);
+
 
           // Load messages from localStorage on chat change
         useEffect(() => {
@@ -116,13 +127,30 @@ const ChatPage = () => {
           }
         }, [messages, selectedContact, userId]);
 
+    useEffect(() => {
+      const savedContact = localStorage.getItem("lastSelectedContact");
+      if (savedContact && contacts.length > 0) {
+        const parsed = JSON.parse(savedContact);
+        const match = contacts.find(c => c.id === parsed.id);
+        if (match) {
+          setSelectedContact(match);
+        }
+      }
+    }, [contacts]);
 
-  useEffect(() => {
-    if (recipientId && contacts.length > 0) {
-      const found = contacts.find(c => c.id === recipientId);
-      if (found) setSelectedContact(found);
-    }
-  }, [recipientId, contacts]);
+
+    useEffect(() => {
+      let found = null;
+      if (recipientId && contacts.length > 0) {
+        found = contacts.find(c => c.id === recipientId);
+        if (found) {
+          setSelectedContact(found);
+          localStorage.setItem("lastSelectedContact", JSON.stringify(found));
+          localStorage.setItem("lastRecipientId", found.id);
+        }
+      }
+    }, [recipientId, contacts]);
+
 
   useEffect(() => {
     if (!selectedContact || !userId) return;
@@ -140,16 +168,18 @@ const ChatPage = () => {
     fetchMessages();
   }, [selectedContact]);
 
-  const sendMessage = () => {
-    if (!text.trim() || !selectedContact) return;
-    socket.emit('sendMessage', {
-      senderId: userId,
-      recipientId: selectedContact.id,
-      text
-    });
-    setMessages((prev) => [...prev, { senderId: userId, recipientId: selectedContact.id, text }]);
-    setText('');
-  };
+    const sendMessage = () => {
+      if (!text.trim() || !selectedContact) return;
+
+      socket.emit('sendMessage', {
+        senderId: userId,
+        recipientId: selectedContact.id,
+        text
+      });
+
+      setText('');
+    };
+
 
   //handle change of text in the input field and showing typing while user is typing
   const handleTextChange = (e) => {
@@ -200,7 +230,11 @@ const ChatPage = () => {
               ...styles.contactItem,
               backgroundColor: selectedContact?.id === contact.id ? '#ddd' : '#fff'
             }}
-            onClick={() => setSelectedContact(contact)}
+            onClick={() => {
+                      setSelectedContact(contact);
+                      localStorage.setItem("lastSelectedContact", JSON.stringify(contact));
+                      localStorage.setItem("lastRecipientId", contact.id);
+                    }}
           >
             {contact.name} {onlineUsers.includes(contact.id) ? '🟢' : '🔴'}
           </div>

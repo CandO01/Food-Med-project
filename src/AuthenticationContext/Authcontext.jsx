@@ -45,6 +45,7 @@ function AuthcontextProvider({ children }) {
     setUser(null);
     setIsLoggedIn(false);
     localStorage.clear();
+    localStorage.removeItem("lastSelectedContact");
   };
 
   return (

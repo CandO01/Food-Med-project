@@ -4,7 +4,7 @@ import { BsFillChatTextFill } from "react-icons/bs";
 import { FaUser } from "react-icons/fa";
 import { MdFastfood } from "react-icons/md";
 import { GiHealthNormal } from "react-icons/gi";
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 function Footer() {
   const recipientId = localStorage.getItem('lastRecipientId');
@@ -20,44 +20,125 @@ function Footer() {
     <>
       <footer style={footerStyle.container}>
         <div style={footerStyle.iconContainer}>
-          <Link to="/landing-page">
-            <IoHomeSharp style={footerStyle.icon} />
-          </Link>
-          <p style={footerStyle.p}>Home</p>
+          <NavLink to="/landing-page" style={{textDecoration: 'none'}}>
+            {({ isActive }) => (
+              <>
+                <IoHomeSharp
+                  style={{
+                    ...footerStyle.icon,
+                    color: isActive ? 'orange' : 'gray',
+                  }}
+                />
+                <p
+                  style={{
+                    ...footerStyle.p,
+                    color: isActive ? 'orange' : 'gray',
+                  }}
+                >
+                  Home
+                </p>
+              </>
+            )}
+          </NavLink>
         </div>
 
         <div style={footerStyle.iconContainer}>
-          <Link to="/food-dashboard">
-            <MdFastfood style={footerStyle.icon} />
-          </Link>
-          <p style={footerStyle.p}>Food</p>
+          <NavLink to="/food-dashboard" style={{textDecoration: 'none'}}>
+            {({ isActive }) => (
+              <>
+                <MdFastfood
+                  style={{
+                    ...footerStyle.icon,
+                    color: isActive ? 'orange' : 'gray',
+                  }}
+                />
+                <p
+                  style={{
+                    ...footerStyle.p,
+                    color: isActive ? 'orange' : 'gray',
+                  }}
+                >
+                  Food
+                </p>
+              </>
+            )}
+          </NavLink>
         </div>
 
         <div style={footerStyle.iconContainer}>
-          <Link to="/health">
-            <GiHealthNormal style={footerStyle.icon} />
-          </Link>
-          <p style={footerStyle.p}>Health</p>
+          <NavLink to="/medical" style={{textDecoration: 'none'}}>
+            {({ isActive }) => (
+              <>
+                <GiHealthNormal
+                  style={{
+                    ...footerStyle.icon,
+                    color: isActive ? 'orange' : 'gray',
+                  }}
+                />
+                <p
+                  style={{
+                    ...footerStyle.p,
+                    color: isActive ? 'orange' : 'gray',
+                  }}
+                >
+                  Health
+                </p>
+              </>
+            )}
+          </NavLink>
         </div>
 
         <div style={footerStyle.iconContainer}>
           {recipientId ? (
-            <Link to={`/chat/${recipientId}`}>
-              <BsFillChatTextFill style={footerStyle.icon} />
-            </Link>
+            <NavLink to={`/chat/${recipientId}`} style={{textDecoration: 'none'}}>
+              {({ isActive }) => (
+                <>
+                  <BsFillChatTextFill
+                    style={{
+                      ...footerStyle.icon,
+                      color: isActive ? 'orange' : 'gray',
+                    }}
+                  />
+                  <p
+                    style={{
+                      ...footerStyle.p,
+                      color: isActive ? 'orange' : 'gray',
+                    }}
+                  >
+                    Chat
+                  </p>
+                </>
+              )}
+            </NavLink>
           ) : (
             <div onClick={handleChatClick} style={{ cursor: 'pointer' }}>
               <BsFillChatTextFill style={footerStyle.icon} />
+              <p style={footerStyle.p}>Chat</p>
             </div>
           )}
-          <p style={footerStyle.p}>Chat</p>
         </div>
 
         <div style={footerStyle.iconContainer}>
-          <Link to="/donor-profile">
-            <FaUser style={footerStyle.icon} />
-          </Link>
-          <p style={footerStyle.p}>Profile</p>
+          <NavLink to="/donor-profile" style={{textDecoration: 'none'}}>
+            {({ isActive }) => (
+              <>
+                <FaUser
+                  style={{
+                    ...footerStyle.icon,
+                    color: isActive ? 'orange' : 'gray',
+                  }}
+                />
+                <p
+                  style={{
+                    ...footerStyle.p,
+                    color: isActive ? 'orange' : 'gray',
+                  }}
+                >
+                  Profile
+                </p>
+              </>
+            )}
+          </NavLink>
         </div>
       </footer>
 
@@ -66,7 +147,9 @@ function Footer() {
         <div style={modalStyle.overlay}>
           <div style={modalStyle.modal}>
             <p>Please select a chat first.</p>
-            <button onClick={() => setShowModal(false)} style={modalStyle.button}>Close</button>
+            <button onClick={() => setShowModal(false)} style={modalStyle.button}>
+              Close
+            </button>
           </div>
         </div>
       )}
@@ -83,8 +166,8 @@ const footerStyle = {
     bottom: 0,
     left: 0,
     right: 0,
-    background: 'orange',
-    color: 'white',
+    background: 'white',
+    color: 'black',
     display: 'flex',
     justifyContent: 'space-around',
     padding: '0.5rem 0',
@@ -93,7 +176,6 @@ const footerStyle = {
     fontSize: '26px',
     fontWeight: 'bold',
     cursor: 'pointer',
-    color: 'white',
   },
   iconContainer: {
     display: 'flex',
@@ -103,7 +185,6 @@ const footerStyle = {
   p: {
     margin: 0,
     fontSize: '12px',
-    color: 'white',
   }
 };
 

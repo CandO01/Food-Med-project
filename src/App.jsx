@@ -19,9 +19,16 @@ import FoodSubmissionDashboard from './components/FoodForm/FoodSubmissionDashboa
 import ChatPage from './Food & Med Page/Chat'
 import DonorProfile from './components/FoodForm/DonorProfile'
 import UserRequests from './components/FoodForm/UserRequestChat'
+import UpdateNoticeModal from './components/UpdateNoticeModal'
+import AboutUs from './Pages/AboutUs'
+import Header from './components/header'
 
 function App() {
   return (
+    <>
+    {/* UpdateAppModal */}
+    <UpdateNoticeModal />
+    <Header />
       <Routes>
         <Route path='/' element={<Layouts />}>
         <Route index element={<SplashCarousel />} />
@@ -40,6 +47,7 @@ function App() {
           <Route path='location' element={<Location />} />
           <Route path='congratulations' element={<Congratulations />} />
           <Route path='landing-page' element={<GeneralHomePage />} />
+          <Route path='about-us' element={<AboutUs />} />
 
           {/* Food Form */}
           <Route path='food-form' element={<FoodForms />} />
@@ -55,6 +63,7 @@ function App() {
           <Route path='*' element={<div>404 Not Found</div>} />
         </Route>
       </Routes>
+    </>
   )
 }
 

@@ -5,8 +5,6 @@ body, html{
   font-family: Inter;
   margin: 0;
   padding: 0;
-  background-color: #4CAF50;
-  color: white; 
 }
 .body-container{
   display: flex;
@@ -33,7 +31,7 @@ body, html{
   font-size: 1.5rem;
   font-weight: 600;
   line-height: 30px;
-  color: #FFFF;
+  color: #FFA500;
 }
 .signup-container,
 .signin-container,
@@ -453,4 +451,25 @@ footer{
   align-items: center;
   flex-shrink: 0;
   margin-top: auto;
+}
+.nav-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.nav-link.active .active-icon,
+.nav-link.active .active-text {
+  color: orange;
+}
+
+/* For drop down notification */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

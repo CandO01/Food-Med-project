@@ -492,9 +492,9 @@ const SubmissionsDashboard = () => {
               <h3 style={{margin: 0}}>{item.foodName}</h3>
               <p style={styles.description}>{item.description}</p>
               <div>
-                <small><FaRegUser /> {item.donorName} </small>
-                <small><MdLocationPin /> {item.location} </small>
-                <small><MdOutlineTimer /> Posted on: {timeAgo(item.createdAt)} </small>
+                <small><FaRegUser style={{color: 'orange'}} /> {item.donorName} </small>
+                <small><MdLocationPin style={{color: 'orange'}} /> {item.location} </small>
+                <small><MdOutlineTimer style={{color: 'orange'}} /> Posted on: {timeAgo(item.createdAt)} </small>
               </div>
               <button
                 onClick={(e) => {
