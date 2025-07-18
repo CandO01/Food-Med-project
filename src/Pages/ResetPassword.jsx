@@ -61,12 +61,12 @@ function ResetPassword() {
   return (
     <div className='new-password-container'>
       <div className="icons">
-        <Link to='/verify-otp' style={{ color: '#ffff' }}><IoArrowBack className='arrow-back' /></Link>
-        <h2>Reset Password</h2>
-        <Link className='cancel-otp' to='/forgot-password' style={{ color: 'white' }}>X</Link>
+        <Link to='/verify-otp' style={{ color: 'black' }}><IoArrowBack className='arrow-back' /></Link>
+        <h2 style={{color: 'black'}}>Reset Password</h2>
+        <Link className='cancel-otp' to='/forgot-password' style={{ color: 'black' }}>X</Link>
       </div>
 
-      <h3 style={{ textAlign: 'center', margin: '20px 0', color: '#FFFF' }}>Enter New Password</h3>
+      <h3 style={{ textAlign: 'center', margin: '20px 0', color: 'black' }}>Enter New Password</h3>
 
       <form className="reset-form" onSubmit={handleSubmit}>
         {/* Password Field */}

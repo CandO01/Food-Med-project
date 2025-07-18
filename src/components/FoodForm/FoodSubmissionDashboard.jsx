@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { color, motion } from 'framer-motion';
 import { FaBell } from 'react-icons/fa';
 import { FaRegUser } from "react-icons/fa";
 import { MdOutlineWavingHand } from "react-icons/md";
@@ -248,8 +248,8 @@ const SubmissionsDashboard = () => {
   const closeModal = () => setSelectedItem(null);
 
   const themeStyles = {
-    background: darkMode ? 'black' : 'white',
-    color: darkMode ? 'white' : 'black',
+    background: darkMode ? 'white' : 'black',
+    color: darkMode ? 'black' : 'white',
   };
 
   const renderImage = (url) => {
@@ -570,9 +570,7 @@ const SubmissionsDashboard = () => {
 const styles = {
   dashboard: {
     padding: '1.2rem',
-    background: '#1a1a1a',
     minHeight: '100vh',
-    color: 'white',
     position: 'relative',
     width: '100vw',
     maxWidth: '100%',
@@ -585,6 +583,7 @@ const styles = {
     zIndex: 1000,
     padding: '0.5rem 1rem',
     background: 'orange',
+    color: 'white',
     border: 'none',
     borderRadius: '5px',
     fontSize: '0.9rem',
@@ -597,9 +596,7 @@ const styles = {
     float: 'right',
     cursor: 'pointer',
     zIndex: 1000,
-    background: '#1a1a1a',
     padding: '0.3rem',
-    borderRadius: '50%',
   },
   dot: {
     position: 'absolute',
@@ -695,9 +692,9 @@ const styles = {
     borderRadius: 8,
     padding: '1rem',
     maxWidth: 300,
-    position: 'absolute',
-    top: 70,
-    right: 20,
+    position: 'fixed',
+    top: 37,
+    right: 30,
     boxShadow: '0 0 10px rgba(0,0,0,0.2)',
     zIndex: 2,
   },
@@ -725,7 +722,7 @@ card: {
   color: '#000',
   borderRadius: '10px',
   padding: '1.2rem 1rem',
-  border: '2px solid gray',
+  border: '1px solid gray',
   cursor: 'pointer',
   boxShadow: '0 0 10px rgba(0,0,0,0.1)',
   width: '100%',

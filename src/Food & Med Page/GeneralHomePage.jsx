@@ -21,7 +21,8 @@ import healthyWeight from '../assets/healthyweight.png';
 import musclebuilding from '../assets/musclebuilding.png';
 import plentyrest from '../assets/plentyrest.png';
 import smile from '../assets/smile.png';
-import stopsmoking from '../assets/stopsmoking.png'
+import stopsmoking from '../assets/stopsmoking.png';
+
 
 const foodItems = [
     {
@@ -70,7 +71,7 @@ const FoodMedHomePage = () => {
   const [current, setCurrent] = useState(0);
   const length = foodItems.length;
   const intervalRef = useRef()
-
+  const recipientId = localStorage.getItem('lastRecipientId');
 
   const handleUserClick = () => {
     setIsSliding(true);
@@ -144,13 +145,13 @@ const FoodMedHomePage = () => {
         </div>
 
         <div className="button-group">
-          <button onClick={() => navigate('/food-form')} className="btn-orange">
+          <button onClick={() => navigate('/food-form')} className="btnHome btn-orange">
             Add food
           </button>
-          <button onClick={() => navigate('/chat')} className="btn-green">
+          <button onClick={() => navigate(`/chat/${recipientId}`)} className="btnHome btn-green">
             Ask a doctor
           </button>
-          <button onClick={() => navigate('/food-dashboard')} className="btn-green">
+          <button onClick={() => navigate('/food-dashboard')} className="btnHome btn-green">
             Find food nearby
           </button>
         </div>

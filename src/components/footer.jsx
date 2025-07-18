@@ -174,7 +174,7 @@ const footerStyle = {
   },
   icon: {
     fontSize: '26px',
-    fontWeight: 'bold',
+    // fontWeight: 'bold',
     cursor: 'pointer',
   },
   iconContainer: {

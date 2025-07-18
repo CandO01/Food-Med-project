@@ -1,28 +1,35 @@
+/* Reset and base */
 
+/* Carousel Container */
 .carousel-container {
   position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh; /* allows content to fit without overflow */
   text-align: center;
   background: white;
-  padding: 1rem;
+  padding: 0; /* removed default padding to prevent scroll */
+  overflow: hidden;
 }
 
+/* Each Slide */
 .carousel-page {
-  flex: 1;
+  width: 100vw;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
+/* Logo Image */
 .logo {
   width: 120px;
   margin-bottom: 1rem;
 }
 
+/* Get Started Button */
 .get-started-btn {
   background-color: #FFA500;
   border: none;
@@ -34,6 +41,8 @@
   font-weight: 700;
   cursor: pointer;
 }
+
+/* Skip Button */
 .skip-btn {
   position: absolute;
   top: 40px;
@@ -49,7 +58,7 @@
   cursor: pointer;
 }
 
-
+/* Indicator Dots */
 .carousel-indicators {
   display: flex;
   gap: 10px;
@@ -59,7 +68,7 @@
 .dot {
   height: 6px;
   width: 40px;
-  background-color:whitesmoke;
+  background-color: whitesmoke;
   border-radius: 15px;
   border: none;
   display: inline-block;
@@ -70,7 +79,8 @@
 .dot.active {
   background-color: #FFA500;
 }
-/* Background image */
+
+/* Optional: Custom backgrounds if used with classNames */
 .bg-page {
   height: 100%;
   width: 100%;
@@ -85,7 +95,6 @@
   background-position: center;
 }
 
-/* Custom backgrounds */
 .bg2 {
   background-image: url('../assets/bg2.png');
 }
@@ -97,4 +106,3 @@
 .bg4 {
   background-image: url('../assets/bg4.png');
 }
-

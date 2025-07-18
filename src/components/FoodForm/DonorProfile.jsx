@@ -162,6 +162,15 @@ const DonorProfile = () => {
                       </span>
                     )}
                   </button>
+                  {/* {req.userPhone && (
+                <button
+                  onClick={() => window.open(`tel:${req.userPhone}`, '_self')}
+                  style={styles.callBtn}
+                  title="Call user"
+                >
+                  📞
+                </button>
+                  )} */}
 
                   {messagePreview[req.userEmail] && (
                     <p style={{ fontSize: '0.85rem', marginTop: '0.3rem', color: '#555' }}><em>"{messagePreview[req.userEmail]}"</em></p>

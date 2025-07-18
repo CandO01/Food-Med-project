@@ -244,8 +244,8 @@ body, html{
 .form-group label.active {
   top: -10px;
   font-size: 12px;
-  background-color: #4CAF50;
-  color: white;
+  background-color: white;
+  color: orange;
 }
 
 .form-group .icon {
@@ -269,7 +269,7 @@ body, html{
 
 .info-text {
   font-size: 14px;
-  color: #fff;
+  color: black;
   text-align: center;
   margin-top: 0;
 }
@@ -351,8 +351,8 @@ body, html{
 .form-group2 label.active {
   top: -10px;
   font-size: 1.0rem;
-  color: #4CAF50;
-  background-color: #FFF;
+  color: orange;
+  background-color: white;
 }
 
 .form-group2 .toggle-icon {
