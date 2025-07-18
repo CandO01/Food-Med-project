@@ -94,8 +94,8 @@ function Signin() {
           required
         />
 
-        <button type="submit" disabled={status === 'logging'}>
-          {status === 'logging' ? t('signin.loggingIn') : t('signin.login')}
+        <button type="submit" disabled={status === 'logging-in'}>
+          {status === 'logging-in' ? t('signin.loggingIn') : t('signin.login')}
         </button>
       </form>
 
