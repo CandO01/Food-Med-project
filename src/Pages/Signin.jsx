@@ -57,7 +57,7 @@ function Signin() {
       
       localStorage.setItem('donorId', data.email);
 
-      navigate('/landing-page');
+      navigate('/home');
     } catch (err) {
       setError(err.message);
       setStatus('idle');

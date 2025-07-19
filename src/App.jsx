@@ -43,10 +43,10 @@ function App() {
           <Route path='reset-password' element={<ResetPassword />} />
 
           {/* Other pages */}
-          <Route path='home' element={<Home />} />
+          <Route path='welcome' element={<Home />} />
           <Route path='location' element={<Location />} />
           <Route path='congratulations' element={<Congratulations />} />
-          <Route path='landing-page' element={<GeneralHomePage />} />
+          <Route path='home' element={<GeneralHomePage />} />
           <Route path='about-us' element={<AboutUs />} />
 
           {/* Food Form */}

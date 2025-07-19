@@ -135,7 +135,7 @@ const FoodMedHomePage = () => {
       <div className="main-content">
         <header className="foodmed-header">
           <div className="user-icon" onClick={handleUserClick}>
-            <img src={menuIcon} alt='Menu icon' style={{ width: '18.5px', height: '14px' }} />
+            <img src={menuIcon} alt='Menu icon' style={{ width: '19px', height: '14px' }} />
             Hello {name}!
           </div>
         </header>

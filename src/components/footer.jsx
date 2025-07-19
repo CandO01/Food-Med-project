@@ -20,7 +20,7 @@ function Footer() {
     <>
       <footer style={footerStyle.container}>
         <div style={footerStyle.iconContainer}>
-          <NavLink to="/landing-page" style={{textDecoration: 'none'}}>
+          <NavLink to="/home" style={{textDecoration: 'none'}}>
             {({ isActive }) => (
               <>
                 <IoHomeSharp

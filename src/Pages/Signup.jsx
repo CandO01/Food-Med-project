@@ -85,7 +85,7 @@ function Signup() {
         setForm({ name: '', phone: '', email: '', password: '', confirm: '', role: '' });
 
         // Navigate after a short delay
-        setTimeout(() => navigate('/home'), 4500);
+        setTimeout(() => navigate('/welcome'), 4500);
       } catch (err) {
         setError(err.message);
         setStatus('idle');
