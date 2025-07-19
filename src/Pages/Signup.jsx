@@ -42,58 +42,63 @@ function Signup() {
   }
 
   async function handleSubmit(e) {
-    e.preventDefault();
-    setStatus('signing-up');
-    setMessage('')
-    setError('');
+      e.preventDefault();
+      setStatus('signing-up');
+      setMessage('');
+      setError('');
 
-    const { name,  phone, email, password, confirm, role } = form;
+      const { name, phone, email, password, confirm, role } = form;
 
-    if (!name || !email || !phone || !password || password !== confirm || !role ) {
-      setError('Please fill all fields correctly');
-      setStatus('idle');
-      return;
-    }
-
-    try {
-      const res = await fetch('https://foodmed-firstserver-backup.onrender.com/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, phone,  email, password, confirm, role })
-      });
-
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || 'Signup failed');
+      if (!name || !email || !phone || !password || password !== confirm || !role) {
+        setError('Please fill all fields correctly');
+        setStatus('idle');
+        return;
       }
 
-      // Login after successful signup
-      setSuccess(true)
-      setMessage(data.message || 'Thank you for signing up successfully!')
-      setStatus('done')
+      try {
+        const res = await fetch('https://foodmed-firstserver-backup.onrender.com/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, phone, email, password, confirm, role }),
+        });
 
-      login({
-            name: data.name,
-            email: data.email,
-            role: data.role,
-            phone: data.phone
-          });
-    
-      setTimeout(() => {
-        navigate('/home')
-      }, 4500)
-    } catch (err) {
-      setError(err.message);
-      setStatus('idle');
+        const data = await res.json();
+        console.log(data);
+
+        if (!res.ok) throw new Error(data.error || 'Signup failed');
+
+        setSuccess(true);
+        setMessage(data.message || 'Signup successful!');
+        setStatus('done');
+
+        // Login user
+        const { user } = data;
+        login({
+          name: user.name,
+          email: user.email,
+          role: user.role,
+          phone: user.phone,
+          id: user.id,
+        });
+
+        // Optional: reset form
+        setForm({ name: '', phone: '', email: '', password: '', confirm: '', role: '' });
+
+        // Navigate after a short delay
+        setTimeout(() => navigate('/home'), 4500);
+      } catch (err) {
+        setError(err.message);
+        setStatus('idle');
+      }
     }
-  }
+
 
  return (
     <div className="signup-form">
       <h1 className='heading-one'>{t('signup.heading')}</h1>
 
       {success && <Confetti />}
-      {message && <p style={{ color: 'white', fontSize: 20 }}>{message}</p>}
+      {message && <p style={{ color: 'green', fontSize: 20 }}>{message}</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
       <form className='signup-container' onSubmit={handleSubmit}>

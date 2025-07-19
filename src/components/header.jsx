@@ -1,8 +1,9 @@
 import React from 'react'
 import { useNotification } from '../AuthenticationContext/NotificationContext'
 
+
 const Header = () => {
-  const { toast } = useNotification(); // You only need toast here
+  const { toast } = useNotification(); 
 
   return (
     <header style={{ position: "relative", zIndex: 100 }}>

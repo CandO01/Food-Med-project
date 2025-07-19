@@ -111,10 +111,16 @@ function Footer() {
               )}
             </NavLink>
           ) : (
-            <div onClick={handleChatClick} style={{ cursor: 'pointer' }}>
-              <BsFillChatTextFill style={footerStyle.icon} />
-              <p style={footerStyle.p}>Chat</p>
-            </div>
+        <div onClick={handleChatClick} style={{ cursor: 'pointer', textAlign: 'center' }}>
+          <BsFillChatTextFill
+            style={{
+              ...footerStyle.icon,
+              color: 'gray'
+            }}
+          />
+          <p style={{ ...footerStyle.p, color: 'gray' }}>Chat</p>
+        </div>
+
           )}
         </div>
 

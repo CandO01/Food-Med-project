@@ -95,6 +95,7 @@ const FoodMedHomePage = () => {
 
   return (
     <div className="foodmed-container">
+      
       {/* Sidebar now slides from the left */}
       <div className={`sidebar ${isSliding ? 'show-sidebar' : ''}`}>
         <button className="cancel-button" onClick={handleCancelClick}>X</button>
@@ -138,7 +139,6 @@ const FoodMedHomePage = () => {
             Hello {name}!
           </div>
         </header>
-
         <div style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           <MdLocationPin style={{ color: 'black' }} />
           <p style={{ textAlign: 'start', margin: '1px', color: 'black' }}>{state}, {country}</p>

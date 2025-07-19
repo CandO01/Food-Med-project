@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 
 const UserRequests = () => {
   const [requests, setRequests] = useState([]);
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const fetchRequests = async () => {
@@ -13,11 +14,14 @@ const UserRequests = () => {
       if (!role || !userId) return;
 
       try {
+        setLoading(true)
         const res = await fetch(`https://foodmed-server3.onrender.com/requests?role=${role}&id=${userId}`);
         const data = await res.json();
         setRequests(data);
       } catch (error) {
         console.error('Failed to load requests:', error);
+      }finally{
+        setLoading(false)
       }
     };
 
@@ -27,7 +31,44 @@ const UserRequests = () => {
   return (
     <div style={{ padding: '2rem' }}>
       <h2>My Requests</h2>
-      {requests.length === 0 ? (
+      {loading ? (
+        <div className="spinner"></div>
+      ) : (
+        requests.length === 0 ? (
+          <p>You haven’t made any requests yet.</p>
+        ) : (
+          requests.map((req, idx)=> (
+            <div key={idx} style={styles.card}>
+              <h3 style={{color: 'black'}}>{req.foodName}</h3>
+              <p style={{color: 'black'}}>
+                <strong>Status:</strong>{' '}
+                <span style={{ color: req.status === 'confirmed' ? 'green' : 'red' }}>
+                  {req.status}
+                </span>
+              </p>
+              {req.donorName && (
+                <p style={{color: 'black'}}><strong>Donor:</strong> {req.donorName}</p>
+              )}
+             {req.donorEmail && (
+                <Link to={`/chat/${req.donorEmail}`}>
+                  <button style={styles.chatBtn}>
+                    💬 Chat with {req.donorName || req.donorEmail}
+                  </button>
+                </Link>
+              )}
+              {req.donorPhone && (
+                <Link to={`tel:${req.donorPhone}`}>
+                  <button style={styles.callBtn}>
+                    📞 Call Donor
+                  </button>
+                </Link>
+              )}
+            </div>
+          ))
+        )
+      )
+    }
+      {/* {requests.length === 0 ? (
         <p>You haven’t made any requests yet.</p>
       ) : (
         requests.map((req, idx) => (
@@ -49,16 +90,16 @@ const UserRequests = () => {
                   </button>
                 </Link>
               )}
-              {/* {req.donorPhone && (
+              {req.donorPhone && (
                 <Link to={`tel:${req.donorPhone}`}>
                   <button style={styles.callBtn}>
                     📞 Call Donor
                   </button>
                 </Link>
-              )} */}
+              )}
             </div>
           ))
-      )}
+      )} */}
     </div>
   );
 };

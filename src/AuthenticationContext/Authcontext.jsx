@@ -19,25 +19,27 @@ function AuthcontextProvider({ children }) {
     }
   }, []);
 
-  const login = ({ name, email, role, phone }) => {
-  localStorage.clear(); // clear previous user data first
+    const login = ({ name, email, role, phone }) => {
+  localStorage.clear(); // Clear any old data
 
   setUser({ name, email, role });
   setIsLoggedIn(true);
+
   localStorage.setItem('userName', name);
   localStorage.setItem('userEmail', email);
   localStorage.setItem('role', role);
-  localStorage.setItem('userPhone', phone); // ✅ Save phone directly here
+  localStorage.setItem('userPhone', phone);
 
-  // Set userId and/or donorId based on role
-  localStorage.setItem('userId', email); // Set for both roles
+  // Always set userId
+  localStorage.setItem('userId', email);
 
+  // If user is a donor, also set donorId and donorEmail
   if (role === 'donor') {
     localStorage.setItem('donorId', email);
-    localStorage.removeItem('userId');
+    localStorage.setItem('donorEmail', email);
   } else {
-    localStorage.setItem('userId', email);
     localStorage.removeItem('donorId');
+    localStorage.removeItem('donorEmail');
   }
 };
 
@@ -57,3 +59,31 @@ function AuthcontextProvider({ children }) {
 
 export default AuthcontextProvider;
 export { AuthContext };
+
+
+
+
+
+//   const login = ({ name, email, role, phone }) => {
+//   localStorage.clear(); // clear previous user data first
+
+//   setUser({ name, email, role });
+//   setIsLoggedIn(true);
+//   localStorage.setItem('userName', name);
+//   localStorage.setItem('userEmail', email);
+//   localStorage.setItem('role', role);
+//   localStorage.setItem('userPhone', phone); // ✅ Save phone directly here
+
+//   // Set userId and/or donorId based on role
+//   localStorage.setItem('userId', email); // Set for both roles
+
+//   if (role === 'donor') {
+//     localStorage.setItem('donorId', email);
+//      localStorage.setItem('donorEmail', email);
+//     localStorage.removeItem('userId');
+//   } else {
+//     localStorage.setItem('userId', email);
+//     localStorage.removeItem('donorId');
+//     localStorage.removeItem('donorEmail');
+//   }
+// };

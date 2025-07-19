@@ -23,11 +23,37 @@ const DonorProfile = () => {
   const [pendingRejectId, setPendingRejectId] = useState(null);
   const [unreadMessages, setUnreadMessages] = useState({});
   const [messagePreview, setMessagePreview] = useState({});
+  const [loading, setLoading] = useState(false)
 
-  const donorId = localStorage.getItem('donorId');
-  const donorEmail = localStorage.getItem('donorEmail');
   const navigate = useNavigate();
   const audioRef = useRef(null);
+
+const fetchData = async () => {
+  const donorId = localStorage.getItem('donorId');
+  const donorEmail = localStorage.getItem('donorEmail');
+
+  if (!donorEmail || !donorId) return; // fail-safe
+
+  try {
+    setLoading(true);
+    const foodRes = await fetch(`https://foodmed-server3.onrender.com/submissions?email=${donorEmail}`);
+    const allFood = await foodRes.json();
+
+    const reqRes = await fetch(`https://foodmed-server3.onrender.com/requests?role=donor&id=${donorId}`);
+    const allRequests = await reqRes.json();
+
+    const itemsWithRequests = allFood.map(item => {
+      const itemRequests = allRequests.filter(req => req.itemId === item.id);
+      return { ...item, requests: itemRequests };
+    });
+
+    setFoodItems(itemsWithRequests);
+  } catch (err) {
+    console.error('Error loading data:', err);
+  }finally {
+      setLoading(false); 
+    }
+};
 
   useEffect(() => {
     fetchData();
@@ -40,24 +66,6 @@ const DonorProfile = () => {
     return () => socket.disconnect();
   }, []);
 
-  const fetchData = async () => {
-    try {
-      const foodRes = await fetch(`https://foodmed-server3.onrender.com/submissions?email=${donorEmail}`);
-      const allFood = await foodRes.json();
-
-      const reqRes = await fetch(`https://foodmed-server3.onrender.com/requests?role=donor&id=${donorId}`);
-      const allRequests = await reqRes.json();
-
-      const itemsWithRequests = allFood.map(item => {
-        const itemRequests = allRequests.filter(req => req.itemId === item.id);
-        return { ...item, requests: itemRequests };
-      });
-
-      setFoodItems(itemsWithRequests);
-    } catch (err) {
-      console.error('Error loading data:', err);
-    }
-  };
 
   const updateHistory = (id, foodName, status) => {
     const existing = JSON.parse(localStorage.getItem('requestHistory')) || [];
@@ -126,25 +134,32 @@ const DonorProfile = () => {
       <Link to='/food-form' style={styles.backLink}><IoArrowBack style={{color: 'orange'}} /> Back</Link>
       <h2>Donor Profile</h2>
 
-      {foodItems.length === 0 ? (
-        <p>No food items uploaded yet.</p>
+      {loading ? (
+        <div className="spinner"></div> //the css is in the universal file /App.css 
+      ) : foodItems.length === 0 ? (
+        <p>No food items uploaded yet.</p> // 🚫 no items
       ) : (
-        foodItems.map((item, index) => (
-          <div key={index} style={styles.card}>
-            <h3 style={{color: 'black'}}>{item.foodName}</h3>
-            <p style={{color: 'black'}}><strong>Quantity:</strong> {item.quantity}</p>
-            <p style={{color: 'black'}}><strong>Mode:</strong> {item.mode}</p>
-            <p style={{color: 'black'}}><strong>Expiry:</strong> {item.expiryDate}</p>
+     foodItems.map((item, index) => (
+      <div key={index} style={styles.card}>
+        <h3 style={{color: 'black'}}>{item.foodName}</h3>
+        <p style={{color: 'black'}}><strong>Quantity:</strong> {item.quantity}</p>
+        <p style={{color: 'black'}}><strong>Mode:</strong> {item.mode}</p>
+        <p style={{color: 'black'}}><strong>Expiry:</strong> {item.expiryDate}</p>
 
-            <h4>User Requests:</h4>
-            {item.requests.length === 0 ? (
+      <h4>User Requests:</h4>
+      {item.requests.length === 0 ? (
               <p style={{ color: 'white' }}>No requests.</p>
             ) : (
               item.requests.map((req, idx) => (
                 <div key={idx} style={styles.requestItem}>
                   <p style={{color: 'black'}}><strong>User:</strong> {req.userName || req.userEmail}</p>
                   <p style={{color: 'black'}}><strong>Email:</strong> {req.userEmail}</p>
-                  <p style={{color: 'black'}}><strong>Status:</strong> <span style={{ color: req.status === 'confirmed' ? 'green' : 'red' }}>{req.status}</span></p>
+                  <p style={{color: 'black'}}>
+                    <strong>Status:</strong>{' '}
+                    <span style={{ color: req.status === 'confirmed' ? 'green' : 'red' }}>
+                      {req.status}
+                    </span>
+                  </p>
 
                   {req.status !== 'confirmed' && (
                     <div style={styles.buttonGroup}>
@@ -162,18 +177,11 @@ const DonorProfile = () => {
                       </span>
                     )}
                   </button>
-                  {/* {req.userPhone && (
-                <button
-                  onClick={() => window.open(`tel:${req.userPhone}`, '_self')}
-                  style={styles.callBtn}
-                  title="Call user"
-                >
-                  📞
-                </button>
-                  )} */}
 
                   {messagePreview[req.userEmail] && (
-                    <p style={{ fontSize: '0.85rem', marginTop: '0.3rem', color: '#555' }}><em>"{messagePreview[req.userEmail]}"</em></p>
+                    <p style={{ fontSize: '0.85rem', marginTop: '0.3rem', color: '#555' }}>
+                      <em>"{messagePreview[req.userEmail]}"</em>
+                    </p>
                   )}
                 </div>
               ))
@@ -181,6 +189,7 @@ const DonorProfile = () => {
           </div>
         ))
       )}
+
 
       {showModal && (
         <ConfirmModal
