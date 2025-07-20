@@ -6,8 +6,8 @@ import Header from './header'
 function Layouts() {
   const location = useLocation()
 
-  // Define routes that should NOT have the footer
-  const noFooterRoutes = ['/login', '/signup', '/forgot-password', '/reset-password', '/verify-otp', '/location', '/','/congratulations', '/language']
+  //  Routes that should NOT have the footer
+  const noFooterRoutes = ['/login', '/signup', '/forgot-password', '/reset-password', '/verify-otp', '/location', '/', '/profile', '/welcome' ,'/congratulations', '/language']
 
   const hideFooter = noFooterRoutes.includes(location.pathname)
 

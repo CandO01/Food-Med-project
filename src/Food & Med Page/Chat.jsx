@@ -16,6 +16,8 @@ const ChatPage = () => {
   const [text, setText] = useState('');
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
+  const [userProfile, setUserProfile] = useState(null); //this is for profile picture of users
+
 
 
   const messagesEndRef = useRef(null);
@@ -35,6 +37,24 @@ const ChatPage = () => {
     });
     return () => socket.off('onlineUsers');
   }, [email]);
+
+  //for profileImage 
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const res = await fetch(`https://foodmed-firstserver-backup.onrender.com/user-profile?email=${email}`);
+        const data = await res.json();
+        setUserProfile(data);
+      } catch (err) {
+        console.error('Failed to fetch user profile:', err);
+      }
+    };
+
+    if (email) {
+      fetchUserProfile();
+    }
+  }, [email]);
+
 
   useEffect(() => {
     socket.on('receiveMessage', (msg) => {
@@ -220,7 +240,25 @@ const ChatPage = () => {
 
 
   return (
+    <>
     <div style={styles.container}>
+      {userProfile?.profileImage && (
+          <img
+            src={userProfile.profileImage}
+            alt="My Profile"
+            style={{
+              position: 'absolute',
+              top: '10px',
+              right: '10px',
+              width: '45px',
+              height: '45px',
+              borderRadius: '50%',
+              objectFit: 'cover',
+              boxShadow: '0 0 5px rgba(0,0,0,0.2)',
+            }}
+          />
+        )}
+
       <div style={styles.sidebar}>
         <h3>Contacts</h3>
         {contacts.map((contact, idx) => (
@@ -235,7 +273,7 @@ const ChatPage = () => {
                       localStorage.setItem("lastSelectedContact", JSON.stringify(contact));
                       localStorage.setItem("lastRecipientId", contact.id);
                     }}
-          >
+                    >
             {contact.name} {onlineUsers.includes(contact.id) ? '🟢' : '🔴'}
           </div>
         ))}
@@ -250,7 +288,7 @@ const ChatPage = () => {
             <div style={styles.messages}>
               {messages.map((msg, i) => (
                   <div
-                    key={i}
+                  key={i}
                     style={{
                       ...styles.message,
                       alignSelf: msg.senderId === userId ? 'flex-end' : 'flex-start',
@@ -278,7 +316,7 @@ const ChatPage = () => {
                 onChange={handleTextChange}
                 placeholder="Type your message..."
                 style={styles.input}
-              />
+                />
               <button onClick={sendMessage} style={styles.button}>Send</button>
             </div>
           </>
@@ -286,12 +324,13 @@ const ChatPage = () => {
           <p>Select a chat to begin.</p>
         )}
       </div>
-    </div>
+     </div>
+    </>
   );
 };
 
 const styles = {
-  container: { display: 'flex', height: '80vh' },
+  container: { display: 'flex', height: '80vh', position: 'relative', },
 
   sidebar: { width: '30%', borderRight: '1px solid #ccc', padding: '1rem', overflowY: 'auto' },
 

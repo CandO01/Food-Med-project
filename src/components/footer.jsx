@@ -125,7 +125,7 @@ function Footer() {
         </div>
 
         <div style={footerStyle.iconContainer}>
-          <NavLink to="/donor-profile" style={{textDecoration: 'none'}}>
+          <NavLink to="/user-profile" style={{textDecoration: 'none'}}>
             {({ isActive }) => (
               <>
                 <FaUser

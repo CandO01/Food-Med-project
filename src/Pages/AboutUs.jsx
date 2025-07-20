@@ -31,7 +31,7 @@ const AboutUs = () => {
       <ul style={styles.list}>
         <li><strong>Matthew</strong> – Fullstack Developer & Vision Carrier</li>
         <li><strong>Boss Angel</strong> – Frontend Lead & System Integrator</li>
-        <li><strong>Abiluv</strong> – Backend Engineer with an eye for structure</li>
+        <li><strong>Abiluv</strong> – Frontend Engineer with an eye for structure</li>
         <li><strong>Destiny & Miracle</strong> – The brilliant UI/UX duo that shaped every experience</li>
         <li><strong>Daisy</strong> – Our amiable and energetic Product Manager, always pushing boundaries</li>
         <li><strong>Mr. Oreoluwa</strong> – The greatest facilitator, mentor, and guiding light</li>

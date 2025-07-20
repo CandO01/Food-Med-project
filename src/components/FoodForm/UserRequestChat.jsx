@@ -32,7 +32,7 @@ const UserRequests = () => {
     <div style={{ padding: '2rem' }}>
       <h2>My Requests</h2>
       {loading ? (
-        <div className="spinner"></div>
+        <div className="spinner"></div> //the css is in the universal file /App.css
       ) : (
         requests.length === 0 ? (
           <p>You haven’t made any requests yet.</p>
@@ -68,38 +68,6 @@ const UserRequests = () => {
         )
       )
     }
-      {/* {requests.length === 0 ? (
-        <p>You haven’t made any requests yet.</p>
-      ) : (
-        requests.map((req, idx) => (
-            <div key={idx} style={styles.card}>
-              <h3 style={{color: 'black'}}>{req.foodName}</h3>
-              <p style={{color: 'black'}}>
-                <strong>Status:</strong>{' '}
-                <span style={{ color: req.status === 'confirmed' ? 'green' : 'red' }}>
-                  {req.status}
-                </span>
-              </p>
-              {req.donorName && (
-                <p style={{color: 'black'}}><strong>Donor:</strong> {req.donorName}</p>
-              )}
-             {req.donorEmail && (
-                <Link to={`/chat/${req.donorEmail}`}>
-                  <button style={styles.chatBtn}>
-                    💬 Chat with {req.donorName || req.donorEmail}
-                  </button>
-                </Link>
-              )}
-              {req.donorPhone && (
-                <Link to={`tel:${req.donorPhone}`}>
-                  <button style={styles.callBtn}>
-                    📞 Call Donor
-                  </button>
-                </Link>
-              )}
-            </div>
-          ))
-      )} */}
     </div>
   );
 };
@@ -214,3 +182,38 @@ export default UserRequests;
 // };
 
 // export default UserRequests;
+
+
+
+   {/* {requests.length === 0 ? (
+        <p>You haven’t made any requests yet.</p>
+      ) : (
+        requests.map((req, idx) => (
+            <div key={idx} style={styles.card}>
+              <h3 style={{color: 'black'}}>{req.foodName}</h3>
+              <p style={{color: 'black'}}>
+                <strong>Status:</strong>{' '}
+                <span style={{ color: req.status === 'confirmed' ? 'green' : 'red' }}>
+                  {req.status}
+                </span>
+              </p>
+              {req.donorName && (
+                <p style={{color: 'black'}}><strong>Donor:</strong> {req.donorName}</p>
+              )}
+             {req.donorEmail && (
+                <Link to={`/chat/${req.donorEmail}`}>
+                  <button style={styles.chatBtn}>
+                    💬 Chat with {req.donorName || req.donorEmail}
+                  </button>
+                </Link>
+              )}
+              {req.donorPhone && (
+                <Link to={`tel:${req.donorPhone}`}>
+                  <button style={styles.callBtn}>
+                    📞 Call Donor
+                  </button>
+                </Link>
+              )}
+            </div>
+          ))
+      )} */}

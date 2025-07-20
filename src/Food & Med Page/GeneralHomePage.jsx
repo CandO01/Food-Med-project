@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { CiLogout } from "react-icons/ci";
 import { FaRegUser } from "react-icons/fa";
 import { IoFastFoodOutline, IoCartOutline, IoSettingsOutline } from "react-icons/io5";
+import { FiUploadCloud } from "react-icons/fi";
 import { CiMedicalCross } from "react-icons/ci";
 import { RiInformation2Line } from "react-icons/ri";
 import { LocationContext } from '../LocationContext/LocationContext';
@@ -100,7 +101,7 @@ const FoodMedHomePage = () => {
       <div className={`sidebar ${isSliding ? 'show-sidebar' : ''}`}>
         <button className="cancel-button" onClick={handleCancelClick}>X</button>
         <ul>
-          <li onClick={() => navigate('/donor-profile')}>
+          <li onClick={() => navigate('/user-profile')}>
             <FaRegUser style={{ marginRight: '8px', color: 'black' }} />
             Profile
           </li>
@@ -111,6 +112,10 @@ const FoodMedHomePage = () => {
           <li onClick={() => navigate('/user-request')}>
             <IoCartOutline style={{ marginRight: '8px', color: 'black' }} />
             My food Request
+          </li>
+          <li onClick={() => navigate('/donor-profile')}>
+            <FiUploadCloud style={{ marginRight: '8px', color: 'black' }} />
+            Donor food profile
           </li>
           <li onClick={() => navigate('/medical')}>
             <CiMedicalCross style={{ marginRight: '8px', color: 'black' }} />

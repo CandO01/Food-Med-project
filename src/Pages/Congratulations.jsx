@@ -30,7 +30,7 @@ function Congratulations() {
         <img  src={successIcon} alt="congratulations icon" width={350} />
         <h1 style={{marginTop: -60}}>{t('congrats.message')}</h1>
         <p style={{marginTop: 0, fontSize: 18, color: 'green', fontWeight: 700}}>{t('congrats.account')}!!!</p>
-        <button type='click' onClick={()=> navigate('/landing-page')}>{t('congrats.nextPage')}</button>
+        <button type='click' onClick={()=> navigate('/home')}>{t('congrats.nextPage')}</button>
       </div>
     </>
   )

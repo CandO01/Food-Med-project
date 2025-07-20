@@ -22,6 +22,9 @@ import UserRequests from './components/FoodForm/UserRequestChat'
 import UpdateNoticeModal from './components/UpdateNoticeModal'
 import AboutUs from './Pages/AboutUs'
 import Header from './components/header'
+import Profilepage from './Pages/Profilepage'
+import UserProfile from './Pages/UserPage'
+import Findadoctor from './Medical/Findadoctor'
 
 function App() {
   return (
@@ -41,6 +44,7 @@ function App() {
           <Route path='forgot-password' element={<ForgotPassword />} />
           <Route path='verify-otp' element={<VerifyOTP />} />
           <Route path='reset-password' element={<ResetPassword />} />
+          <Route path='profile' element={<Profilepage />} />
 
           {/* Other pages */}
           <Route path='welcome' element={<Home />} />
@@ -48,6 +52,7 @@ function App() {
           <Route path='congratulations' element={<Congratulations />} />
           <Route path='home' element={<GeneralHomePage />} />
           <Route path='about-us' element={<AboutUs />} />
+          <Route path='user-profile' element={<UserProfile />} />
 
           {/* Food Form */}
           <Route path='food-form' element={<FoodForms />} />
@@ -58,6 +63,9 @@ function App() {
           <Route path='donor-profile' element={<DonorProfile />} />
           <Route path='user-request' element={<UserRequests />} />
           {/* <Route path='user-request' element={<UserRequests />} /> */}
+
+          {/* Medical route */}
+          <Route path='medical' element={<Findadoctor />} />
 
           {/* Catch-all route */}
           <Route path='*' element={<div>404 Not Found</div>} />
