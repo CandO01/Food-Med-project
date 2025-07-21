@@ -34,7 +34,8 @@
     "login": "Log in",
     "loggingIn": "We dey log you in...",
     "forgotPassword": "You forget password?",
-    "switchAccount": "No be you? Change account"
+    "switchAccount": "Change account",
+    "asking":"No be"
   },
    "resetPassword": {
     "newPassword": "New Password",

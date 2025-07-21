@@ -33,7 +33,8 @@
     "login": "Log in",
     "loggingIn": "Logging in...",
     "forgotPassword": "Forgot password?",
-    "switchAccount": "Switch account"
+    "switchAccount": "Switch account",
+    "asking":"Not"
   },
   "resetPassword": {
     "newPassword": "New Password",

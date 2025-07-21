@@ -102,7 +102,7 @@ function Signin() {
       <div className="forgot-password">
         <Link to='/forgot-password'>{t('signin.forgotPassword')}</Link>
 
-        <p><Link to='/signup'>{t('signin.switchAccount')}</Link></p>
+        <p><Link to='/signup'>{t('signin.asking')} {names}? {t('signin.switchAccount')}</Link></p>
       </div>
     </div>
   )

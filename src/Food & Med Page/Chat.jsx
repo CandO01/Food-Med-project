@@ -1,7 +1,8 @@
 // src/pages/ChatPage.jsx
 import React, { useEffect, useState, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import io from 'socket.io-client';
+import ProfileModal from '../Pages/ProfileModal/ProfileModal';
 
 const socket = io('https://foodmed-server3.onrender.com');
 
@@ -17,6 +18,21 @@ const ChatPage = () => {
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
   const [userProfile, setUserProfile] = useState(null); //this is for profile picture of users
+  const [recipientProfile, setRecipientProfile] = useState(null); //i just included it today take note incase it did not work i can see it easily and remove
+  const [showProfileModal, setShowProfileModal] = useState(false); //i just included it today take note incase it did not work i can see it easily and remove
+  const [profileModalType, setProfileModalType] = useState(null);
+
+    const location = useLocation();
+    useEffect(() => {
+      if (location.pathname === '/user-profile') {
+        setProfileModalType('self');
+        setShowProfileModal(true);
+      } else {
+        setShowProfileModal(false); // Close modal on route change
+      }
+    }, [location]);
+
+ 
 
 
 
@@ -140,6 +156,7 @@ const ChatPage = () => {
           fetchMessages();
         }, [selectedContact]);
 
+        
         // Save messages to localStorage on every update
         useEffect(() => {
           if (selectedContact) {
@@ -236,28 +253,49 @@ const ChatPage = () => {
         }
       }, [selectedContact, userId]);
 
+      //THIS IS ANOTHER USEEFFECT I AM ADDING TODAY 
+        useEffect(() => {
+          const fetchRecipientProfile = async () => {
+            if (selectedContact?.id) {
+              try {
+                const res = await fetch(`https://foodmed-firstserver-backup.onrender.com/user-profile?email=${selectedContact.id}`);
+                const data = await res.json();
+                setRecipientProfile(data);
+              } catch (err) {
+                console.error('Error fetching recipient profile:', err);
+              }
+            }
+          };
 
+          fetchRecipientProfile();
+        }, [selectedContact]);
 
 
   return (
     <>
     <div style={styles.container}>
+            {/* ✅ USER (SELF) PROFILE IMAGE */}
       {userProfile?.profileImage && (
-          <img
-            src={userProfile.profileImage}
-            alt="My Profile"
-            style={{
-              position: 'absolute',
-              top: '10px',
-              right: '10px',
-              width: '45px',
-              height: '45px',
-              borderRadius: '50%',
-              objectFit: 'cover',
-              boxShadow: '0 0 5px rgba(0,0,0,0.2)',
-            }}
-          />
-        )}
+        <img
+          src={userProfile.profileImage}
+          alt="My Profile"
+          style={{
+            position: 'absolute',
+            top: '10px',
+            right: '10px',
+            width: '45px',
+            height: '45px',
+            borderRadius: '50%',
+            objectFit: 'cover',
+            boxShadow: '0 0 5px rgba(0,0,0,0.2)',
+            cursor: 'pointer'
+          }}
+          onClick={() => {
+            setProfileModalType('self'); // ✅ Opens modal for self
+            setShowProfileModal(true);
+          }}
+        />
+      )}
 
       <div style={styles.sidebar}>
         <h3>Contacts</h3>
@@ -282,6 +320,26 @@ const ChatPage = () => {
       <div style={styles.chatArea}>
         {selectedContact ? (
           <>
+          {/* ✅ RECIPIENT PROFILE IMAGE */}
+          {recipientProfile?.profileImage && (
+            <img
+              src={recipientProfile.profileImage}
+              alt="Recipient"
+              style={{
+                width: '45px',
+                height: '45px',
+                borderRadius: '50%',
+                objectFit: 'cover',
+                marginBottom: '0.5rem',
+                cursor: 'pointer'
+              }}
+              onClick={() => {
+                setProfileModalType('recipient'); // ✅ Opens modal for recipient
+                setShowProfileModal(true);
+              }}
+            />
+          )}
+        {/* 👆 IT ENDS THERE */}
             <h4>Chat with {selectedContact.name}</h4>
             {isTyping && <div style={styles.typingIndicator}>{selectedContact.name} is typing...</div>}
 
@@ -325,6 +383,42 @@ const ChatPage = () => {
         )}
       </div>
      </div>
+     {/* THE RECICIPIENT BIO */}
+     {showProfileModal && recipientProfile && (
+        <div style={{
+          position: 'fixed',
+          top: 60,
+          left: '50%',
+          transform: 'translateX(-50%)',
+          width: '300px',
+          backgroundColor: 'white',
+          borderRadius: '10px',
+          padding: '1rem',
+          boxShadow: '0 0 10px rgba(0,0,0,0.3)',
+          zIndex: 1000
+        }}>
+          <button style={{ float: 'right' }} onClick={() => setShowProfileModal(false)}>✖</button>
+          <div style={{ textAlign: 'center' }}>
+            <img
+              src={recipientProfile.profileImage}
+              alt="Profile"
+              style={{ width: 100, height: 100, borderRadius: '50%', objectFit: 'cover' }}
+            />
+            <h3>{recipientProfile.name || 'No Name'}</h3>
+            <p><strong>Email:</strong> {recipientProfile.email}</p>
+            <p><strong>Phone:</strong> {recipientProfile.phone}</p>
+            <p><strong>Location:</strong> {recipientProfile.location}</p>
+            <p><strong>Bio:</strong> {recipientProfile.bio}</p>
+          </div>
+        </div>
+      )}
+
+       {/* ✅ SINGLE SHARED PROFILE MODAL COMPONENT */}
+      <ProfileModal
+        isOpen={showProfileModal}
+        onClose={() => setShowProfileModal(false)}
+        profileData={profileModalType === 'self' ? userProfile : recipientProfile}
+      />
     </>
   );
 };
