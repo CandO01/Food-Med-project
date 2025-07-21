@@ -88,6 +88,6 @@ const styles = {
       textAlign: 'center',
     },
     highlight: {
-      color: '#1e90ff', // Customize as needed
+      color: '#1e90ff', 
     },
   }

@@ -61,29 +61,3 @@ export default AuthcontextProvider;
 export { AuthContext };
 
 
-
-
-
-//   const login = ({ name, email, role, phone }) => {
-//   localStorage.clear(); // clear previous user data first
-
-//   setUser({ name, email, role });
-//   setIsLoggedIn(true);
-//   localStorage.setItem('userName', name);
-//   localStorage.setItem('userEmail', email);
-//   localStorage.setItem('role', role);
-//   localStorage.setItem('userPhone', phone); // ✅ Save phone directly here
-
-//   // Set userId and/or donorId based on role
-//   localStorage.setItem('userId', email); // Set for both roles
-
-//   if (role === 'donor') {
-//     localStorage.setItem('donorId', email);
-//      localStorage.setItem('donorEmail', email);
-//     localStorage.removeItem('userId');
-//   } else {
-//     localStorage.setItem('userId', email);
-//     localStorage.removeItem('donorId');
-//     localStorage.removeItem('donorEmail');
-//   }
-// };
