@@ -1,8 +1,10 @@
 import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
   plugins: [
+    react(), // ✅ Enable React plugin
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: [
@@ -32,7 +34,13 @@ export default defineConfig({
         ]
       }
     })
-  ]
+  ],
+  base: '/', // ✅ Set base path for Netlify (use '/repo-name/' if deploying to subpath)
+  build: {
+    outDir: 'dist', // ✅ Ensure this matches Netlify's "Publish directory"
+    assetsDir: 'assets', // (Optional) Organize assets
+    emptyOutDir: true, // (Optional) Clear old files on build
+  }
 });
 
 
