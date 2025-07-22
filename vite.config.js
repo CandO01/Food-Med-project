@@ -33,7 +33,7 @@ export default defineConfig({
       }
     })
   ],
-  base: '/', 
+  base: '/Food-Med-project/', 
 });
 
 
