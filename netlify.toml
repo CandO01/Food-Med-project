@@ -1,9 +1,16 @@
 [build]
-  command = "npm install && npm run build"
+  command = "npm ci --legacy-peer-deps && npm run build"  # Combined flags
   publish = "dist"
 
 [build.environment]
-  NODE_VERSION = "20.19.0"  # Or your preferred version
+  NODE_VERSION = "20.19.0"  # Matches Vite's requirement
+  NPM_VERSION = "10.x"      # Explicit npm version
+  # Removed NPM_FLAGS (now included in command)
+
+[[headers]]
+  for = "/service-worker.js"  # Ensure correct MIME type for SW
+  [headers.values]
+    Content-Type = "application/javascript"
 
 [[redirects]]
   from = "/*"

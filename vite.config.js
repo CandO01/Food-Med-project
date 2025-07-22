@@ -4,9 +4,10 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
   plugins: [
-    react(), // ✅ Enable React plugin
+    react(), // React plugin (required)
     VitePWA({
-      registerType: 'autoUpdate',
+      registerType: 'autoUpdate', // Auto-update SW in production
+      strategies: 'generateSW', // Explicit SW generation
       includeAssets: [
         'favicon.svg',
         'robots.txt',
@@ -32,14 +33,32 @@ export default defineConfig({
             type: 'image/png'
           }
         ]
+      },
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,mp3}'], // Cached file types
+        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024, // 5MB max file size
+        runtimeCaching: [
+          {
+            urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i, // Example: Cache Google Fonts
+            handler: 'CacheFirst'
+          }
+        ]
       }
     })
   ],
-  base: '/', // ✅ Set base path for Netlify (use '/repo-name/' if deploying to subpath)
+  base: '/', // Ensure correct asset paths in production
   build: {
-    outDir: 'dist', // ✅ Ensure this matches Netlify's "Publish directory"
-    assetsDir: 'assets', // (Optional) Organize assets
-    emptyOutDir: true, // (Optional) Clear old files on build
+    outDir: 'dist', // Match Netlify's publish directory
+    chunkSizeWarningLimit: 1000, // Silence large chunk warnings (adjust as needed)
+    rollupOptions: {
+      output: {
+        manualChunks: (id) => {
+          if (id.includes('node_modules')) {
+            return 'vendor'; // Split dependencies into separate chunk
+          }
+        }
+      }
+    }
   }
 });
 
