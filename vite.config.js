@@ -32,7 +32,8 @@ export default defineConfig({
         ]
       }
     })
-  ]
+  ],
+  base: './', 
 });
 
 
