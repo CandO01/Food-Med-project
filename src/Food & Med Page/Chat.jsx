@@ -5,6 +5,15 @@ import io from 'socket.io-client';
 import ProfileModal from '../Pages/ProfileModal/ProfileModal';
 
 const socket = io('https://foodmed-server3.onrender.com');
+let typingTimeout;
+
+const emitTyping = (socket, userId, recipientId) => {
+  socket.emit('typing', { senderId: userId, recipientId });
+  clearTimeout(typingTimeout);
+  typingTimeout = setTimeout(() => {
+    socket.emit('stopTyping', { senderId: userId, recipientId });
+  }, 3000); // stop typing after 3s
+};
 
 const ChatPage = () => {
   const { recipientId } = useParams();
@@ -18,8 +27,8 @@ const ChatPage = () => {
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
   const [userProfile, setUserProfile] = useState(null); //this is for profile picture of users
-  const [recipientProfile, setRecipientProfile] = useState(null); //i just included it today take note incase it did not work i can see it easily and remove
-  const [showProfileModal, setShowProfileModal] = useState(false); //i just included it today take note incase it did not work i can see it easily and remove
+  const [recipientProfile, setRecipientProfile] = useState(null); 
+  const [showProfileModal, setShowProfileModal] = useState(false); 
   const [profileModalType, setProfileModalType] = useState(null);
 
     const location = useLocation();
@@ -54,7 +63,7 @@ const ChatPage = () => {
     return () => socket.off('onlineUsers');
   }, [email]);
 
-  //for profileImage 
+  //for User profileImage 
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
@@ -220,21 +229,36 @@ const ChatPage = () => {
 
   //handle change of text in the input field and showing typing while user is typing
   const handleTextChange = (e) => {
-      setText(e.target.value);
-      socket.emit('typing', { senderId: userId, recipientId: selectedContact?.id });
-    };
+    setText(e.target.value);
+    if (selectedContact) {
+      emitTyping(socket, userId, selectedContact.id);
+    }
+  };
+
  
     //listening to typing
     useEffect(() => {
-      socket.on('typing', ({ senderId }) => {
+      const handleTyping = ({ senderId }) => {
         if (senderId === selectedContact?.id) {
           setIsTyping(true);
-          // Clear after 3 seconds
-          setTimeout(() => setIsTyping(false), 3000);
         }
-      });
-      return () => socket.off('typing');
+      };
+
+      const handleStopTyping = ({ senderId }) => {
+        if (senderId === selectedContact?.id) {
+          setIsTyping(false);
+        }
+      };
+
+      socket.on('typing', handleTyping);
+      socket.on('stopTyping', handleStopTyping);
+
+      return () => {
+        socket.off('typing', handleTyping);
+        socket.off('stopTyping', handleStopTyping);
+      };
     }, [selectedContact]);
+
 
     //chat history
     useEffect(() => {
@@ -253,7 +277,7 @@ const ChatPage = () => {
         }
       }, [selectedContact, userId]);
 
-      //THIS IS ANOTHER USEEFFECT I AM ADDING TODAY 
+      //For recipient profile image
         useEffect(() => {
           const fetchRecipientProfile = async () => {
             if (selectedContact?.id) {
@@ -281,7 +305,7 @@ const ChatPage = () => {
           alt="My Profile"
           style={{
             position: 'absolute',
-            top: '10px',
+            top: '18px',
             right: '10px',
             width: '45px',
             height: '45px',
@@ -296,7 +320,7 @@ const ChatPage = () => {
           }}
         />
       )}
-
+  
       <div style={styles.sidebar}>
         <h3>Contacts</h3>
         {contacts.map((contact, idx) => (
@@ -341,8 +365,6 @@ const ChatPage = () => {
           )}
         {/* 👆 IT ENDS THERE */}
             <h4>Chat with {selectedContact.name}</h4>
-            {isTyping && <div style={styles.typingIndicator}>{selectedContact.name} is typing...</div>}
-
             <div style={styles.messages}>
               {messages.map((msg, i) => (
                   <div
@@ -367,6 +389,8 @@ const ChatPage = () => {
 
               <div ref={messagesEndRef} />
             </div>
+                {/* Chat indicator */}
+               {isTyping && <div style={styles.typingIndicator}>{selectedContact.name} is typing...</div>}
 
             <div style={styles.inputRow}>
               <input
@@ -383,36 +407,6 @@ const ChatPage = () => {
         )}
       </div>
      </div>
-     {/* THE RECICIPIENT BIO */}
-     {showProfileModal && recipientProfile && (
-        <div style={{
-          position: 'fixed',
-          top: 60,
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: '300px',
-          backgroundColor: 'white',
-          borderRadius: '10px',
-          padding: '1rem',
-          boxShadow: '0 0 10px rgba(0,0,0,0.3)',
-          zIndex: 1000
-        }}>
-          <button style={{ float: 'right' }} onClick={() => setShowProfileModal(false)}>✖</button>
-          <div style={{ textAlign: 'center' }}>
-            <img
-              src={recipientProfile.profileImage}
-              alt="Profile"
-              style={{ width: 100, height: 100, borderRadius: '50%', objectFit: 'cover' }}
-            />
-            <h3>{recipientProfile.name || 'No Name'}</h3>
-            <p><strong>Email:</strong> {recipientProfile.email}</p>
-            <p><strong>Phone:</strong> {recipientProfile.phone}</p>
-            <p><strong>Location:</strong> {recipientProfile.location}</p>
-            <p><strong>Bio:</strong> {recipientProfile.bio}</p>
-          </div>
-        </div>
-      )}
-
        {/* ✅ SINGLE SHARED PROFILE MODAL COMPONENT */}
       <ProfileModal
         isOpen={showProfileModal}
@@ -432,7 +426,7 @@ const styles = {
 
   contactItem: { padding: '0.5rem', marginBottom: '0.5rem', cursor: 'pointer', borderRadius: '5px' },
 
-  typingIndicator: { fontStyle: 'italic', color: '#888', marginBottom: '0.5rem', }, 
+  typingIndicator: { fontStyle: 'italic', color: '#888', marginBottom: '0.8rem', marginTop:'1.2rem' }, 
 
   messages: { flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '0.5rem', marginBottom: '1rem' },
 

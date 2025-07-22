@@ -14,7 +14,6 @@ createRoot(document.getElementById('root')).render(
           <UserLocation>
             <App />
           </UserLocation>
-
         </NotificationProvider>
       </AuthcontextProvider>
     </BrowserRouter>

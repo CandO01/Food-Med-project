@@ -249,7 +249,7 @@ const SubmissionsDashboard = () => {
 
   const themeStyles = {
     background: darkMode ? 'white' : 'black',
-    color: darkMode ? 'black' : 'white',
+    color: darkMode ? 'black' : '',
   };
 
   const renderImage = (url) => {
@@ -258,6 +258,7 @@ const SubmissionsDashboard = () => {
       : `https://foodmed-server3.onrender.com${url}`;
   };
 
+  //for indicating loading while waiting for data to be fetched
   if (loading)
     return (
       <img
