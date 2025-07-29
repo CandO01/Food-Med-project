@@ -249,7 +249,7 @@ const SubmissionsDashboard = () => {
 
   const themeStyles = {
     background: darkMode ? 'white' : 'black',
-    color: darkMode ? 'black' : '',
+    color: darkMode ? 'black' : 'white',
   };
 
   const renderImage = (url) => {
@@ -414,7 +414,7 @@ const SubmissionsDashboard = () => {
               key={cat.name}
               onClick={() =>
                 setSelectedCategory(selectedCategory === cat.name ? '' : cat.name)
-              }
+                      }
               style={{
                 minWidth: '140px',
                 padding: '0.5rem',

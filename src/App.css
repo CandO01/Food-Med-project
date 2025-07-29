@@ -500,38 +500,258 @@ footer{
   display: flex;
   align-items: center;
 }
+/* MEDIA QUERY FOR BIGGER SCREEN */
 
-.marquee-text {
-  position: absolute;
-  white-space: nowrap;
-  font-size: 1.2rem;
-  font-weight: bold;
-  color: black;
-  animation: dropBounce 1s ease-out, scrollLeft 15s linear infinite;
+@media only screen and (max-width: 600px) {
+  .signup-container,
+  .signin-container,
+  .reset-form,
+  .location-container,
+  .language-container,
+  .congratulations-container,
+  .new-password-container,
+  .verify-container {
+    max-width: 95vw;
+    padding-inline: 0.5rem;
+  }
+
+  .foodmed {
+    height: 180px;
+  }
+
+  .foodmed img {
+    width: 110px;
+  }
+
+  .foodmed > h1 {
+    margin-left: -15px;
+    margin-top: -10px;
+    font-size: 1.2rem;
+  }
+
+  .welcome-message,
+  .congratulations-container,
+  .language-container {
+    height: 80vh;
+    padding-inline: 0.5rem;
+  }
+
+  .heading-one {
+    font-size: 1.1rem;
+    line-height: 1.2;
+  }
+
+  .signup-container > input,
+  .signup-container > .input,
+  .signin-container > input,
+  .forget-password-container form > input,
+  .reset-form > input {
+    font-size: 1rem;
+    height: 45px;
+  }
+
+  .signup-container > button,
+  .signin-container > button,
+  .forget-password-container form > button,
+  .reset-form > button,
+  .welcome-message > button,
+  .location-container > button,
+  .language-container > button,
+  .congratulations-container > button {
+    font-size: 1rem;
+    height: 45px;
+    margin-top: 14px;
+  }
+
+  .form-group input,
+  .form-group2 input {
+    font-size: 1rem;
+    height: 40px;
+  }
+
+  .form-group label,
+  .form-group2 label {
+    font-size: 0.9rem;
+    top: 10px;
+  }
+
+  .form-group input:focus + label,
+  .form-group label.active,
+  .form-group2 input:focus ~ label,
+  .form-group2 label.active {
+    font-size: 0.8rem;
+    top: -8px;
+  }
+
+  .otp-input {
+    width: 32px;
+    height: 38px;
+    font-size: 18px;
+  }
+
+  .verify-btn {
+    padding: 10px 18px;
+    font-size: 14px;
+  }
+
+  .search-field input {
+    font-size: 1rem;
+  }
+
+  .search-field .icon {
+    font-size: 22px;
+  }
+
+  .map-placeholder {
+    min-height: 120px;
+  }
+
+  .modal {
+    max-width: 98vw;
+    padding: 0.5rem;
+  }
+
+  .marquee-container {
+    height: 40px;
+  }
+
+  .marquee-text {
+    font-size: 1rem;
+  }
+
+  .icons {
+    padding: 0 0.5rem;
+  }
+
+  .forget-password-container form {
+    width: 95vw;
+    margin: 20px 0;
+  }
 }
 
-@keyframes dropBounce {
-  0% {
-    top: -100px;
-    opacity: 0;
+@media only screen and (min-width: 600px) {
+  .signup-container,
+  .signin-container,
+  .reset-form,
+  .location-container,
+  .language-container,
+  .congratulations-container,
+  .new-password-container,
+  .verify-container {
+    max-width: 400px;
+    padding-inline: 1.687rem;
   }
-  60% {
-    top: 30px;
-    opacity: 1;
-  }
-  80% {
-    top: 20px;
-  }
-  100% {
-    top: 25px;
-  }
-}
 
-@keyframes scrollLeft {
-  0% {
-    left: 100%;
+  .foodmed {
+    height: 300px;
   }
-  100% {
-    left: -100%;
+
+  .foodmed img {
+    width: 180px;
+  }
+
+  .foodmed > h1 {
+    margin-left: -40px;
+    margin-top: -30px;
+    font-size: 2rem;
+  }
+
+  .welcome-message,
+  .congratulations-container,
+  .language-container {
+    height: 100vh;
+    padding-inline: 1.687rem;
+  }
+
+  .heading-one {
+    font-size: 1.5rem;
+    line-height: 30px;
+  }
+
+  .signup-container > input,
+  .signup-container > .input,
+  .signin-container > input,
+  .forget-password-container form > input,
+  .reset-form > input {
+    font-size: 1.375rem;
+    height: 57px;
+  }
+
+  .signup-container > button,
+  .signin-container > button,
+  .forget-password-container form > button,
+  .reset-form > button,
+  .welcome-message > button,
+  .location-container > button,
+  .language-container > button,
+  .congratulations-container > button {
+    font-size: 1.25rem;
+    height: 57px;
+    margin-top: 22px;
+  }
+
+  .form-group input,
+  .form-group2 input {
+    font-size: 1rem;
+    height: 48px;
+  }
+
+  .form-group label,
+  .form-group2 label {
+    font-size: 1rem;
+    top: 12px;
+  }
+
+  .form-group input:focus + label,
+  .form-group label.active,
+  .form-group2 input:focus ~ label,
+  .form-group2 label.active {
+    font-size: 0.9rem;
+    top: -10px;
+  }
+
+  .otp-input {
+    width: 40px;
+    height: 50px;
+    font-size: 24px;
+  }
+
+  .verify-btn {
+    padding: 12px 30px;
+    font-size: 16px;
+  }
+
+  .search-field input {
+    font-size: 1.5rem;
+  }
+
+  .search-field .icon {
+    font-size: 30px;
+  }
+
+  .map-placeholder {
+    min-height: 180px;
+  }
+
+  .modal {
+    max-width: 380px;
+    padding: 0.625rem 1.25rem;
+  }
+
+  .marquee-container {
+    height: 60px;
+  }
+
+  .marquee-text {
+    font-size: 1.2rem;
+  }
+
+  .icons {
+    padding: 0 1.687rem;
+  }
+
+  .forget-password-container form {
+    width: 350px;
+    margin: 50px;
   }
 }

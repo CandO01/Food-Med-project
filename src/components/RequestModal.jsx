@@ -1,4 +1,5 @@
 // components/RequestModal.jsx
+import { color } from 'framer-motion';
 import React, { useState } from 'react';
 
 const RequestModal = ({ item, onClose, onSubmit }) => {
@@ -15,8 +16,8 @@ const RequestModal = ({ item, onClose, onSubmit }) => {
   return (
     <div style={styles.overlay}>
       <div style={styles.modal}>
-        <h3>Request {item.foodName}</h3>
-        <label>Enter your phone number</label>
+        <h3  style={styles.request}>Request {item.foodName}</h3>
+        <label style={styles.request}>Enter your phone number</label>
         <input
           type="number"
           placeholder="Enter your phone number..."
@@ -48,6 +49,9 @@ const styles = {
   },
   actions: {
     display: 'flex', justifyContent: 'space-between'
+  },
+  request:{
+    color: 'black'
   }
 };
 
