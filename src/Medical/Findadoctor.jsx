@@ -49,6 +49,7 @@ function Findadoctor() {
         flexDirection: 'column',
         alignItems: 'flex-start',
         justifyContent: 'flex-start',
+        position: 'relative'
       }
       return (
         <div
@@ -63,6 +64,15 @@ function Findadoctor() {
             >
               {cat.name}
             </span>
+            <img style={{
+                  width: 30, 
+                  position: 'absolute', 
+                  bottom: 5,
+                  right: 5,
+                  color: '#fff'
+                  }} 
+                  src={cat.images} 
+            />
         </div>
          )
     })

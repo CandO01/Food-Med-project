@@ -29,7 +29,7 @@ const UserProfile = () => {
   }, [email]);
 
   if (error) return <p style={{ color: 'red' }}>{error}</p>;
-  if (!profile) return <p>Loading profile...</p>;
+  if (!profile) return <div style={{ marginTop: '80%'}} className="spinner"></div>;
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' , maxWidth: '600px', margin: '2rem auto', padding: '1rem', border: '1px solid #ccc', borderRadius: '8px',  }}>
