@@ -502,7 +502,7 @@ footer{
 }
 /* MEDIA QUERY FOR BIGGER SCREEN */
 
-@media only screen and (max-width: 600px) {
+/* @media only screen and (max-width: 600px) {
   .signup-container,
   .signin-container,
   .reset-form,
@@ -754,4 +754,4 @@ footer{
     width: 350px;
     margin: 50px;
   }
-}
+} */
