@@ -4,9 +4,9 @@ import { AnimatePresence, motion } from 'framer-motion'
 import './SplashCarousel.css'
 import splashLogo from '../assets/logo.png'
 // background images
-import bg2 from '../assets/bg2.png'
-import bg3 from '../assets/bg3.png'
-import bg4 from '../assets/bg4.png'
+import food1 from '../assets/food1.png'
+import doc from '../assets/doc.png'
+import food from '../assets/food.png'
 
 function SplashCarousel() {
   const [currentPage, setCurrentPage] = useState(0)
@@ -37,22 +37,18 @@ function SplashCarousel() {
       id: 2,
       content: (
         <div style={{
-          backgroundImage: `url(${bg2})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          height: '100vh',
           width: '100vw',
           padding: '2rem',
           color: 'whitesmoke',
-          textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'end',
           alignItems: 'center',
           textAlign: 'center'
         }}>
+          <img className='imgs' src={doc} />
           <h1>Welcome to Connect and Care!</h1>
-          <p style={{ margin: '0 0 30px 0' }}>Connecting for food items, and medical help</p>
+          <p>Connecting for food items, and medical help</p>
           <button className="skip-btn" onClick={() => navigate('/language')}>Skip</button>
         </div>
       )
@@ -61,20 +57,16 @@ function SplashCarousel() {
       id: 3,
       content: (
         <div style={{
-          backgroundImage: `url(${bg3})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          height: '100vh',
           width: '100vw',
           padding: '2rem',
           color: 'black',
-          textShadow: '2px 2px 4px rgba(255, 255, 255, 0.5)',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'end',
           alignItems: 'center',
           textAlign: 'center'
         }}>
+          <img className='imgs' src={food1} />
           <h1>Give what you can, get what you want</h1>
           <button className="skip-btn" onClick={() => navigate('/language')}>Skip</button>
         </div>
@@ -84,10 +76,6 @@ function SplashCarousel() {
       id: 4,
       content: (
         <div style={{
-          backgroundImage: `url(${bg4})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          height: '100vh',
           width: '100vw',
           padding: '2rem',
           color: 'black',
@@ -97,8 +85,9 @@ function SplashCarousel() {
           alignItems: 'center',
           textAlign: 'center'
         }}>
-          <h1>Access healthcare at your fingertips</h1>
-          <p style={{ fontWeight: 700 }}>Get in touch with qualified medical professionals and manage your health journey with ease</p>
+          <img className='imgs' src={food1} />
+          <h1>Access food items at your fingertips</h1>
+          <p style={{ fontWeight: 700 }}>Easily access quality food items and manage your nutritional journey with confidence.</p>
           <button className="get-started-btn" onClick={() => navigate('/language')}>Get Started</button>
         </div>
       )

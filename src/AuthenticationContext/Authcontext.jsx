@@ -37,9 +37,11 @@ function AuthcontextProvider({ children }) {
   if (role === 'donor') {
     localStorage.setItem('donorId', email);
     localStorage.setItem('donorEmail', email);
+    localStorage.setItem('role', role);
   } else {
     localStorage.removeItem('donorId');
     localStorage.removeItem('donorEmail');
+    localStorage.removeItem('role');
   }
 };
 

@@ -100,7 +100,14 @@ const ProfileSetup = () => {
           style={styles.fileInput}
         />
         <button type="submit" disabled={uploading} style={styles.button}>
-          {uploading ? 'Uploading...' : 'Save Profile'}
+          {uploading ? (
+            <>
+             <span className='spinner1'></span>
+              Uploading..
+            </>
+          ): (
+            'Save profile'
+          )}
         </button>
       </form>
 
@@ -156,6 +163,7 @@ const styles = {
     color: 'black',
     border: 'none',
     borderRadius: '5px',
+    fontSize: '1.3rem',
     fontWeight: 'bold',
     cursor: 'pointer',
   },

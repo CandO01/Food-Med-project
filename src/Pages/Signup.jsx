@@ -157,7 +157,7 @@ function Signup() {
 
 
         <p className='have-account'>
-          {t('signup.haveAccount')}<Link to="/login">{t('signup.login')}</Link>
+          {t('signup.haveAccount')} <Link to="/login">{t('signup.login')}</Link>
         </p>
 
         <div className='terms-and-condi'>
