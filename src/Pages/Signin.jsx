@@ -38,7 +38,6 @@ function Signin() {
     try {
       const res = await fetch('https://foodmed-firstserver-backup.onrender.com/login', {
         method: 'POST',
-        credentials: 'include', // Include credentials for cookie-based auth
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(loginForm)
       });
