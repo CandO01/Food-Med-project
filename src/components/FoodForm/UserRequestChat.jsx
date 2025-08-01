@@ -20,7 +20,7 @@ const UserRequests = () => {
         const res = await fetch(`https://foodmed-server3.onrender.com/requests?role=${role}&id=${userId}`);
         const data = await res.json();
         
-
+         console.log("Fetched Requests:", data);
         setRequests(data);
       } catch (error) {
         console.error('Failed to load requests:', error);
