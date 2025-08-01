@@ -1,15 +1,11 @@
 
-// ✅ Chat icon with tooltip and unread count
-// ✅ Clears unread status when chat is opened
-// ✅ Animated pulsing notification dot
-// ✅ Sound alert and message previews
-
 import React, { useEffect, useState, useRef } from 'react';
 import { IoArrowBack } from 'react-icons/io5';
 import { Link, useNavigate } from 'react-router-dom';
 import ConfirmModal from './DonorConfirmationModal';
 import { io } from 'socket.io-client';
 import { FaComments } from 'react-icons/fa';
+import { useLocation } from 'react-router-dom';
 
 const socket = io('https://foodmed-server3.onrender.com');
 
@@ -24,6 +20,7 @@ const DonorProfile = () => {
   const [unreadMessages, setUnreadMessages] = useState({});
   const [messagePreview, setMessagePreview] = useState({});
   const [loading, setLoading] = useState(false)
+  const location = useLocation();
 
   const navigate = useNavigate();
   const audioRef = useRef(null);
@@ -63,8 +60,12 @@ const fetchData = async () => {
       setMessagePreview(prev => ({ ...prev, [sender]: message }));
       if (audioRef.current) audioRef.current.play().catch(() => {});
     });
-    return () => socket.disconnect();
-  }, []);
+    return () => {
+          socket.off('requestUpdated');
+          socket.off('newMessage');
+        };
+    // return () => socket.disconnect();
+  }, [location]);
 
 
   const updateHistory = (id, foodName, status) => {

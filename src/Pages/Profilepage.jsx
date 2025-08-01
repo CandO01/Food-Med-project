@@ -103,7 +103,7 @@ const ProfileSetup = () => {
           {uploading ? (
             <>
              <span className='spinner1'></span>
-              Uploading..
+              Uploading...
             </>
           ): (
             'Save profile'

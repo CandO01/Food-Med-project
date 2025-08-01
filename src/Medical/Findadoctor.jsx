@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import doc1 from '../assets/doc1.png'
 import doc2 from '../assets/doc2.png'
 import doc3 from '../assets/doc3.png'
+import doc4 from '../assets/doc5.png'
 import { categories } from './categories.js'
 
 function Findadoctor() {
@@ -10,6 +11,11 @@ function Findadoctor() {
                       name: "Dr. Gabriella Abel",
                       specialty: "Eye specialist",
                       image: doc1
+                    },
+                     {
+                      name: "Dr. Grace Olawale",
+                      specialty: "Brain specialist",
+                      image: doc4
                     },
                      {
                       name: "Dr. Jane Doe",

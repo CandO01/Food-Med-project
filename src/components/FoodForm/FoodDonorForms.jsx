@@ -21,6 +21,7 @@ function FoodForm () {
   const [unexpiredItems, setUnexpiredItems] = useState([]);
   const [notifications, setNotifications] = useState([]);
   const [showModal, setShowModal] = useState(false)
+  const [uploading, setUploading] = useState(false);
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -52,11 +53,14 @@ function FoodForm () {
     });
 
     try {
+      setUploading(true);
       const res = await fetch('https://foodmed-server3.onrender.com/submit', {
         method: 'POST',
         body: data,
       });
       const result = await res.json();
+      if (!res.ok) throw new Error(result.error || 'Failed to submit');
+      
       //show success upload
       setShowModal(true)
       setTimeout(()=>{
@@ -68,6 +72,7 @@ function FoodForm () {
           localStorage.setItem('donorId', localStorage.getItem('userEmail'));
         }
       fetchUnexpiredItems();
+      setUploading(false);
     } catch (err) {
       console.error('Error submitting:', err);
       alert('Failed to submit');
@@ -256,8 +261,9 @@ function FoodForm () {
           <option value="Proteins">Proteins</option>
           <option value="Palliatives">Palliatives</option>
           <option value="Vegetables">Vegetables</option>
-          <option value="Beverages">Beverages</option>
+          <option value="Tubers">Tubers</option>
           <option value="Grains">Grains</option>
+          <option value="Oil">Oil</option>
         </select>
 
         {/* Mode of the food */}
@@ -272,7 +278,17 @@ function FoodForm () {
           <option value="Free">Free Share</option>
           <option value="Barter">Barter</option>
         </select>
-        <button type="submit" style={styles.button}>Submit</button>
+        {/* <button type="submit" style={styles.button}>Submit</button> */}
+        <button type="submit" disabled={uploading} style={styles.button}>
+          {uploading ? (
+            <>
+             <span className='spinner1'></span>
+              Uploading...
+            </>
+          ): (
+            'Submit'
+          )}
+        </button>
       </form>
 
       {/* Unexpired Items */}

@@ -31,11 +31,12 @@
 img.imgs{
   height: 400px;
 }
-h1, p{
+h1.heading-one{
   color: black;
 }
-p{
+p.para{
   margin: 0 0 30px 0;
+  color: black;
 }
 
 /* Get Started Button */

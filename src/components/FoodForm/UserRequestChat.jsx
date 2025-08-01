@@ -1,10 +1,12 @@
 // src/components/UserRequests.jsx
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 const UserRequests = () => {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(false)
+  const location = useLocation();
 
   useEffect(() => {
     const fetchRequests = async () => {
@@ -17,6 +19,8 @@ const UserRequests = () => {
         setLoading(true)
         const res = await fetch(`https://foodmed-server3.onrender.com/requests?role=${role}&id=${userId}`);
         const data = await res.json();
+        
+
         setRequests(data);
       } catch (error) {
         console.error('Failed to load requests:', error);
@@ -26,7 +30,7 @@ const UserRequests = () => {
     };
 
     fetchRequests();
-  }, []);
+  }, [location]); // Re-fetch when location changes
 
   return (
     <div style={{ padding: '2rem' }}>
