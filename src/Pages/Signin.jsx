@@ -47,12 +47,13 @@ function Signin() {
       if (!res.ok) {
         throw new Error(data.error || 'Login failed');
       }
-
       login({
         name: data.name,
         email: data.email,
-        role: data.role,
-        phone: data.phone
+        canDonate: data.canDonate,
+        canRequest: data.canRequest,
+        phone: data.phone,
+        _id: data._id
       });
       
       localStorage.setItem('donorId', data.email);
@@ -71,7 +72,7 @@ function Signin() {
         <h1>FOODMED</h1>
       </div>
 
-      <h1 style={{color: '#FFFFF'}}>{t('signin.welcomeBack')} {names}</h1>
+      <h1 style={{color: 'black'}}>{t('signin.welcomeBack')} {names}</h1>
 
       {error && <p style={{ color: 'red' }}>{error}</p>}
 

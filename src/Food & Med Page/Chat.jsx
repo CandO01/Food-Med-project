@@ -4,7 +4,7 @@ import { useParams, useLocation } from 'react-router-dom';
 import io from 'socket.io-client';
 import ProfileModal from '../Pages/ProfileModal/ProfileModal';
 
-const socket = io('https://foodmed-server3.onrender.com');
+const socket = io('https://foodmed-server3.onrender.com'); // Adjust the URL as needed
 let typingTimeout;
 
 const emitTyping = (socket, userId, recipientId) => {
@@ -12,7 +12,7 @@ const emitTyping = (socket, userId, recipientId) => {
   clearTimeout(typingTimeout);
   typingTimeout = setTimeout(() => {
     socket.emit('stopTyping', { senderId: userId, recipientId });
-  }, 3000); // stop typing after 3s
+  }, 1000); // stop typing after 2s
 };
 
 const ChatPage = () => {
@@ -40,10 +40,6 @@ const ChatPage = () => {
         setShowProfileModal(false); // Close modal on route change
       }
     }, [location]);
-
- 
-
-
 
   const messagesEndRef = useRef(null);
 
@@ -93,38 +89,49 @@ const ChatPage = () => {
     return () => socket.off('receiveMessage');
   }, [selectedContact]);
 
-  useEffect(() => {
-    const fetchContacts = async () => {
-      try {
-        const role = localStorage.getItem('role');
-        const id = localStorage.getItem('userId') || localStorage.getItem('donorId');
-        const res = await fetch(`https://foodmed-server3.onrender.com/requests?role=${role}&id=${id}`);
-        const data = await res.json();
-        console.log('🔍 Fetching contacts for:', { role, id });
+        useEffect(() => {
+          const fetchContacts = async () => {
+            try {
+              const canDonate = localStorage.getItem('canDonate') === 'true';
+              const canRequest = localStorage.getItem('canRequest') === 'true';
+              const id = localStorage.getItem('userId') || localStorage.getItem('donorId');
+              const type = canDonate ? 'donor' : 'user';
 
+              const res = await fetch(`https://foodmed-server3.onrender.com/requests?type=${type}&id=${encodeURIComponent(id)}`);
 
-        const unique = {};
-        
-        const formatted = data.map(r => {
-          return {
-              id: role === 'donor' ? r.userEmail : r.donorEmail,
-              name: role === 'donor' ? r.userName || r.userEmail : r.donorName || r.donorEmail
-            };
-        }).filter(c => {
-          if (unique[c.id]) return false;
-          unique[c.id] = true;
-          return true;
-        });
+              if (!res.ok) {
+                const err = await res.json();
+                console.error('❌ Server error:', err);
+                return;
+              }
 
+              const data = await res.json();
+              console.log('🔍 Fetching contacts for:', { type, id });
 
-        setContacts(formatted);
-      } catch (err) {
-        console.error('Failed to fetch contacts:', err);
-      }
-    };
+              if (!Array.isArray(data)) {
+                console.error('❌ Expected array but got:', data);
+                return;
+              }
 
-    fetchContacts();
-  }, []);
+              const unique = {};
+              const formatted = data.map(r => ({
+                id: canDonate ? r.userEmail : r.donorEmail,
+                name: canDonate ? r.userName || r.userEmail : r.donorName || r.donorEmail
+              })).filter(c => {
+                if (unique[c.id]) return false;
+                unique[c.id] = true;
+                return true;
+              });
+
+              setContacts(formatted);
+            } catch (err) {
+              console.error('Failed to fetch contacts:', err);
+            }
+          };
+
+          fetchContacts();
+        }, []);
+
       
           useEffect(() => {
           const savedContact = localStorage.getItem("lastSelectedContact");
@@ -173,16 +180,16 @@ const ChatPage = () => {
           }
         }, [messages, selectedContact, userId]);
 
-    useEffect(() => {
-      const savedContact = localStorage.getItem("lastSelectedContact");
-      if (savedContact && contacts.length > 0) {
-        const parsed = JSON.parse(savedContact);
-        const match = contacts.find(c => c.id === parsed.id);
-        if (match) {
-          setSelectedContact(match);
-        }
-      }
-    }, [contacts]);
+        useEffect(() => {
+          const savedContact = localStorage.getItem("lastSelectedContact");
+          if (savedContact && contacts.length > 0) {
+            const parsed = JSON.parse(savedContact);
+            const match = contacts.find(c => c.id === parsed.id);
+            if (match) {
+              setSelectedContact(match);
+            }
+          }
+        }, [contacts]);
 
 
     useEffect(() => {

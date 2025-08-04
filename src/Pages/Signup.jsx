@@ -14,7 +14,8 @@ function Signup() {
     email: '',
     password: '',
     confirm: '',
-    role: '',
+    canDonate: false,
+    canRequest: false,
   });
   const [error, setError] = useState('');
   const [status, setStatus] = useState('idle');
@@ -23,10 +24,17 @@ function Signup() {
   const [showModal, setShowModal] = useState(false)
   const navigate = useNavigate();
   
+  //old function handling input field we will still come back to itrt
+  // function handleChange(e) {
+  //   const { name, value } = e.target;
+  //   setForm(prev => ({ ...prev, [name]: value }));
+  // }
 
-  function handleChange(e) {
-    const { name, value } = e.target;
-    setForm(prev => ({ ...prev, [name]: value }));
+  // New function to handle change
+  function handleChange(e){
+    const { name, value, type, checked } = e.target
+    const fieldValue = type === 'checkbox' ? checked : value
+    setForm(prev=> ({ ...prev, [name]: fieldValue }))
   }
 
     // function to display terms and conditions modal
@@ -47,9 +55,9 @@ function Signup() {
       setMessage('');
       setError('');
 
-      const { name, phone, email, password, confirm, role } = form;
+      const { name, phone, email, password, confirm, canDonate, canRequest } = form;
 
-      if (!name || !email || !phone || !password || password !== confirm || !role) {
+      if (!name || !email || !phone || !password || password !== confirm) {
         setError('Please fill all fields correctly');
         setStatus('idle');
         return;
@@ -59,11 +67,10 @@ function Signup() {
         const res = await fetch('https://foodmed-firstserver-backup.onrender.com/signup', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, phone, email, password, confirm, role }),
+          body: JSON.stringify({ name, phone, email, password, confirm, canDonate, canRequest }),
         });
 
         const data = await res.json();
-        console.log(data);
 
         if (!res.ok) throw new Error(data.error || 'Signup failed');
 
@@ -76,13 +83,14 @@ function Signup() {
         login({
           name: user.name,
           email: user.email,
-          role: user.role,
           phone: user.phone,
-          id: user.id,
+          canDonate: user.canDonate,
+          canRequest: user.canRequest,
+          _id: user._id,
         });
 
         // Optional: reset form
-        setForm({ name: '', phone: '', email: '', password: '', confirm: '', role: '' });
+        setForm({ name: '', phone: '', email: '', password: '', confirm: '', canDonate: false, canRequest: false });
 
         // Navigate after a short delay
         setTimeout(() => navigate('/profile', {state: {user: res.user}}), 4500); //welcome
@@ -142,7 +150,7 @@ function Signup() {
           value={form.confirm}
           required
         />
-        <select
+        {/* <select
         name='role'
           value={form.role}
           onChange={handleChange}
@@ -153,15 +161,40 @@ function Signup() {
           <option value="user">User</option>
           <option value="donor">Donor</option>
           <option value="doctor">Doctor</option>
-        </select>
-
+        </select> */}
+        {/* Replacing select tag with checkboxes */}
+        <div style ={{marginTop: '10px'}}>
+          <label>
+            <input
+              type='checkbox'
+              name='canDonate'
+              checked={form.canDonate} 
+              onChange={handleChange}
+            />{' '}
+            I want to donate food
+          </label>
+          <br />
+          <label>
+            <input
+              type='checkbox'
+              name='canRequest'
+              checked={form.canRequest} 
+              onChange={handleChange}
+            />{' '}
+            I want to request food
+          </label>
+        </div>
 
         <p className='have-account'>
           {t('signup.haveAccount')} <Link to="/login">{t('signup.login')}</Link>
         </p>
 
         <div className='terms-and-condi'>
-          {t('signup.terms')} <span style={{fontWeight: 700}}><div style={{display: 'inline-block'}} onClick={displayModal}>{t('signup.learnMore')}</div></span>
+          {t('signup.terms')}{''}
+          <span style={{fontWeight: 700}}><div style={{display: 'inline-block'}} onClick={displayModal}>{t('signup.learnMore')}
+
+          </div>
+        </span>
         </div>
 
         <button type="submit" disabled={status === 'signing-up'}>

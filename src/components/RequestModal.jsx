@@ -24,6 +24,7 @@ const RequestModal = ({ item, onClose, onSubmit }) => {
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
           style={styles.input}
+          required
         />
         <div style={styles.actions}>
           <button onClick={handleSubmit}>Submit</button>

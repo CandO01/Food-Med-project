@@ -2,32 +2,62 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
+import { AuthContext } from '../../AuthenticationContext/Authcontext';
 
 const UserRequests = () => {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(false)
   const location = useLocation();
+  const { user } = React.useContext(AuthContext);
 
   useEffect(() => {
     const fetchRequests = async () => {
-      const role = localStorage.getItem('role');
-      const userId = localStorage.getItem('userId');
-
-      if (!role || !userId) return;
-
       try {
-        setLoading(true)
-        const res = await fetch(`https://foodmed-server3.onrender.com/requests?role=${role}&id=${userId}`);
-        const data = await res.json();
-        
-         console.log("Fetched Requests:", data);
-        setRequests(data);
-      } catch (error) {
-        console.error('Failed to load requests:', error);
-      }finally{
-        setLoading(false)
+        setLoading(true);
+        const userId = localStorage.getItem('userId');
+        const canRequest = localStorage.getItem('canRequest') === 'true';
+        const canDonate = localStorage.getItem('canDonate') === 'true';
+
+      let type = '';
+      if (canRequest && canDonate) {
+        type = 'both';
+      } else if (canRequest) {
+        type = 'user';
+      } else if (canDonate) {
+        type = 'donor';
+      } else {
+        console.error('User has neither canRequest nor canDonate permission.');
+        return;
       }
-    };
+
+
+
+    if (!userId) {
+      console.error('User ID is missing from localStorage');
+      return;
+    }
+    // Fetch requests based on userId and type
+
+    const response = await fetch(`https://foodmed-server3.onrender.com/requests?id=${userId}&type=${type}`);
+    const data = await response.json();
+    console.log('Fetched requests:', data);
+
+    if (!Array.isArray(data)) {
+      console.error('Unexpected data format:', data);
+      return;
+    }
+
+    const userRequests = data.filter(req =>
+      req.userId === userId || req.donorId === userId
+    );
+    setRequests(userRequests);
+  } catch(error) {
+    console.error('Error fetching requests:', error);
+  }
+  finally {
+        setLoading(false);
+      }
+}
 
     fetchRequests();
   }, [location]); // Re-fetch when location changes
@@ -97,127 +127,3 @@ const styles = {
 
 export default UserRequests;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// // UserRequests.jsx
-// import React, { useEffect, useState } from 'react';
-// import { Link } from 'react-router-dom';
-
-// const UserRequests = () => {
-//   const [requests, setRequests] = useState([]);
-
-//   useEffect(() => {
-//     const fetchRequests = async () => {
-//       const role = localStorage.getItem('role');
-//       const userId = localStorage.getItem('userId');
-
-//       if (!role || !userId) return;
-
-//       try {
-//         const res = await fetch(`http://localhost:3001/requests?role=${role}&id=${userId}`);
-//         const data = await res.json();
-//         setRequests(data);
-//       } catch (error) {
-//         console.error('Failed to load requests:', error);
-//       }
-//     };
-
-//     fetchRequests();
-//   }, []);
-
-//   return (
-//     <div style={{ padding: '2rem' }}>
-//       <h2>My Requests</h2>
-//       {requests.length === 0 ? (
-//         <p>You haven’t made any requests yet.</p>
-//       ) : (
-//         requests.map((req, idx) => (
-//           <div key={idx} style={styles.card}>
-//             <h3>{req.foodName}</h3>
-//             <p><strong>Status:</strong>
-//               <span style={{ color: req.status === 'confirmed' ? 'green' : 'orange' }}>
-//                 {req.status}
-//               </span>
-//             </p>
-
-//             {req.donorEmail && (
-//               <Link to={`/chat/${recipientId}`}>
-
-//                 <button style={styles.chatBtn}>💬 Chat with Donor</button>
-//               </Link>
-//             )}
-//           </div>
-//         ))
-//       )}
-//     </div>
-//   );
-// };
-
-// const styles = {
-//   card: {
-//     border: '1px solid #ccc',
-//     padding: '1rem',
-//     marginBottom: '1rem',
-//     borderRadius: '8px',
-//     background: '#f9f9f9'
-//   },
-//   chatBtn: {
-//     background: 'orange',
-//     color: 'white',
-//     border: 'none',
-//     padding: '0.5rem 1rem',
-//     borderRadius: '20px',
-//     cursor: 'pointer',
-//     marginTop: '0.5rem'
-//   }
-// };
-
-// export default UserRequests;
-
-
-
-   {/* {requests.length === 0 ? (
-        <p>You haven’t made any requests yet.</p>
-      ) : (
-        requests.map((req, idx) => (
-            <div key={idx} style={styles.card}>
-              <h3 style={{color: 'black'}}>{req.foodName}</h3>
-              <p style={{color: 'black'}}>
-                <strong>Status:</strong>{' '}
-                <span style={{ color: req.status === 'confirmed' ? 'green' : 'red' }}>
-                  {req.status}
-                </span>
-              </p>
-              {req.donorName && (
-                <p style={{color: 'black'}}><strong>Donor:</strong> {req.donorName}</p>
-              )}
-             {req.donorEmail && (
-                <Link to={`/chat/${req.donorEmail}`}>
-                  <button style={styles.chatBtn}>
-                    💬 Chat with {req.donorName || req.donorEmail}
-                  </button>
-                </Link>
-              )}
-              {req.donorPhone && (
-                <Link to={`tel:${req.donorPhone}`}>
-                  <button style={styles.callBtn}>
-                    📞 Call Donor
-                  </button>
-                </Link>
-              )}
-            </div>
-          ))
-      )} */}

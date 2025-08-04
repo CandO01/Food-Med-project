@@ -21,7 +21,6 @@ import DonorProfile from './components/FoodForm/DonorProfile'
 import UserRequests from './components/FoodForm/UserRequestChat'
 import UpdateNoticeModal from './components/UpdateNoticeModal'
 import AboutUs from './Pages/AboutUs'
-import Header from './components/header'
 import Profilepage from './Pages/Profilepage'
 import UserProfile from './Pages/UserPage'
 import Findadoctor from './Medical/Findadoctor'
@@ -31,7 +30,6 @@ function App() {
     <>
     {/* UpdateAppModal */}
     <UpdateNoticeModal />
-    <Header />
       <Routes>
         <Route path='/' element={<Layouts />}>
         <Route index element={<SplashCarousel />} />

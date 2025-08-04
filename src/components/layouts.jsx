@@ -1,7 +1,6 @@
 import React from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import Footer from './footer'
-import Header from './header'
 
 function Layouts() {
   const location = useLocation()
@@ -13,7 +12,6 @@ function Layouts() {
 
   return (
     <> 
-      <Header />
       <main>
         <Outlet />
       </main>

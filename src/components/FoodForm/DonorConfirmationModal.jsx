@@ -22,6 +22,7 @@ const ConfirmModal = ({ isOpen, onClose, onConfirm, foodName }) => {
     <div style={modalStyles.overlay}>
       <div style={modalStyles.modal}>
         <h3>Confirm Request for <span style={{ color: 'orange' }}>{foodName}</span></h3>
+        <label style={modalStyles.labels}>Date of Delivery</label>
         <input
           type="date"
           value={date}
@@ -29,6 +30,7 @@ const ConfirmModal = ({ isOpen, onClose, onConfirm, foodName }) => {
           style={modalStyles.input}
           placeholder="Delivery Date"
         />
+        <label style={modalStyles.labels}>Time of Delivery</label>
         <input
           type="time"
           value={time}
@@ -36,6 +38,7 @@ const ConfirmModal = ({ isOpen, onClose, onConfirm, foodName }) => {
           style={modalStyles.input}
           placeholder="Delivery Time"
         />
+        <label style={modalStyles.labels}>Pick up location</label>
         <input
           type="text"
           value={location}
@@ -72,9 +75,14 @@ const modalStyles = {
   input: {
     width: '100%',
     padding: '0.5rem',
-    marginTop: '0.8rem',
+    marginBottom: '0.8rem',
     borderRadius: '4px',
-    border: '1px solid #ccc'
+    border: '1px solid #ccc',
+    color: 'black'
+  },
+  labels:{
+   color: 'black',
+   fontSize: '0.8rem'
   },
   confirmBtn: {
     background: 'green',
@@ -84,6 +92,7 @@ const modalStyles = {
     marginRight: '1rem',
     cursor: 'pointer'
   },
+  
   cancelBtn: {
     background: 'gray',
     color: '#fff',

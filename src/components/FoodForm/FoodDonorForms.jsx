@@ -67,10 +67,12 @@ function FoodForm () {
         setShowModal(false)
       },5000)
 
-        if (localStorage.getItem('role') !== 'donor') {
-          localStorage.setItem('role', 'donor');
+        if (localStorage.getItem('canDonate') !== 'true') {
+          localStorage.setItem('canDonate', 'true');
           localStorage.setItem('donorId', localStorage.getItem('userEmail'));
         }
+
+
       fetchUnexpiredItems();
       setUploading(false);
     } catch (err) {
@@ -107,7 +109,7 @@ function FoodForm () {
                 email: localStorage.getItem('userEmail'),  // if stored
                 phone: localStorage.getItem('userPhone'),  // if stored
                 userName: localStorage.getItem('userName'),
-                status: 'pending'
+                status: 'Pending'
               })
             });
 
@@ -130,12 +132,20 @@ function FoodForm () {
     const interval = setInterval(async () => {
       try {
         const userId = localStorage.getItem('userEmail') || localStorage.getItem('donorEmail');
-        const role = localStorage.getItem('role');
+      
+       const canDonate = localStorage.getItem('canDonate') === 'true';
+       const canRequest = localStorage.getItem('canRequest') === 'true'
 
-        if (!userId || !role) return;
+       if(!userId ||(!canDonate && !canRequest)) return;
 
-        const res = await fetch(`https://foodmed-server3.onrender.com/requests?role=${role}&id=${userId}`);
+       const type = canDonate ? 'donor' : canRequest ? 'user' : '';
+
+        const res = await fetch(`https://foodmed-server3.onrender.com/requests?type=${type}&id=${userId}`);
+
         const requests = await res.json();
+
+        console.log(requests)
+        
         const accepted = requests.filter(r => r.status === 'accepted');
         setNotifications(accepted.map(r => `Your request for "${r.foodName}" was accepted`));
       } catch (e) {

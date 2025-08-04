@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import ConfirmModal from './DonorConfirmationModal';
 import { io } from 'socket.io-client';
 import { FaComments } from 'react-icons/fa';
+import { AuthContext } from '../../AuthenticationContext/Authcontext'
 import { useLocation } from 'react-router-dom';
 
 const socket = io('https://foodmed-server3.onrender.com');
@@ -22,28 +23,40 @@ const DonorProfile = () => {
   const [loading, setLoading] = useState(false)
   const location = useLocation();
 
+  const { user } = React.useContext(AuthContext)
+
   const navigate = useNavigate();
   const audioRef = useRef(null);
 
 const fetchData = async () => {
-  const donorId = localStorage.getItem('donorId');
-  const donorEmail = localStorage.getItem('donorEmail');
+  const donorId = localStorage.getItem('donorId') || localStorage.getItem('userId');
+  const donorEmail = localStorage.getItem('donorEmail') || localStorage.getItem('userEmail');
 
-  if (!donorEmail || !donorId) return; // fail-safe
+  //   console.log("📦 donorId:", donorId);
+  // console.log("📧 donorEmail:", donorEmail);
+
+  if (!donorEmail || !donorId) {
+    console.warn("🚫 donorEmail or donorId not found in localStorage");
+    return;
+  }
 
   try {
     setLoading(true);
     const foodRes = await fetch(`https://foodmed-server3.onrender.com/submissions?email=${donorEmail}`);
     const allFood = await foodRes.json();
 
-    const reqRes = await fetch(`https://foodmed-server3.onrender.com/requests?role=donor&id=${donorId}`);
+    // console.log('🍤 uploaded foods', allFood);
+
+    const reqRes = await fetch(`https://foodmed-server3.onrender.com/requests?id=${donorId}&type=donor`);
+
     const allRequests = await reqRes.json();
+    // console.log('✔ All requests', allRequests);
 
     const itemsWithRequests = allFood.map(item => {
       const itemRequests = allRequests.filter(req => req.itemId === item.id);
       return { ...item, requests: itemRequests };
     });
-
+    // console.log('🔍 Incoming requests:', itemsWithRequests);
     setFoodItems(itemsWithRequests);
   } catch (err) {
     console.error('Error loading data:', err);
@@ -52,19 +65,27 @@ const fetchData = async () => {
     }
 };
 
+useEffect(()=>{
+  socket.on('requestUpdated', () => {
+    console.log('📢 requestUpdated received');
+    fetchData()
+  });
+    return () => {
+        socket.off('requestUpdated');
+      socket.off('newMessage');
+    };
+    // return () => socket.disconnect();
+}, [])
+
   useEffect(() => {
-    fetchData();
-    socket.on('requestUpdated', () => fetchData());
+    fetchData()
     socket.on('newMessage', ({ sender, message }) => {
       setUnreadMessages(prev => ({ ...prev, [sender]: (prev[sender] || 0) + 1 }));
       setMessagePreview(prev => ({ ...prev, [sender]: message }));
       if (audioRef.current) audioRef.current.play().catch(() => {});
     });
-    return () => {
-          socket.off('requestUpdated');
-          socket.off('newMessage');
-        };
-    // return () => socket.disconnect();
+
+ 
   }, [location]);
 
 
@@ -133,8 +154,7 @@ const fetchData = async () => {
     <div style={{ padding: '2rem' }}>
       <audio ref={audioRef} src="/notification.mp3" preload="auto" />
       <Link to='/food-form' style={styles.backLink}><IoArrowBack style={{color: 'orange'}} /> Back</Link>
-      <h2>Donor Profile</h2>
-
+      <h2>{localStorage.getItem("userName")}'s Donor Profile</h2>
       {loading ? (
         <div className="spinner"></div> //the css is in the universal file /App.css 
       ) : foodItems.length === 0 ? (

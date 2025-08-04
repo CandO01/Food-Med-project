@@ -11,37 +11,46 @@ function AuthcontextProvider({ children }) {
   useEffect(() => {
     const name = localStorage.getItem('userName');
     const email = localStorage.getItem('userEmail');
-    const role = localStorage.getItem('role');
+    const phone = localStorage.getItem('userPhone');
+    const _id = localStorage.getItem('userId');
+    const canDonate = localStorage.getItem('canDonate') === 'true';
+    const canRequest = localStorage.getItem('canRequest') === 'true'
 
-    if (name && email && role) {
-      setUser({ name, email, role });
+
+    // New features added
+    if(_id && name && email){
+      setUser({ _id, name, email, phone, canDonate, canRequest });
       setIsLoggedIn(true);
     }
   }, []);
 
-    const login = ({ name, email, role, phone }) => {
+    const login = ({_id, name, email, phone, canDonate, canRequest }) => {
   localStorage.clear(); // Clear any old data
 
-  setUser({ name, email, role });
+  setUser({ _id, name, email, phone, canDonate, canRequest });
   setIsLoggedIn(true);
 
+  // Save user data to localStorage
+  localStorage.setItem('userId', _id);
   localStorage.setItem('userName', name);
   localStorage.setItem('userEmail', email);
-  localStorage.setItem('role', role);
   localStorage.setItem('userPhone', phone);
-
-  // Always set userId
   localStorage.setItem('userId', email);
 
+  localStorage.setItem('canDonate', canDonate);
+   localStorage.setItem('canRequest', canRequest);
+
+  // Always set userId
+  // localStorage.setItem('userId', email);
+
   // If user is a donor, also set donorId and donorEmail
-  if (role === 'donor') {
+  if (canDonate) {
+    localStorage.setItem('donorId', _id);
     localStorage.setItem('donorId', email);
     localStorage.setItem('donorEmail', email);
-    localStorage.setItem('role', role);
   } else {
     localStorage.removeItem('donorId');
     localStorage.removeItem('donorEmail');
-    localStorage.removeItem('role');
   }
 };
 

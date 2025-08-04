@@ -74,6 +74,8 @@ const FoodMedHomePage = () => {
   const intervalRef = useRef()
   const recipientId = localStorage.getItem('lastRecipientId');
 
+
+
   const handleUserClick = () => {
     setIsSliding(true);
   };

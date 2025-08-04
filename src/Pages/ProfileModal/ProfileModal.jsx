@@ -2,6 +2,7 @@ import { color } from 'framer-motion';
 import React from 'react';
 
 const ProfileModal = ({ isOpen, onClose, profileData }) => {
+
   if (!isOpen || !profileData) return null;
 
   return (
@@ -19,7 +20,7 @@ const ProfileModal = ({ isOpen, onClose, profileData }) => {
         <p><strong>Email:</strong> {profileData.email}</p>
         <p><strong>Phone:</strong> {profileData.phone || 'Not provided'}</p>
         <p><strong>Location:</strong> {profileData.location || 'Not provided'}</p>
-        <p><strong>Role:</strong> {profileData.role || 'N/A'}</p>
+        {/* <p><strong>Role:</strong> {role || 'N/A'}</p> */}
         <p><strong>Bio:</strong> {profileData.bio || 'No bio yet.'}</p>
       </div>
     </div>
