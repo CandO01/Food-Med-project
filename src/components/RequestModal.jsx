@@ -7,6 +7,8 @@ const RequestModal = ({ item, onClose, onSubmit }) => {
   const [phone, setPhone] = useState('');
 
   const handleSubmit = () => {
+    if (!phone.trim()) return; // Prevent submission if phone is empty
+    // Call the onSubmit function passed as a prop
     if (onSubmit) onSubmit(item);
     onClose();
   };
@@ -27,7 +29,18 @@ const RequestModal = ({ item, onClose, onSubmit }) => {
           required
         />
         <div style={styles.actions}>
-          <button onClick={handleSubmit}>Submit</button>
+          <button 
+            onClick={handleSubmit}
+            disabled={!phone.trim()}
+            style={{
+              backgroundColor: !phone.trim() ? '#ccc' : 'orange',
+              color: 'white',
+              border: 'none',
+              padding: '8px 12px',
+              borderRadius: '4px',
+              cursor: !phone.trim() ? 'not-allowed' : 'pointer'
+            }}
+            >Submit</button>
           <button onClick={onClose}>Cancel</button>
         </div>
       </div>

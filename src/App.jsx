@@ -24,6 +24,7 @@ import AboutUs from './Pages/AboutUs'
 import Profilepage from './Pages/Profilepage'
 import UserProfile from './Pages/UserPage'
 import Findadoctor from './Medical/Findadoctor'
+import ProtectedRoute from './Pages/ProtectedRoute'
 
 function App() {
   return (
@@ -36,34 +37,34 @@ function App() {
           {/* Show language screen first */}
           <Route path='language' element={<Language />} />
 
-          {/* Auth routes */}
+          {/*Public route no Auth routes needed */}
           <Route path='signup' element={<Signup />} />
           <Route path='login' element={<Signin />} />
           <Route path='forgot-password' element={<ForgotPassword />} />
           <Route path='verify-otp' element={<VerifyOTP />} />
           <Route path='reset-password' element={<ResetPassword />} />
-          <Route path='profile' element={<Profilepage />} />
 
-          {/* Other pages */}
-          <Route path='welcome' element={<Home />} />
-          <Route path='location' element={<Location />} />
-          <Route path='congratulations' element={<Congratulations />} />
-          <Route path='home' element={<GeneralHomePage />} />
+          {/* Protected routes */}
+          <Route path='welcome' element={<ProtectedRoute><Home /></ProtectedRoute>} />
+          <Route path='location' element={<ProtectedRoute><Location /></ProtectedRoute>} />
+          <Route path='profile' element={<ProtectedRoute><Profilepage /></ProtectedRoute>} />
+          <Route path='congratulations' element={<ProtectedRoute><Congratulations /></ProtectedRoute>} />
+          <Route path='home' element={<ProtectedRoute><GeneralHomePage /></ProtectedRoute>} />
           <Route path='about-us' element={<AboutUs />} />
-          <Route path='user-profile' element={<UserProfile />} />
+          <Route path='user-profile' element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
 
           {/* Food Form */}
-          <Route path='food-form' element={<FoodForms />} />
-          <Route path='food-dashboard' element={<FoodSubmissionDashboard />} />
+          <Route path='food-form' element={<ProtectedRoute><FoodForms /></ProtectedRoute>} />
+          <Route path='food-dashboard' element={<ProtectedRoute><FoodSubmissionDashboard /></ProtectedRoute>} />
 
           {/* chatting platform */}
-          <Route path="/chat/:recipientId" element={<ChatPage />} />
-          <Route path='donor-profile' element={<DonorProfile />} />
-          <Route path='user-request' element={<UserRequests />} />
+          <Route path="/chat/:recipientId" element={<ProtectedRoute><ChatPage /></ProtectedRoute>} />
+          <Route path='donor-profile' element={<ProtectedRoute><DonorProfile /></ProtectedRoute>} />
+          <Route path='user-request' element={<ProtectedRoute><UserRequests /></ProtectedRoute>} />
           {/* <Route path='user-request' element={<UserRequests />} /> */}
 
           {/* Medical route */}
-          <Route path='medical' element={<Findadoctor />} />
+          <Route path='medical' element={<ProtectedRoute><Findadoctor /></ProtectedRoute>} />
 
           {/* Catch-all route */}
           <Route path='*' element={<div>404 Not Found</div>} />

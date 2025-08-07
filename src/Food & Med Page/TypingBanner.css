@@ -1,0 +1,19 @@
+.typing-banner {
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+  margin: 20px 0;
+  min-height: 40px; /* Prevent layout shift */
+  color: #333;
+}
+
+.cursor {
+  display: inline-block;
+  animation: blink 0.8s infinite;
+  color: orange;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}

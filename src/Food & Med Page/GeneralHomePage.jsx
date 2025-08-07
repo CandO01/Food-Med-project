@@ -23,6 +23,7 @@ import musclebuilding from '../assets/musclebuilding.png';
 import plentyrest from '../assets/plentyrest.png';
 import smile from '../assets/smile.png';
 import stopsmoking from '../assets/stopsmoking.png';
+import TypingBanner from '../Food & Med Page/TypingBanner';
 
 
 const foodItems = [
@@ -162,6 +163,8 @@ const FoodMedHomePage = () => {
             Find food nearby
           </button>
         </div>
+
+        <TypingBanner />
 
         <h2 className='nearby-listing'>Nearby food listing</h2>
         <div className="carousel-wrapper" style={{ transform: `translateX(-${current * 100}%)` }}>

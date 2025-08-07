@@ -46,7 +46,10 @@ const ProfileSetup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setUploading(true);
+   
+
+    if(!bio.trim() || !location.trim() || !profileImage) return; //prevent submission if fields are empty
+     setUploading(true);
 
     let imageUrl = '';
     if (profileImage) {
@@ -60,7 +63,7 @@ const ProfileSetup = () => {
       profileImage: imageUrl,
     };
 
-    await fetch('https://foodmed-firstserver-backup.onrender.com/profile-setup', {
+    await fetch('http://localhost:5223/profile-setup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(updatedProfile),
@@ -84,14 +87,20 @@ const ProfileSetup = () => {
           placeholder="Bio"
           value={bio}
           onChange={(e) => setBio(e.target.value)}
-          style={styles.input}
+          style={{
+            ...styles.input,
+            borderColor: !bio.trim() ? 'red' : '#ccc', // Highlight if empty
+          }}
         />
         <input
           type="text"
           placeholder="Location"
           value={location}
           onChange={(e) => setLocation(e.target.value)}
-          style={styles.input}
+            style={{
+            ...styles.input,
+            borderColor: !location.trim() ? 'red' : '#ccc', // Highlight if empty
+          }}
         />
         <input
           type="file"
@@ -99,7 +108,18 @@ const ProfileSetup = () => {
           onChange={handleImageChange}
           style={styles.fileInput}
         />
-        <button type="submit" disabled={uploading} style={styles.button}>
+        <button 
+          type="submit" 
+          disabled={uploading} 
+          style={{
+            ...styles.button,
+            backgroundColor: uploading || !bio.trim() || !location.trim() || !profileImage ? '#ccc' : 'orange',
+            cursor: uploading || !bio.trim() || !location.trim() || !profileImage ? 'not-allowed' : 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '0.5rem',
+            }}>
           {uploading ? (
             <>
              <span className='spinner1'></span>
