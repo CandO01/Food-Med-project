@@ -18,14 +18,13 @@ export const NotificationProvider = ({ children }) => {
   // 🔌 Log socket connection
   useEffect(() => {
     socket.on("connect", () => {
-      console.log("✅ Socket connected:", socket.id);
     });
   }, []);
 
   // 📢 Join socket room with user ID (which is email)
   useEffect(() => {
     if (user && user?._id) {
-      console.log("Joining socket room with ID:", user._id);
+
       socket.emit("joinNotificationRoom", user._id);
     }
   }, [user]);
@@ -33,10 +32,7 @@ export const NotificationProvider = ({ children }) => {
   // 📩 Listen for incoming messages
   useEffect(() => {
     const handleReceiveMessage = (msg) => {
-    // console.log("📨 Received message from socket:", msg);
-    // console.log("Current pathname:", location.pathname);
-    // console.log("Expected path:", `/chat/${msg.senderId}`);
-    console.log("📨 Incoming message:", msg); 
+
 
     if(!user) return
     if(msg.recipientId !==user?._id) return 
@@ -80,7 +76,6 @@ export const NotificationProvider = ({ children }) => {
 
   return (
     <NotificationContext.Provider value={{ toast, showToast, hasNewMessage, setHasNewMessage, socket }}>
-      {console.log("Toast value:", toast)}
       {toast && (
         <div 
           onClick={() => navigate(`/chat/${toast.senderId}`)}
