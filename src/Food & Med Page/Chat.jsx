@@ -441,7 +441,7 @@ const styles = {
 
   timestamp: { fontSize: '0.75rem', color: '#666', marginTop: 4, textAlign: 'right' },
 
-  inputRow: { display: 'flex', gap: '0.5rem', marginBottom: -70 },
+  inputRow: { display: 'flex', gap: '0.5rem', marginBottom: -50 },
 
   input: { flex: 1, padding: '0.5rem', borderRadius: '20px', border: '1px solid #ccc' },
 

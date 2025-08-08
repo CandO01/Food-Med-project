@@ -1,17 +1,45 @@
 [build]
-  command = "npm ci --legacy-peer-deps && npm run build"  # Combined flags
+  command = "npm ci --legacy-peer-deps && npm run build"
   publish = "dist"
 
 [build.environment]
-  NODE_VERSION = "20.19.0"  # Matches Vite's requirement
-  NPM_VERSION = "10.x"      # Explicit npm version
-  # Removed NPM_FLAGS (now included in command)
+  NODE_VERSION = "20.19.0"
+  NPM_VERSION = "10.x"
 
+########################################
+# 1️⃣ Correct MIME types for JS files
+########################################
 [[headers]]
-  for = "/service-worker.js"  # Ensure correct MIME type for SW
+  for = "/assets/*"
   [headers.values]
     Content-Type = "application/javascript"
 
+[[headers]]
+  for = "/service-worker.js"
+  [headers.values]
+    Content-Type = "application/javascript"
+
+########################################
+# 2️⃣ Let static files be served directly
+########################################
+[[redirects]]
+  from = "/assets/*"
+  to = "/assets/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/icon/*"
+  to = "/icon/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/images/*"
+  to = "/images/:splat"
+  status = 200
+
+########################################
+# 3️⃣ SPA fallback (React Router)
+########################################
 [[redirects]]
   from = "/*"
   to = "/index.html"
