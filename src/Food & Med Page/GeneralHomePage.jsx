@@ -9,7 +9,6 @@ import { RiInformation2Line } from "react-icons/ri";
 import { LocationContext } from '../LocationContext/LocationContext';
 import { MdLocationPin } from "react-icons/md";
 import menuIcon from '../assets/menu.png';
-import './FoodMedHomePage.css';
 import garri from '../assets/garri.jpg';
 import freshcorn from '../assets/freshcorn.jpg';
 import plantain from '../assets/plantain.jpg';
