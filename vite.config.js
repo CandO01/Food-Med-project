@@ -46,7 +46,7 @@ export default defineConfig({
       }
     })
   ],
-  base: '/', // Ensure correct asset paths in production
+  base: './', // Ensure correct asset paths in production
   build: {
     outDir: 'dist', // Match Netlify's publish directory
     chunkSizeWarningLimit: 1000, // Silence large chunk warnings (adjust as needed)
