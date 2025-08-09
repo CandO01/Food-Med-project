@@ -7,12 +7,22 @@
   NPM_VERSION = "10.x"
 
 ########################################
-# 1️⃣ Correct MIME types for JS files
+# 1️⃣ Correct MIME types
 ########################################
 [[headers]]
-  for = "/assets/*"
+  for = "/assets/*.js"
   [headers.values]
     Content-Type = "application/javascript"
+
+[[headers]]
+  for = "/assets/*.css"
+  [headers.values]
+    Content-Type = "text/css"
+
+[[headers]]
+  for = "/manifest.json"
+  [headers.values]
+    Content-Type = "application/manifest+json"
 
 [[headers]]
   for = "/service-worker.js"
