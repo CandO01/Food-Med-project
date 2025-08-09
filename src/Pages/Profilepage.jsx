@@ -63,7 +63,7 @@ const ProfileSetup = () => {
       profileImage: imageUrl,
     };
 
-    await fetch('http://localhost:5223/profile-setup', {
+    await fetch('https://foodmed-firstserver-backup.onrender.com/profile-setup', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(updatedProfile),

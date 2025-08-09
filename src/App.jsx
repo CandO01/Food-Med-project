@@ -50,18 +50,17 @@ function App() {
           <Route path='profile' element={<ProtectedRoute><Profilepage /></ProtectedRoute>} />
           <Route path='congratulations' element={<ProtectedRoute><Congratulations /></ProtectedRoute>} />
           <Route path='home' element={<ProtectedRoute><GeneralHomePage /></ProtectedRoute>} />
-          <Route path='about-us' element={<AboutUs />} />
+          <Route path='about-us' element={<ProtectedRoute><AboutUs /></ProtectedRoute>} />
           <Route path='user-profile' element={<ProtectedRoute><UserProfile /></ProtectedRoute>} />
 
           {/* Food Form */}
           <Route path='food-form' element={<ProtectedRoute><FoodForms /></ProtectedRoute>} />
-          <Route path='food-dashboard' element={<ProtectedRoute><FoodSubmissionDashboard /></ProtectedRoute>} />
+          <Route path='food-dashboard' element={<FoodSubmissionDashboard />} />
 
           {/* chatting platform */}
           <Route path="/chat/:recipientId" element={<ProtectedRoute><ChatPage /></ProtectedRoute>} />
           <Route path='donor-profile' element={<ProtectedRoute><DonorProfile /></ProtectedRoute>} />
           <Route path='user-request' element={<ProtectedRoute><UserRequests /></ProtectedRoute>} />
-          {/* <Route path='user-request' element={<UserRequests />} /> */}
 
           {/* Medical route */}
           <Route path='medical' element={<ProtectedRoute><Findadoctor /></ProtectedRoute>} />
