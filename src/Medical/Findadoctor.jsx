@@ -4,6 +4,7 @@ import doc2 from '../assets/doc2.png'
 import doc3 from '../assets/doc3.png'
 import doc4 from '../assets/doc5.png'
 import { categories } from './categories.js'
+import { Link } from 'react-router-dom'
 
 function Findadoctor() {
   const doctors = [
@@ -86,20 +87,26 @@ function Findadoctor() {
   return (
     <main style={styles.main}>
       <h1 style={styles.ask}>Ask A doctor</h1>
-      <div style={styles.container}>
-        <div style={styles.card}>
-          <div style={styles.doctordetails}>
-            <h2 style={styles.name}>{doctors[current].name}</h2>
-            <p style={styles.specialty}>{doctors[current].specialty}</p>
+        <div style={styles.container}>
+      <Link
+        style={{textDecoration: 'none', color: 'black'}} 
+        to="/doctor-profile"
+        state={{ doctor: doctors[current] }}>
+          <div style={styles.card}>
+            <div style={styles.doctordetails}>
+              <h2 style={styles.name}>{doctors[current].name}</h2>
+              <p style={styles.specialty}>{doctors[current].specialty}</p>
           </div>
           <img 
             src={doctors[current].image}
             alt={doctors[current].name}
             style={styles.image} 
-          />
+            />
         </div>
+        </Link>
         <button onClick={nextSlide} style={styles.arrowButton}>➜</button>
       </div>
+
       <div style={styles.dotsContainer}>
           {doctors.map((_, index)=>{
             return <span

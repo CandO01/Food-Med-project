@@ -25,6 +25,7 @@ import Profilepage from './Pages/Profilepage'
 import UserProfile from './Pages/UserPage'
 import Findadoctor from './Medical/Findadoctor'
 import ProtectedRoute from './Pages/ProtectedRoute'
+import DoctorProfileCard from './Medical/DoctorCard'
 
 function App() {
   return (
@@ -64,6 +65,7 @@ function App() {
 
           {/* Medical route */}
           <Route path='medical' element={<ProtectedRoute><Findadoctor /></ProtectedRoute>} />
+          <Route path='doctor-profile' element={<ProtectedRoute><DoctorProfileCard /></ProtectedRoute>} />
 
           {/* Catch-all route */}
           <Route path='*' element={<div>404 Not Found</div>} />

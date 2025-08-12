@@ -37,7 +37,7 @@ export const NotificationProvider = ({ children }) => {
     if(!user) return
     if(msg.recipientId !==user?._id) return 
       const isOnChatPage = location.pathname === `/chat/${msg.senderId}`;
-      console.log("isOnChatPage:", isOnChatPage);
+      // console.log("isOnChatPage:", isOnChatPage);
 
       if (!isOnChatPage) {
         setToast({ 
