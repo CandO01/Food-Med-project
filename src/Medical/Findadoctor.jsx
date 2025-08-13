@@ -5,6 +5,7 @@ import doc3 from '../assets/doc3.png'
 import doc4 from '../assets/doc5.png'
 import { categories } from './categories.js'
 import { Link } from 'react-router-dom'
+import ChatBotWidget from '../Food & Med Page/ChatBotWidget.jsx'
 
 function Findadoctor() {
   const doctors = [
@@ -143,6 +144,7 @@ function Findadoctor() {
             <p>More</p>
           </div>
         </section>
+        <ChatBotWidget />
   </main>
   )
 }

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import ChatBotWidget from '../Food & Med Page/ChatBotWidget';
 
 const UserProfile = () => {
   const [profile, setProfile] = useState(null);
@@ -47,6 +48,7 @@ const UserProfile = () => {
       <p style={styles.userprofile}><strong>Location:</strong> {profile.location || 'Not provided'}</p>
       <p style={styles.userprofile}><strong>Role:</strong> {profile.role || 'N/A'}</p>
       <p style={styles.userprofile}><strong>Bio:</strong> {profile.bio || 'No bio yet.'}</p>
+      <ChatBotWidget />
     </div>
   );
 };

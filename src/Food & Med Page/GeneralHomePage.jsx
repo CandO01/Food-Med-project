@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+// import { RiRobot2Line } from "react-icons/ri";
 import { useNavigate } from 'react-router-dom';
 import { CiLogout } from "react-icons/ci";
 import { FaRegUser } from "react-icons/fa";
@@ -23,6 +24,7 @@ import plentyrest from '../assets/plentyrest.png';
 import smile from '../assets/smile.png';
 import stopsmoking from '../assets/stopsmoking.png';
 import TypingBanner from '../Food & Med Page/TypingBanner';
+import ChatBotWidget from '../Food & Med Page/ChatBotWidget';
 
 
 const foodItems = [
@@ -217,10 +219,18 @@ const FoodMedHomePage = () => {
 
          </div>
         </div>
+
+        <ChatBotWidget />
+          
+        
       </div>
+
+
   );
 };
 
 export default FoodMedHomePage;
+
+
 
 

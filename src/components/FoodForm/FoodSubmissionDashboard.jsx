@@ -23,6 +23,7 @@ import tuber from '../../assets/yam.webp';
 import oil from '../../assets/oil.png';
 import grains from '../../assets/grains.png';
 import RequestModal from '../RequestModal';
+import ChatBotWidget from '../../Food & Med Page/ChatBotWidget';
 
 //this is to handle the time the food item is posted 
  function timeAgo(dateString) {
@@ -584,6 +585,7 @@ const SubmissionsDashboard = () => {
           </div>
         </div>
       )}
+    <ChatBotWidget />
   </div>
   );
 };

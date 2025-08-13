@@ -10,6 +10,7 @@ body, html{
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+
 }
 /* SIGN UP and SIGN IN FORM */
 .signup-form,
@@ -607,6 +608,8 @@ footer{
 /* Main Content */
 .main-content {
   padding: 1rem 1.5rem;
+  
+  position: relative;
 }
 
 /* Button Group */
