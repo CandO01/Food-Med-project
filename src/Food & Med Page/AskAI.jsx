@@ -1,42 +1,51 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 
 function AskAI() {
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
   const [loading, setLoading] = useState(false);
+  const [messages, setMessages] = useState([]);
 
-  // function to show text like typing
-  function typeWriteEffect(text){
-    if(typeof text !== 'string') return; 
-    
+  function typeWriteEffect(text) {
+    if (typeof text !== 'string') return;
+
     let index = 0;
-    // setAnswer(''); //clear old text
-    setQuestion('')
-    const interval = setInterval(()=>{
+    setQuestion('');
+    setAnswer('');
+    const interval = setInterval(() => {
       setAnswer(prev => prev + text.charAt(index));
       index++;
-      if(index > text.length){
-        clearInterval(interval)
+      if (index > text.length) {
+        clearInterval(interval);
       }
-    }, 30); //speed of typing in ms
-  };
+    }, 30);
+  }
 
   async function handleAsk() {
-    if(!question.trim()) return;
+    if (!question.trim()) return;
     setLoading(true);
     setAnswer('');
 
     try {
-      const res = await fetch(' http://localhost:3226/ask', {
+      const res = await fetch('https://foodmed-server-4.onrender.com/ask', {
         method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json'
-         },
-         body: JSON.stringify({ question })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          question,
+          history: messages  // ✅ send previous conversation to server
+        })
       });
 
       const data = await res.json();
-      if(!data || typeof data.answer !== 'string'){
+
+      const newMessages = [
+        ...messages,
+        { role: 'user', content: question },
+        { role: 'assistant', content: data.answer }
+      ];
+      setMessages(newMessages);
+
+      if (!data || typeof data.answer !== 'string') {
         setAnswer('No valid response from AI');
         return;
       }
@@ -45,14 +54,30 @@ function AskAI() {
     } catch (err) {
       console.error(err);
       setAnswer('Error fetching AI response');
-    } finally{
+    } finally {
       setLoading(false);
     }
   }
 
- return (
+  return (
     <div style={{ maxWidth: 500, margin: "auto", padding: 20 }}>
       <h2>Ask FoodMed AI</h2>
+
+      {/* Chat history */}
+      <div style={{ 
+        border: "1px solid #ccc", 
+        padding: 10, 
+        minHeight: 200, 
+        marginBottom: 10, 
+        whiteSpace: "pre-wrap" 
+      }}>
+        {messages.map((msg, i) => (
+          <div key={i} style={{ marginBottom: 8 }}>
+            <strong>{msg.role === 'user' ? 'You' : 'AI'}:</strong> {msg.content}
+          </div>
+        ))}
+      </div>
+
       <textarea
         value={question}
         onChange={(e) => setQuestion(e.target.value)}
@@ -60,37 +85,79 @@ function AskAI() {
         style={{ width: "100%", height: 100, marginBottom: 10 }}
       />
       <button
-        onClick={handleAsk}
-        disabled={loading}
-        style={{
-          padding: "8px 15px",
-          backgroundColor: "orange",
-          color: "#fff",
-          border: "none",
-          cursor: "pointer",
-        }}
-      >
-        {loading ? "Thinking..." : "Ask"}
-      </button>
+  onClick={handleAsk}
+  disabled={loading}
+  style={{
+    padding: "8px 15px",
+    backgroundColor: "orange",
+    color: "#fff",
+    border: "none",
+    cursor: "pointer",
+    minWidth: 80
+  }}
+    >
+      {loading ? (
+        <span style={{ display: "flex", gap: 4, alignItems: "end" }}>
+          <span style={{
+            display: "inline-block",
+            width: 6,
+            height: 6,
+            backgroundColor: "white",
+            borderRadius: "50%",
+            animation: "bounce 1.2s infinite ease-in-out",
+            animationDelay: "0s"
+          }} />
+          <span style={{
+            display: "inline-block",
+            width: 6,
+            height: 6,
+            backgroundColor: "white",
+            borderRadius: "50%",
+            animation: "bounce 1.2s infinite ease-in-out",
+            animationDelay: "0.3s"
+          }} />
+          <span style={{
+            display: "inline-block",
+            width: 6,
+            height: 6,
+            backgroundColor: "white",
+            borderRadius: "50%",
+            animation: "bounce 1.2s infinite ease-in-out",
+            animationDelay: "0.6s"
+          }} />
+        </span>
+      ) : "Ask"}
+    </button>
 
+{/* 
       {answer && (
         <div
           style={{
             marginTop: 20,
             padding: 10,
             border: "1px solid #ccc",
-            minHeight: 50,
             fontFamily: "monospace",
-            whiteSpace: "pre-wrap",
           }}
         >
           <strong>Answer:</strong>
           <p>{answer}</p>
         </div>
-      )}
+      )} */}
     </div>
   );
 }
 
-export default AskAI
+export default AskAI;
+<style>
+{`
+@keyframes bounce {
+  0%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-6px);
+  }
+}
+`}
+</style>
 
