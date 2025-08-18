@@ -49,6 +49,56 @@ function Signup() {
     setShowModal(prev=> !prev)
   }
 
+  // async function handleSubmit(e) {
+  //     e.preventDefault();
+  //     setStatus('signing-up');
+  //     setMessage('');
+  //     setError('');
+
+  //     const { name, phone, email, password, confirm, canDonate, canRequest } = form;
+
+  //     if (!name || !email || !phone || !password || password !== confirm) {
+  //       setError('Please fill all fields correctly');
+  //       setStatus('idle');
+  //       return;
+  //     }
+
+  //     try {
+  //       const res = await fetch('http://localhost:5223/signup', {
+  //         method: 'POST',
+  //         headers: { 'Content-Type': 'application/json' },
+  //         body: JSON.stringify({ name, phone, email, password, confirm, canDonate, canRequest }),
+  //       });
+
+  //       const data = await res.json();
+
+  //       if (!res.ok) throw new Error(data.error || 'Signup failed');
+
+  //       setSuccess(true);
+  //       setMessage(data.message || 'Signup successful!');
+  //       setStatus('done');
+
+  //       // Login user
+  //       const { user } = data;
+  //       login({
+  //         name: user.name,
+  //         email: user.email,
+  //         phone: user.phone,
+  //         canDonate: user.canDonate,
+  //         canRequest: user.canRequest,
+  //         _id: user._id,
+  //       });
+
+  //       // Optional: reset form
+  //       setForm({ name: '', phone: '', email: '', password: '', confirm: '', canDonate: false, canRequest: false });
+
+  //       // Navigate after a short delay
+  //       setTimeout(() => navigate('/profile', {state: {user: res.user}}), 4500); //welcome
+  //     } catch (err) {
+  //       setError(err.message);
+  //       setStatus('idle');
+  //     }
+  //   }
   async function handleSubmit(e) {
       e.preventDefault();
       setStatus('signing-up');
@@ -57,6 +107,7 @@ function Signup() {
 
       const { name, phone, email, password, confirm, canDonate, canRequest } = form;
 
+      // Basic validation
       if (!name || !email || !phone || !password || password !== confirm) {
         setError('Please fill all fields correctly');
         setStatus('idle');
@@ -64,7 +115,7 @@ function Signup() {
       }
 
       try {
-        const res = await fetch('https://foodmed-firstserver-backup.onrender.com/signup', {
+        const res = await fetch('http://localhost:5223/signup', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ name, phone, email, password, confirm, canDonate, canRequest }),
@@ -78,22 +129,40 @@ function Signup() {
         setMessage(data.message || 'Signup successful!');
         setStatus('done');
 
-        // Login user
-        const { user } = data;
+        // Make sure to use the correct user object from the backend
+        const createdUser = data.user || data.doctor || data;
+
+        // Login the new user and overwrite localStorage
         login({
-          name: user.name,
-          email: user.email,
-          phone: user.phone,
-          canDonate: user.canDonate,
-          canRequest: user.canRequest,
-          _id: user._id,
+          _id: createdUser._id,
+          name: createdUser.name,
+          email: createdUser.email,
+          phone: createdUser.phone,
+          canDonate: createdUser.canDonate || false,
+          canRequest: createdUser.canRequest || false,
+          specialty: createdUser.specialty || null, // optional, only for doctors
         });
 
-        // Optional: reset form
-        setForm({ name: '', phone: '', email: '', password: '', confirm: '', canDonate: false, canRequest: false });
+        // Reset form
+        setForm({
+          name: '',
+          phone: '',
+          email: '',
+          password: '',
+          confirm: '',
+          canDonate: false,
+          canRequest: false,
+        });
 
-        // Navigate after a short delay
-        setTimeout(() => navigate('/profile', {state: {user: res.user}}), 4500); //welcome
+        // Navigate after a short delay (for showing Confetti or message)
+        setTimeout(() => {
+          if (createdUser.specialty) {
+            navigate('/doctor-dashboard', { state: { user: createdUser } });
+          } else {
+            navigate('/profile', { state: { user: createdUser } });
+          }
+        }, 1000);
+
       } catch (err) {
         setError(err.message);
         setStatus('idle');

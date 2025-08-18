@@ -26,6 +26,8 @@ import UserProfile from './Pages/UserPage'
 import Findadoctor from './Medical/Findadoctor'
 import ProtectedRoute from './Pages/ProtectedRoute'
 import DoctorProfileCard from './Medical/DoctorCard'
+import DoctorRegistrationForm from './Pages/DoctorRegistrationForm'
+import RolesPage from './Pages/RolesPage'
 
 function App() {
   return (
@@ -36,6 +38,7 @@ function App() {
         <Route path='/' element={<Layouts />}>
         <Route index element={<SplashCarousel />} />
           {/* Show language screen first */}
+          <Route path='role' element={<RolesPage />} />
           <Route path='language' element={<Language />} />
 
           {/*Public route no Auth routes needed */}
@@ -44,6 +47,7 @@ function App() {
           <Route path='forgot-password' element={<ForgotPassword />} />
           <Route path='verify-otp' element={<VerifyOTP />} />
           <Route path='reset-password' element={<ResetPassword />} />
+          <Route path='doctor-registration' element = {<DoctorRegistrationForm /> } />
 
           {/* Protected routes */}
           <Route path='welcome' element={<ProtectedRoute><Home /></ProtectedRoute>} />

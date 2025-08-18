@@ -14,7 +14,7 @@ body, html{
 }
 /* SIGN UP and SIGN IN FORM */
 .signup-form,
-.signin-form{
+.signin-form, .doctor-form{
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -25,7 +25,9 @@ body, html{
 .welcome-message,
 .location-container,
 .language-container,
-.congratulations-container {
+.congratulations-container,
+.doctor-form,
+.role-form {
   padding-inline: 1.687rem;
 }
 .heading-one{
@@ -41,7 +43,8 @@ body, html{
 .language-container,
 .congratulations-container,
 .new-password-container,
-.verify-container{
+.verify-container, 
+.doctor-form-container{
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -55,7 +58,8 @@ body, html{
   margin: auto;
 }
 .signup-container > input,
-.signup-container > .input{
+.signup-container > .input,
+.doctor-form-container> input{
   border: 1px solid rgba(209, 213, 219);
   height: 57px;
   text-indent: 10px;
@@ -66,11 +70,13 @@ body, html{
   font-size: 1.375rem;
 } .signup-container > input::placeholder,
 .signin-container > input::placeholder,
+.doctor-form-container> input::placeholder
 .reset-form > input::placeholder{
   font-size: 1.0rem;
 }
 .signup-container > input:focus,
-.signin-container > input:focus{
+.signin-container > input:focus,
+.doctor-form-container > input:focus{
   outline: none;
 }
 .signin-container > input,
@@ -102,12 +108,14 @@ body, html{
 }
 .signup-container > button,
 .signin-container > button,
+.doctor-form-container > button,
 .forget-password-container form > button,
 .reset-form > button,
 .welcome-message > button,
 .location-container > button,
 .language-container > button,
-.congratulations-container > button {
+.congratulations-container > button,
+.role-form-container > button {
   background-color: #FFA500;
   border: none;
   width: 100%;

@@ -47,7 +47,7 @@ function SplashCarousel() {
           <img className='imgs' src={doc} />
           <h1 className='heading-one'>Welcome to Connect and Care!</h1>
           <p className='para'>Connecting for food items, and medical help</p>
-          <button className="skip-btn" onClick={() => navigate('/language')}>Skip</button>
+          <button className="skip-btn" onClick={() => navigate('/role')}>Skip</button>
         </div>
       )
     },
@@ -66,7 +66,7 @@ function SplashCarousel() {
         }}>
           <img className='imgs' src={food1} />
           <h1 className='heading-one'>Give what you can, get what you want</h1>
-          <button className="skip-btn" onClick={() => navigate('/language')}>Skip</button>
+          <button className="skip-btn" onClick={() => navigate('/role')}>Skip</button>
         </div>
       )
     },
@@ -86,7 +86,7 @@ function SplashCarousel() {
           <img className='imgs' src={food1} />
           <h1 className='heading-one'>Access food items at your fingertips</h1>
           <p className='para' style={{ fontWeight: 700 }}>Easily access quality food items and manage your nutritional journey with confidence.</p>
-          <button className="get-started-btn" onClick={() => navigate('/language')}>Get Started</button>
+          <button className="get-started-btn" onClick={() => navigate('/role')}>Get Started</button>
         </div>
       )
     },
