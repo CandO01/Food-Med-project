@@ -24,7 +24,7 @@ function Findadoctor() {
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
-        const res = await fetch("http://localhost:5223/doctors");
+        const res = await fetch("https://foodmed-firstserver-backup.onrender.com/doctors");
         const data = await res.json();
         setDoctors(data);
         setFilteredDoctors(data);
@@ -48,12 +48,12 @@ function Findadoctor() {
       )
     );
     try {
-      const res = await fetch(`http://localhost:5223/doctors/${id}/book`, {
+      const res = await fetch(`https://foodmed-firstserver-backup.onrender.com/${id}/book`, {
         method: "PATCH",
       });
       await res.json();
       // Refresh doctors list
-      const refreshRes = await fetch("http://localhost:5223/doctors");
+      const refreshRes = await fetch("https://foodmed-firstserver-backup.onrender.com/doctors");
       const refreshedData = await refreshRes.json();
       setDoctors(refreshedData);
     } catch (err) {
