@@ -368,9 +368,9 @@ function Signup() {
           <strong>12. Contact Us</strong> 
           For questions or concerns regarding these Terms, please contact: <br />
 
-          📧 <strong>Email:</strong> support@foodmed.app <br />
+          📧 <strong>Email:</strong> info.foodmedapp@gmail.com <br />
           📞 <strong>Phone:</strong> 08130841061 <br />
-          🏢 <strong>Address:</strong> Techwitsclan head office Victoria Island Lagos.
+          🏢 <strong>Address:</strong> FoodMed head office Victoria Island Lagos.
         </p>
       </div>}
     </div>

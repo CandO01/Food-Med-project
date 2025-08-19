@@ -14,10 +14,13 @@ body, html{
 }
 /* SIGN UP and SIGN IN FORM */
 .signup-form,
-.signin-form, .doctor-form{
+.signin-form, .doctor-form, .role-form{
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+.role-form-container{
+  text-align: center;
 }
 .signup-form, 
 .signin-container,
@@ -26,8 +29,7 @@ body, html{
 .location-container,
 .language-container,
 .congratulations-container,
-.doctor-form,
-.role-form {
+.doctor-form {
   padding-inline: 1.687rem;
 }
 .heading-one{
@@ -59,7 +61,7 @@ body, html{
 }
 .signup-container > input,
 .signup-container > .input,
-.doctor-form-container> input{
+.doctor-form-container> .input{
   border: 1px solid rgba(209, 213, 219);
   height: 57px;
   text-indent: 10px;
@@ -70,9 +72,9 @@ body, html{
   font-size: 1.375rem;
 } .signup-container > input::placeholder,
 .signin-container > input::placeholder,
-.doctor-form-container> input::placeholder
-.reset-form > input::placeholder{
-  font-size: 1.0rem;
+.reset-form > input::placeholder,
+.doctor-form-container > input::placeholder{
+  font-size: 1.1rem;
 }
 .signup-container > input:focus,
 .signin-container > input:focus,
@@ -88,7 +90,7 @@ body, html{
   padding: 8px 4px; 
   background: transparent; 
   height: 57px;
-  font-size: 1.375rem;
+  font-size: 1.2rem;
   text-indent: 10px;
 }
 .signup-container .have-account{
@@ -100,6 +102,12 @@ body, html{
   color: #000000;
   cursor: pointer;
   font-weight: 700;
+}
+.doctor-form-container label{
+  font-size: 1.4rem;
+  font-weight: 500;
+  margin-left: 10px;
+  color: gray;
 }
 .signup-container .terms-and-condi{
   font-size: 0.937rem;

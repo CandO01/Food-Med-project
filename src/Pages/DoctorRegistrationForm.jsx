@@ -8,11 +8,13 @@ function DoctorRegistrationForm() {
     specialty: '',
     email: '',
     password: '',
-    phone: ''
+    phone: '',
+    overview: ''
   });
   const [imageFile, setImageFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate()
     const { t } = useTranslation()
 
@@ -36,13 +38,14 @@ function DoctorRegistrationForm() {
         data.append('specialty', formData.specialty); 
         data.append('email', formData.email); 
         data.append('password', formData.password); 
-        data.append('phone', formData.phone); 
+        data.append('phone', formData.phone);
+        data.append('overview', formData.overview);
 
         if(imageFile){
           data.append('image', imageFile)
         }
 
-        const res = await fetch('http://localhost:5223/doctors', {
+        const res = await fetch('https://foodmed-firstserver-backup.onrender.com/doctors', {
           method: 'POST',
           body: data
         });
@@ -51,7 +54,7 @@ function DoctorRegistrationForm() {
 
         if(res.ok){
          setMessage('You have successfully registered as a doctor');
-         setFormData({ name: '', specialty: '', email: '', password: '', phone: '' });
+         setFormData({ name: '', specialty: '', email: '', password: '', phone: '', overview: '' });
          setImageFile(null)
          setTimeout(()=>navigate('/home'), 4000)
         }
@@ -60,6 +63,7 @@ function DoctorRegistrationForm() {
         }
       } catch (err) {
          setMessage('Error connecting to server')
+         setError(err.message)
       } finally{
         setLoading(false)
       }
@@ -67,50 +71,87 @@ function DoctorRegistrationForm() {
 
   return (
     <div className='doctor-form' style={{ maxWidth: 500, margin: 'auto' }}>
-      <h1>Doctor Registration Form</h1>
-      {message && <p>{message}</p>}
+      <h1 className='heading-one'>Doctor Registration Form</h1>
+      {message && <p style={{color: 'green', fontSize: '18px', fontWeight: 600}}>{message}</p>}
+      {error && <p style={{color: 'red', fontSize: '18px', fontWeight: 600}}>{error}</p>}
       <form className='doctor-form-container' onSubmit={handleSubmit}>
+        <label>Full name:</label>
         <input
+          className='input'
           type="text"
           name="name"
           value={formData.name}
-          placeholder="Enter your full name"
+          placeholder="Dr Matthew O"
           onChange={handleChange}
+          required
         />
+        <label>Area of specialist:</label>
         <input
+          className='input'
           type="text"
           name="specialty"
           value={formData.specialty}
-          placeholder="Enter your profession"
+          placeholder="E.g Brain specialist"
           onChange={handleChange}
+          required
         />
+        <label>Phone Number:</label>
         <input
+          className='input'
           type="tel"
           name="phone"
           value={formData.phone}
-          placeholder="Enter your phone number"
+          placeholder="+234*****678"
           onChange={handleChange}
+          required
         />
+        <label>Email address:</label>
         <input
+          className='input'
           type="email"
           name="email"
           value={formData.email}
-          placeholder="Enter your correct email address"
+          placeholder="example@gmail.com"
           onChange={handleChange}
+          required
         />
+        <label>Password:</label>
         <input
+          className='input'
           type="password"
           name="password"
           value={formData.password}
-          placeholder="Enter your password"
+          placeholder="@12thegdth"
           onChange={handleChange}
+          required
         />
-        
+        <label>Overview / Bio</label>
+        <textarea
+            name="overview"
+            value={formData.overview}
+            onChange={handleChange}
+            placeholder="Tell us about your experience, background, and hospitals you worked with"
+            required
+            style={{
+                  width: "100%",   // takes full width of form
+                  height: "120px", // taller height for more text
+                  padding: "10px",
+                  fontFamily: 'Inter',
+                  fontSize: "1rem",
+                  borderRadius: "6px",
+                  border: "1px solid #ccc",
+                  resize: "vertical" // allows user to resize only vertically
+                }}
+        />
+
+        <label>Profile image</label>
         <input 
           type="file" 
           name="image" 
           accept="image/*" 
-          onChange={handleFileChange} 
+          onChange={handleFileChange}
+          required
+          style={{fontSize: '1rem'}}
         />
 
         <button type="submit" disabled={loading}>

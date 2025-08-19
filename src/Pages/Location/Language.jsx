@@ -38,7 +38,7 @@ function Language() {
   return (
     <div className='language-container'>
       <img src={logo} alt="" style={{width: 180, marginBottom: -80}} />
-      <h1 style={{fontSize: 25, margin: 0, fontWeight: 800}}>WELCOME TO FOODMED</h1>
+      <h1 style={{fontSize: 25, margin: 0, fontWeight: 800}}>FOODMED</h1>
       <p style={{fontSize: 22, fontWeight: 500}}>Please select preferred language</p>
       
       <div className="english-language">

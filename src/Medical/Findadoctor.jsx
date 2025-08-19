@@ -112,7 +112,7 @@ function Findadoctor() {
       {filteredDoctors.length > 0 && (
         <div style={styles.container}>
           <Link
-            style={{ textDecoration: "none", color: "black" }}
+            style={{ textDecoration: "none", color: "black"}}
             to="/doctor-profile"
             state={{ doctor: filteredDoctors[current] }}
           >
@@ -270,9 +270,9 @@ const styles = {
   main: { display: "flex", flexDirection: "column", padding: "1.7rem" },
   ask: { marginBottom: "30px", width: "100px", fontSize: "2.25rem", fontWeight: 500, lineHeight: 1.2 },
   container: { width: "100%", margin: "0 auto", backgroundColor: "orange", color: "white", borderRadius: 20, position: "relative", padding: 20, height: 200, boxShadow: "0 5px 15px rgba(0,0,0,0.1)" },
-  card: { display: "flex", alignItems: "center" },
-  doctordetails: { flexBasis: "39%" },
-  image: { width: 250, height: 250, marginBottom: 15, flexBasis: "61%", position: "absolute", right: 0, bottom: -15 },
+  card: { display: "flex"},
+  doctordetails: { flexBasis: "39%", marginTop: '-30px' },
+  image: { width: 230, height: 250, marginBottom: 15, flexBasis: "61%", position: "absolute", right: -6, bottom: -15 },
   arrowButton: { position: "absolute", left: 0, bottom: 0, width: "70px", backgroundColor: "white", color: "orange", padding: 4, border: "none", cursor: "pointer", fontSize: 18, borderBottomLeftRadius: 20, borderTopRightRadius: 20, boxShadow: "0 2px 5px rgba(0,0,0,0.2)" },
   dotsContainer: { display: "flex", justifyContent: "center", marginTop: 15, gap: 6 },
   dot: { height: 4, borderRadius: 2, backgroundColor: "#fff4", transition: "all 0.3s ease" },

@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import ReactMarkdown from 'react-markdown';
+
 
 function AskAI() {
   const [question, setQuestion] = useState('');
@@ -65,17 +67,21 @@ function AskAI() {
 
       {/* Chat history */}
       <div style={{ 
-        border: "1px solid #ccc", 
+        // border: "1px solid #ccc", 
         padding: 10, 
         minHeight: 200, 
         marginBottom: 10, 
         whiteSpace: "pre-wrap" 
       }}>
-        {messages.map((msg, i) => (
-          <div key={i} style={{ marginBottom: 8 }}>
-            <strong>{msg.role === 'user' ? 'You' : 'AI'}:</strong> {msg.content}
-          </div>
-        ))}
+          {messages.map((msg, i) => (
+            <div key={i} style={{ marginBottom: 8 }}>
+              <strong>{msg.role === 'user' ? 'You' : 'AI'}:</strong>
+              <ReactMarkdown>
+               {msg.content}
+              </ReactMarkdown>
+            </div>
+          ))}
+        
       </div>
 
       <textarea

@@ -28,6 +28,7 @@ const DoctorProfileCard = () => {
         <h3 style={styles.doctorName}>{doctor?.name}</h3>
         <span style={styles.specialty}>{doctor?.specialty}</span>
       </div>
+      <p style={styles.overview}>{doctor?.overview}</p>
     </div>
   );
 };
@@ -63,6 +64,13 @@ const styles = {
     marginBottom: "20px",
     fontSize: "1.5rem",
   },
+  overview: {
+  marginTop: "12px",
+  fontSize: "1rem",
+  color: "#444",
+  lineHeight: "1.5",
+  padding: '0 16px'
+},
   askText: {
     writingMode: "vertical-rl",
     transform: "rotate(180deg)",

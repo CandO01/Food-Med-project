@@ -13,7 +13,7 @@
   "signup": {
     "heading": "Create account with FoodMed",
     "fullName": "Full name",
-    "phone":"Put your numbere here",
+    "phone":"Put your number here",
     "email": "Email",
     "password": "Password",
     "confirm": "Confirm password",
@@ -28,7 +28,7 @@
     
   },
   "signin": {
-    "welcomeBack": "Welcome back",
+    "welcomeBack": "Welcome back!",
     "email": "Enter your email",
     "password": "Enter your password",
     "login": "Log in",

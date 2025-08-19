@@ -63,6 +63,18 @@ function FoodForm () {
       
       //show success upload
       setShowModal(true)
+      setFormData({
+        donorName: '',
+        donorPhone: '',
+        donorEmail: localStorage.getItem('donorEmail') || '',
+        foodName: '',
+        description: '',
+        quantity: '',
+        expiryDate: '',
+        location: '',
+        foodType: '',
+        mode: ''
+      })
       setTimeout(()=>{
         setShowModal(false)
       },5000)
