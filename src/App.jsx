@@ -28,6 +28,7 @@ import ProtectedRoute from './Pages/ProtectedRoute'
 import DoctorProfileCard from './Medical/DoctorCard'
 import DoctorRegistrationForm from './Pages/DoctorRegistrationForm'
 import RolesPage from './Pages/RolesPage'
+import PaymentSuccess from './Medical/PaymentSuccess'
 
 function App() {
   return (
@@ -40,6 +41,9 @@ function App() {
           {/* Show language screen first */}
           <Route path='role' element={<RolesPage />} />
           <Route path='language' element={<Language />} />
+
+          {/* Payment route */}
+          <Route path='payment-success' element={<PaymentSuccess />} />
 
           {/*Public route no Auth routes needed */}
           <Route path='signup' element={<Signup />} />

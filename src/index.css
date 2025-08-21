@@ -93,21 +93,24 @@ body, html{
   font-size: 1.2rem;
   text-indent: 10px;
 }
-.signup-container .have-account{
+.signup-container .have-account,
+.doctor-form .have-account{
   align-self: flex-start;
   font-size: 0.937rem;
 }
-.signup-container .have-account a{
+.signup-container .have-account a,
+.doctor-form .have-account a{
   text-decoration: none;
   color: #000000;
   cursor: pointer;
   font-weight: 700;
 }
+
 .doctor-form-container label{
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   font-weight: 500;
   margin-left: 10px;
-  color: gray;
+  color: #000000;
 }
 .signup-container .terms-and-condi{
   font-size: 0.937rem;

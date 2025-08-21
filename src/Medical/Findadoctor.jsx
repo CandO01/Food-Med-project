@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { categories } from "./categories.js";
 import { Link } from "react-router-dom";
 import ChatBotWidget from "../Food & Med Page/ChatBotWidget.jsx";
+import LoadingDots from "../AuthenticationContext/LoadingDots.jsx";
 
 function Findadoctor() {
   const [doctors, setDoctors] = useState([]);
@@ -10,6 +11,8 @@ function Findadoctor() {
   const [current, setCurrent] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [bookingDoctor, setBookingDoctor] = useState(null);
+
+  const userEmail = localStorage.getItem('userEmail');
 
   // Ref to the category container
   const categoryContainerRef = useRef(null);
@@ -37,40 +40,43 @@ function Findadoctor() {
     fetchDoctors();
   }, []);
 
-  // Handle booking
-  async function handleBooking(id) {
-    setBookingDoctor(id);
-    setFilteredDoctors((prevDoctors)=>
-      prevDoctors.map((doc)=>
-        doc._id === id
-        ? { ...doc, patientsCount: (doc.patientsCount ?? 0) + 1 }
-        : doc
-      )
-    );
-    try {
-      const res = await fetch(`https://foodmed-firstserver-backup.onrender.com/${id}/book`, {
-        method: "PATCH",
-      });
-      await res.json();
-      // Refresh doctors list
-      const refreshRes = await fetch("https://foodmed-firstserver-backup.onrender.com/doctors");
-      const refreshedData = await refreshRes.json();
-      setDoctors(refreshedData);
-    } catch (err) {
-      console.error("Error booking appointment:", err);
-         // Rollback in case of error
-    setFilteredDoctors((prevDoctors) =>
-      prevDoctors.map((doc) =>
-        doc._id === id
-          ? { ...doc, patientsCount: (doc.patientsCount ?? 1) - 1 }
-          : doc
-      )
-    );
 
-    } finally {
-      setBookingDoctor(null);
+// Hnadle booking and payment
+
+async function handleBooking(id) {
+   setBookingDoctor(id);
+   try {
+    // First request payment link from the backend
+    const res = await fetch('https://foodmed-firstserver-backup.onrender.com/pay', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        doctorId: id,
+        email: userEmail,
+        amount: 1
+      })
+    });
+
+
+
+    const data = await res.json();
+
+    if(data.paymentLink){
+        // Redirect to flutterwave payment page
+        window.location.href =data.paymentLink;
     }
-  }
+    else{
+      alert('Error initializing payment')
+    }
+   } catch (err) {
+     console.error('Error booking appointment:', err);
+     alert('Something went wrong. Try again')
+   } finally{
+    setBookingDoctor(null)
+   }
+}
 
   // Filter and sort doctors by category and rating
   useEffect(() => {
@@ -84,7 +90,7 @@ function Findadoctor() {
     }
 
     filtered.sort((a, b) => {
-      const ratingDiff = (b.rating ?? 0) - (a.rating ?? 0);
+      const ratingDiff = (b.stars ?? 0) - (a.stars ?? 0);
       if (ratingDiff !== 0) return ratingDiff;
       return (b.patientsCount ?? 0) - (a.patientsCount ?? 0);
     });
@@ -102,7 +108,8 @@ function Findadoctor() {
     }
   }, [selectedCategory]);
 
-  if (loading) return <p>Loading doctors...</p>;
+  if (loading) return <LoadingDots center size={12} color="orange" />
+
 
   return (
     <main style={styles.main}>
@@ -122,10 +129,16 @@ function Findadoctor() {
                 <p style={styles.specialty}>
                   {filteredDoctors[current].specialty}
                 </p>
-                <p>
-                  ⭐ {filteredDoctors[current].rating ?? 0} (
-                  {filteredDoctors[current].patientsCount ?? 0} patients)
+                <p style={{ fontSize: '1.0rem' }}>
+                  {Array.from({ length: 5 }, (_, i) => (
+                    <span key={i}>
+                      {i < Math.min(Math.floor((filteredDoctors[current].patientsCount ?? 0) / 10), 5) ? '⭐' : '☆'}
+                    </span>
+                  ))}
+                  ({filteredDoctors[current].patientsCount ?? 0} patients)
                 </p>
+
+
               </div>
               <img
                 src={filteredDoctors[current].image}
@@ -217,7 +230,7 @@ function Findadoctor() {
         {filteredDoctors.length === 0 && <p>No doctors found in this category.</p>}
 
         {filteredDoctors.map((doc) => {
-          const rating = doc.rating ?? 0;
+          const rating = Math.min(doc.stars ?? 0, 5);
           const patients = doc.patientsCount ?? 0;
 
           return (
@@ -240,18 +253,31 @@ function Findadoctor() {
                   style={{ width: "80px", height: "80px", borderRadius: "50%" }}
                 />
                 <div>
-                  <h3 style={{ margin: 0 }}>{doc.name}</h3>
+                  <h3 style={{ margin: 0, fontSize: '0.9rem' }}>{doc.name}</h3>
                   <p style={{ margin: "5px 0" }}>{doc.specialty}</p>
-                  <p style={{ margin: 0 }}>⭐ {rating} ({patients} patients)</p>
+                  {/* Stars + patient count */}
+                   <p style={{ margin: 0 }}>
+                    {"⭐".repeat(Math.min(Math.floor((patients ?? 0) / 10), 5))}
+                    {"☆".repeat(5 - Math.min(Math.floor((patients ?? 0) / 10), 5))}
+                    ({patients ?? 0} patients)
+                  </p>
+
                 </div>
               </div>
 
               <button
                 onClick={() => handleBooking(doc._id)}
-                style={styles.bookButton}
                 disabled={bookingDoctor === doc._id}
+                style={{
+                  padding: '10px 5px',
+                  backgroundColor: bookingDoctor === doc._id ? "#ddd" : "orange",
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: 8,
+                  cursor: bookingDoctor === doc._id ? "not-allowed" : "pointer"
+                }}
               >
-                {bookingDoctor === doc._id ? "Booking..." : "Book Appointment"}
+                {bookingDoctor === doc._id ? <LoadingDots size={6} color="white" /> : "Book Appointment"}
               </button>
             </div>
           );
@@ -282,8 +308,12 @@ const styles = {
   more: { display: "flex", justifyContent: "space-between", alignItems: "center" },
   category: { fontSize: "1rem", fontWeight: 500 },
   doctorCard: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem", padding: "10px 15px", border: "1px solid #ddd", borderRadius: "10px", backgroundColor: "#fff", transition: "all 0.3s ease", cursor: "pointer" },
+  name:{ fontSize: '1.2rem' },
+  specialty:{ fontSize: '1.0rem' },
   bookButton: { background: "orange", color: "#fff", padding: "10px 15px", border: "none", borderRadius: "5px", cursor: "pointer", transition: "background 0.3s ease" },
 };
+
+
 
 
 

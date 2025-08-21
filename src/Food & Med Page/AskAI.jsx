@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
+import LoadingDots from '../AuthenticationContext/LoadingDots';
 
 
 function AskAI() {
@@ -91,47 +92,18 @@ function AskAI() {
         style={{ width: "100%", height: 100, marginBottom: 10 }}
       />
       <button
-  onClick={handleAsk}
-  disabled={loading}
-  style={{
-    padding: "8px 15px",
-    backgroundColor: "orange",
-    color: "#fff",
-    border: "none",
-    cursor: "pointer",
-    minWidth: 80
-  }}
+        onClick={handleAsk}
+        disabled={loading}
+        style={{
+          padding: "8px 16px",
+          backgroundColor: "orange",
+          color: "#fff",
+          border: "none",
+          cursor: "pointer",
+      }}
     >
       {loading ? (
-        <span style={{ display: "flex", gap: 4, alignItems: "end" }}>
-          <span style={{
-            display: "inline-block",
-            width: 6,
-            height: 6,
-            backgroundColor: "white",
-            borderRadius: "50%",
-            animation: "bounce 1.2s infinite ease-in-out",
-            animationDelay: "0s"
-          }} />
-          <span style={{
-            display: "inline-block",
-            width: 6,
-            height: 6,
-            backgroundColor: "white",
-            borderRadius: "50%",
-            animation: "bounce 1.2s infinite ease-in-out",
-            animationDelay: "0.3s"
-          }} />
-          <span style={{
-            display: "inline-block",
-            width: 6,
-            height: 6,
-            backgroundColor: "white",
-            borderRadius: "50%",
-            animation: "bounce 1.2s infinite ease-in-out",
-            animationDelay: "0.6s"
-          }} />
-        </span>
+        <LoadingDots size={6} color='white' />
       ) : "Ask"}
     </button>
 

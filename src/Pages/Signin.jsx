@@ -73,7 +73,7 @@ function Signin() {
         <h1>FOODMED</h1>
       </div>
 
-      <h1 style={{ color: 'black' }}>{t('signin.welcomeBack')} {names}</h1>
+      <h1 style={{ color: 'black', fontSize:'1.6rem' }}>{t('signin.welcomeBack')} {names}</h1>
 
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
