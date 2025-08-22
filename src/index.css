@@ -59,9 +59,8 @@ body, html{
 .verify-container{
   margin: auto;
 }
-.signup-container > input,
-.signup-container > .input,
-.doctor-form-container> .input{
+/* .signup-container > input,
+.signup-container > .input{
   border: 1px solid rgba(209, 213, 219);
   height: 57px;
   text-indent: 10px;
@@ -70,7 +69,8 @@ body, html{
   font-weight: 400;
   border-radius: 50px;
   font-size: 1.375rem;
-} .signup-container > input::placeholder,
+} */
+ .signup-container > input::placeholder,
 .signin-container > input::placeholder,
 .reset-form > input::placeholder,
 .doctor-form-container > input::placeholder{
@@ -83,15 +83,30 @@ body, html{
 }
 .signin-container > input,
 .forget-password-container form > input,
-.reset-form > input{
+.reset-form > input,
+.doctor-form-container> .input,
+.signup-container > input,
+.signup-container > .input{
   border: none; 
   border-bottom: 3px solid #D9D9D999; 
   outline: none;
   padding: 8px 4px; 
   background: transparent; 
+  font-family: "Inter", sans-serif;
   height: 57px;
   font-size: 1.2rem;
   text-indent: 10px;
+}
+
+.doctor-form-container,
+.signup-container{
+  margin-top: 20px;
+  margin-bottom: 15px;
+}
+.doctor-form-container> .input,
+.signup-container > input,
+.signup-container > .input{
+  margin-bottom: 10px;
 }
 .signup-container .have-account,
 .doctor-form .have-account{
@@ -106,7 +121,8 @@ body, html{
   font-weight: 700;
 }
 
-.doctor-form-container label{
+.doctor-form-container label,
+.signup-container label{
   font-size: 1.2rem;
   font-weight: 500;
   margin-left: 10px;

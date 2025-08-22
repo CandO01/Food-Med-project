@@ -58,7 +58,7 @@ export const categories = [
         images: hiv
     },
     {
-        name: "Child specialist",
+        name: "Baby specialist",
         backgroundColor: "#2D519F",
         color: "#F9F4DA",
         images: baby

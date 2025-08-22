@@ -47,10 +47,12 @@ const UserRequests = () => {
       return;
     }
 
-    const userRequests = data.filter(req =>
-      req.userId === userId || req.donorId === userId
-    );
-    setRequests(userRequests);
+    // const userRequests = data.filter(req =>
+    //   req.userId === userId || req.donorId === userId
+    // );
+    // setRequests(userRequests);
+    setRequests(data)
+    console.log(data)
   } catch(error) {
     console.error('Error fetching requests:', error);
   }

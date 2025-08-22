@@ -69,6 +69,16 @@ function DoctorRegistrationForm() {
       }
   }
 
+    const isFormValid = 
+        formData.name.trim() !== "" &&
+        formData.specialty.trim() !== "" &&
+        formData.email.trim() !== "" &&
+        formData.password.trim() !== "" &&
+        formData.phone.trim() !== "" &&
+        formData.overview.trim() !== "" &&
+        imageFile !== null;
+
+
   return (
     <div className='doctor-form' style={{ maxWidth: 500, margin: 'auto' }}>
       <h1 className='heading-one'>Doctor Registration Form</h1>
@@ -85,7 +95,7 @@ function DoctorRegistrationForm() {
           onChange={handleChange}
           required
         />
-        <label>Area of specialist:</label>
+        <label>Area of specialization:</label>
         <input
           className='input'
           type="text"
@@ -125,7 +135,7 @@ function DoctorRegistrationForm() {
           onChange={handleChange}
           required
         />
-        <label>Overview / Bio</label>
+        <label>Overview / Bio:</label>
         <textarea
             name="overview"
             value={formData.overview}
@@ -154,9 +164,10 @@ function DoctorRegistrationForm() {
           style={{fontSize: '1rem'}}
         />
 
-        <button type="submit" disabled={loading}>
-          {loading ? 'Submitting...' : 'Register'}
-        </button>
+       <button type="submit" disabled={loading || !isFormValid}>
+        {loading ? 'Submitting...' : 'Register'}
+       </button>
+
       </form>
        <p className='have-account'>
           {t('signup.haveAccount')} <Link to="/login">{t('signup.login')}</Link>

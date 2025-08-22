@@ -23,14 +23,8 @@ function Signup() {
   const [success, setSuccess] = useState(false)
   const [showModal, setShowModal] = useState(false)
   const navigate = useNavigate();
-  
-  //old function handling input field we will still come back to itrt
-  // function handleChange(e) {
-  //   const { name, value } = e.target;
-  //   setForm(prev => ({ ...prev, [name]: value }));
-  // }
 
-  // New function to handle change
+  // function to handle change
   function handleChange(e){
     const { name, value, type, checked } = e.target
     const fieldValue = type === 'checkbox' ? checked : value
@@ -49,56 +43,6 @@ function Signup() {
     setShowModal(prev=> !prev)
   }
 
-  // async function handleSubmit(e) {
-  //     e.preventDefault();
-  //     setStatus('signing-up');
-  //     setMessage('');
-  //     setError('');
-
-  //     const { name, phone, email, password, confirm, canDonate, canRequest } = form;
-
-  //     if (!name || !email || !phone || !password || password !== confirm) {
-  //       setError('Please fill all fields correctly');
-  //       setStatus('idle');
-  //       return;
-  //     }
-
-  //     try {
-  //       const res = await fetch('http://localhost:5223/signup', {
-  //         method: 'POST',
-  //         headers: { 'Content-Type': 'application/json' },
-  //         body: JSON.stringify({ name, phone, email, password, confirm, canDonate, canRequest }),
-  //       });
-
-  //       const data = await res.json();
-
-  //       if (!res.ok) throw new Error(data.error || 'Signup failed');
-
-  //       setSuccess(true);
-  //       setMessage(data.message || 'Signup successful!');
-  //       setStatus('done');
-
-  //       // Login user
-  //       const { user } = data;
-  //       login({
-  //         name: user.name,
-  //         email: user.email,
-  //         phone: user.phone,
-  //         canDonate: user.canDonate,
-  //         canRequest: user.canRequest,
-  //         _id: user._id,
-  //       });
-
-  //       // Optional: reset form
-  //       setForm({ name: '', phone: '', email: '', password: '', confirm: '', canDonate: false, canRequest: false });
-
-  //       // Navigate after a short delay
-  //       setTimeout(() => navigate('/profile', {state: {user: res.user}}), 4500); //welcome
-  //     } catch (err) {
-  //       setError(err.message);
-  //       setStatus('idle');
-  //     }
-  //   }
   async function handleSubmit(e) {
       e.preventDefault();
       setStatus('signing-up');
@@ -179,6 +123,8 @@ function Signup() {
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
       <form className='signup-container' onSubmit={handleSubmit}>
+
+       <label>Full name:</label>
         <input
           type="text"
           name="name"
@@ -187,6 +133,7 @@ function Signup() {
           value={form.name}
           required
         />
+        <label>Phone number:</label>
         <input
           type="tel"
           name="phone"
@@ -195,6 +142,7 @@ function Signup() {
           value={form.phone}
           required
         />
+        <label>Email:</label>
         <input
           type="email"
           name="email"
@@ -203,6 +151,7 @@ function Signup() {
           value={form.email}
           required
         />
+        <label>Password:</label>
         <input
           type="password"
           name="password"
@@ -211,6 +160,7 @@ function Signup() {
           value={form.password}
           required
         />
+        <label>Confirm password:</label>
         <input
           type="password"
           name="confirm"
@@ -219,20 +169,9 @@ function Signup() {
           value={form.confirm}
           required
         />
-        {/* <select
-        name='role'
-          value={form.role}
-          onChange={handleChange}
-          required
-          className='input'
-        >
-          <option value="">Select Role</option>
-          <option value="user">User</option>
-          <option value="donor">Donor</option>
-          <option value="doctor">Doctor</option>
-        </select> */}
+
         {/* Replacing select tag with checkboxes */}
-        <div style ={{marginTop: '10px'}}>
+        <div style ={{marginTop: '20px', display: 'flex', justifyContent: 'space-between'}}>
           <label>
             <input
               type='checkbox'
@@ -240,7 +179,7 @@ function Signup() {
               checked={form.canDonate} 
               onChange={handleChange}
             />{' '}
-            I want to donate food
+            Donate food
           </label>
           <br />
           <label>
@@ -250,7 +189,7 @@ function Signup() {
               checked={form.canRequest} 
               onChange={handleChange}
             />{' '}
-            I want to request food
+            Request for food
           </label>
         </div>
 

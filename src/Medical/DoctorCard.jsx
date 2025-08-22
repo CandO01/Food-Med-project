@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 
 const DoctorProfileCard = () => {
   const { state } = useLocation();
-  const doctor = state?.doctor
+  const doctor = state?.doctor;
   return (
     <div style={styles.cardContainer}>
       <div style={styles.container}>
@@ -24,11 +24,19 @@ const DoctorProfileCard = () => {
     </div>
 
       {/* Info section */}
-      <div style={styles.infoContainer}>
-        <h3 style={styles.doctorName}>{doctor?.name}</h3>
-        <span style={styles.specialty}>{doctor?.specialty}</span>
-      </div>
-      <p style={styles.overview}>{doctor?.overview}</p>
+       <div style={styles.infoContainer}>
+          <h3 style={styles.doctorName}>{doctor?.name}</h3>
+          <div style={styles.ratings}>
+            <span style={styles.specialty}>{doctor?.specialty}</span>
+            <p style={{ margin: 0 }}>
+              {"⭐".repeat(Math.min(Math.floor((doctor?.patientsCount ?? 0) / 10), 5))}
+              {"☆".repeat(5 - Math.min(Math.floor((doctor?.patientsCount ?? 0) / 10), 5))}
+              ({doctor?.patientsCount ?? 0} patients)
+            </p>
+          </div>
+          <p style={styles.overview}>{doctor?.overview}</p>
+        </div>
+
     </div>
   );
 };
@@ -79,7 +87,7 @@ const styles = {
   },
   imageContainer: {
     flexBasis: "80%",
-    backgroundColor: "#705BDF", // purple background
+    backgroundColor: "orange", // purple background
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -110,6 +118,11 @@ const styles = {
     borderRadius: "8px",
     marginTop: "10px",
     fontSize: "1.06rem"
+  },
+  ratings:{
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between'
   }
 };
 

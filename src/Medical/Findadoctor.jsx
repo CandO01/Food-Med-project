@@ -11,6 +11,8 @@ function Findadoctor() {
   const [current, setCurrent] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [bookingDoctor, setBookingDoctor] = useState(null);
+  const [showAllCategories, setShowAllCategories] = useState(false);
+
 
   const userEmail = localStorage.getItem('userEmail');
 
@@ -170,7 +172,28 @@ async function handleBooking(id) {
       <section style={styles.categorySection}>
         <div style={styles.more}>
           <p style={styles.category}>Categories</p>
-          <p>More</p>
+          <div
+              onClick={() => setShowAllCategories(!showAllCategories)}
+              style={{
+                ...styles.category,
+                backgroundColor: "#fff", // keep background white
+                cursor: "pointer",
+                textAlign: "center",
+                boxShadow: "none" 
+              }}
+            >
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: "0.9rem",
+                  fontWeight: "bold",
+                  color: "black", // 👈 make text grey
+                }}
+              >
+                {showAllCategories ? "▲ Less" : "▼ More"}
+              </p>
+            </div>
+
         </div>
         <div
           ref={categoryContainerRef}
@@ -182,55 +205,52 @@ async function handleBooking(id) {
             paddingBottom: "0.5rem",
           }}
         >
-          {[{ name: "All", backgroundColor: "#f0ad4e", color: "#fff", images: "" }, ...categories].map(
-            (cat) => {
-              const isActive = selectedCategory === cat.name;
-              const catStyles = {
-                backgroundColor: isActive ? "#ff8c00" : cat.backgroundColor,
-                color: isActive ? "#fff" : cat.color,
-                width: "85px",
-                height: "85px",
-                padding: "1.2rem",
-                borderRadius: "15px",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "flex-start",
-                justifyContent: "flex-start",
-                position: "relative",
-                cursor: "pointer",
-                border: isActive ? "2px solid #e69500" : "none",
-                fontWeight: cat.name === "All" ? "600" : "normal",
-              };
-              return (
-                <div
-                  key={cat.name}
-                  style={catStyles}
-                  onClick={() => setSelectedCategory(cat.name)}
-                  className={isActive ? "activeCategory" : ""}
-                >
-                  <span style={{ fontSize: "0.8rem", marginTop: "-10px", marginLeft: -10 }}>
-                    {cat.name}
-                  </span>
-                  {cat.images && (
-                    <img
-                      style={{ width: 30, position: "absolute", bottom: 5, right: 5 }}
-                      src={cat.images}
-                      alt={cat.name}
-                    />
-                  )}
-                </div>
-              );
-            }
-          )}
+          {(showAllCategories ? categories : categories.slice(0, 4)).map((category, index) => (
+          <div
+            key={index}
+            onClick={() => setSelectedCategory(category.name)}
+            style={{
+              backgroundColor: selectedCategory === category.name ? "#f0ad4e" : "#fff",
+              color: selectedCategory === category.name ? "#fff" : "#000",
+              cursor: "pointer",
+              padding: 5,
+              borderRadius: '4px'
+            }}
+          >
+            {category.images && (
+              <img
+                src={category.images}
+                alt={category.name}
+                style={{ width: "30px", height: "30px", borderRadius: "50%" }}
+              />
+            )}
+            <p style={{ margin: 0, fontSize: "0.9rem" }}>{category.name}</p>
+          </div>
+        ))}
+
         </div>
       </section>
 
       {/* Filtered Doctors List */}
       <section style={styles.categorySection}>
-        {filteredDoctors.length === 0 && <p>No doctors found in this category.</p>}
+        <div style={{ display: 'flex',    justifyContent: 'space-between' }}>
+          <p>Top rated doctor</p>
+          <p
+            onClick={() => setSelectedCategory("All")}
+            style={{
+              fontSize: '1.0rem',
+              fontWeight: '700',
+              cursor: 'pointer',
+              color: selectedCategory === "All" ? "orange" : "black"
+            }}
+          >
+            All
+          </p>
+        </div>
 
+        {filteredDoctors.length === 0 && <p>No doctors found in this category.</p>}
+       
         {filteredDoctors.map((doc) => {
-          const rating = Math.min(doc.stars ?? 0, 5);
           const patients = doc.patientsCount ?? 0;
 
           return (

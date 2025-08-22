@@ -725,10 +725,12 @@ const styles = {
     padding: '0.5rem 1rem',
     width: '100%',
     maxWidth: '400px',
+    height: '40px',
+    fontFamily: 'Inter", sans-serif',
     display: 'block',
     margin: '0 auto 2rem auto',
     borderRadius: '50px',
-    border: '1px solid orange',
+    border: '1px solid grey',
   },
 grid:{
   display: 'flex',

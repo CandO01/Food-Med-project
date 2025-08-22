@@ -18,7 +18,7 @@ function RolesPage() {
   };
 
   return (
-    <div className='role-form'>
+    <div className='role-form' style={{height: '100vh'}}>
       <h1 className='heading-one'>Welcome to FoodMed App</h1>
       <p style={{fontSize: '1.3rem', fontWeight: 400, color: 'black'}}>Please select your role?</p>
       <form className='role-form-container' onSubmit={handleSubmit}>
