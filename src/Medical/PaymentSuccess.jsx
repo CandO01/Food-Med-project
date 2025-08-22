@@ -45,7 +45,8 @@ const styles = {
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    height: "100vh",
+    height: "100vh"
+
   },
   para: {
     margin: 10,

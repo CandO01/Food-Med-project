@@ -5,6 +5,7 @@ import logo from '../Location/logo.png'
 
 function Language() {
   const [language, setLanguage] = useState(localStorage.getItem('appLang') || '')
+  const [message, setMessage] = useState('');
   const navigate = useNavigate()
   const { i18n } = useTranslation()
 
@@ -21,7 +22,7 @@ function Language() {
     const role = localStorage.getItem('selectedRole') // 👈 get role stored in RolePage
 
     if (!language) {
-      alert('Please select a language first!')
+      setMessage('Please select a language first');
       return
     }
 
@@ -39,8 +40,8 @@ function Language() {
     <div className='language-container'>
       <img src={logo} alt="" style={{width: 180, marginBottom: -80}} />
       <h1 style={{fontSize: 25, margin: 0, fontWeight: 800}}>FOODMED</h1>
-      <p style={{fontSize: 22, fontWeight: 500}}>Please select preferred language</p>
-      
+      <p style={{fontSize: 22, fontWeight: 500, marginBottom: 4}}>Please select preferred language</p>
+       <p style={{margin: 0, color: 'red'}}>{message}</p>
       <div className="english-language">
         <label htmlFor="english" style={{fontSize: 20}}>English</label>
         <input 

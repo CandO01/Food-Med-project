@@ -40,6 +40,12 @@ export const categories = [
         images: burns
     },
     {
+        name: "Cardiologist specialist",
+        backgroundColor: "#D02B2B",
+        color: "#F9F4DA",
+        images: hiv
+    },
+    {
         name: "Heart specialist",
         backgroundColor: "#599137",
         color: "#F9F4DA",

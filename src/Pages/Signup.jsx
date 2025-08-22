@@ -172,7 +172,7 @@ function Signup() {
 
         {/* Replacing select tag with checkboxes */}
         <div style ={{marginTop: '20px', display: 'flex', justifyContent: 'space-between'}}>
-          <label>
+          <label style={{fontSize: '1.0rem', fontWeight: 400}}>
             <input
               type='checkbox'
               name='canDonate'
@@ -182,7 +182,7 @@ function Signup() {
             Donate food
           </label>
           <br />
-          <label>
+          <label style={{fontSize: '1.0rem', fontWeight: 400}}>
             <input
               type='checkbox'
               name='canRequest'
