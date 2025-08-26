@@ -67,7 +67,7 @@ const styles = {
   overviewText: {
     writingMode: "vertical-rl",
     transform: "rotate(180deg)",
-    color: "orange",
+    color: "#4CAF50",
     fontWeight: "bold",
     marginBottom: "20px",
     fontSize: "1.5rem",
@@ -87,7 +87,7 @@ const styles = {
   },
   imageContainer: {
     flexBasis: "80%",
-    backgroundColor: "orange", // purple background
+    backgroundColor: "#4CAF50", // purple background
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -110,8 +110,8 @@ const styles = {
   },
   specialty: {
     display: "inline-block",
-    background: "#FFA50033",
-    color: "#FFA500",
+    background: "#d7f9d8ff",
+    color: "green",
     height: "36px",
     padding: "5px 10px",
     width: "fit-content",

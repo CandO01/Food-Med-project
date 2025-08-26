@@ -29,6 +29,8 @@ import DoctorProfileCard from './Medical/DoctorCard'
 import DoctorRegistrationForm from './Pages/DoctorRegistrationForm'
 import RolesPage from './Pages/RolesPage'
 import PaymentSuccess from './Medical/PaymentSuccess'
+import DoctorAppointments from './Medical/DoctorAppointment'
+import MyAppointments from './Medical/MyAppointment'
 
 function App() {
   return (
@@ -70,6 +72,8 @@ function App() {
           <Route path="/chat/:recipientId" element={<ProtectedRoute><ChatPage /></ProtectedRoute>} />
           <Route path='donor-profile' element={<ProtectedRoute><DonorProfile /></ProtectedRoute>} />
           <Route path='user-request' element={<ProtectedRoute><UserRequests /></ProtectedRoute>} />
+          <Route path='doctor-appointment' element={<ProtectedRoute><DoctorAppointments /></ProtectedRoute>} />
+          <Route path='patient-appointment' element={<ProtectedRoute><MyAppointments /></ProtectedRoute>} />
 
           {/* Medical route */}
           <Route path='medical' element={<ProtectedRoute><Findadoctor /></ProtectedRoute>} />

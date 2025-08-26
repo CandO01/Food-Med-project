@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { AuthContext } from '../../AuthenticationContext/Authcontext';
+import  { MessageCircle, Phone } from 'lucide-react'
 
 const UserRequests = () => {
   const [requests, setRequests] = useState([]);
@@ -15,6 +16,7 @@ const UserRequests = () => {
       try {
         setLoading(true);
         const userId = localStorage.getItem('userId');
+        console.log(userId)
         const canRequest = localStorage.getItem('canRequest') === 'true';
         const canDonate = localStorage.getItem('canDonate') === 'true';
 
@@ -87,15 +89,20 @@ const UserRequests = () => {
               )}
              {req.donorEmail && (
                 <Link to={`/chat/${req.donorEmail}`}>
-                  <button style={styles.chatBtn}>
-                    💬 Chat with {req.donorName || req.donorEmail}
+                  <button style={styles.button}>
+                    <MessageCircle size={23} color='white' /> 
+                     <span style={{fontSize: '1.0rem', color: 'white'}}> 
+                       Chat with {req.donorName || req.donorEmail}
+                    </span>
+                     
                   </button>
                 </Link>
               )}
               {req.donorPhone && (
                 <Link to={`tel:${req.donorPhone}`}>
-                  <button style={styles.callBtn}>
-                    📞 Call Donor
+                  <button style={styles.button}>
+                    <Phone size={18} color="white"/> 
+                    <span style={{color: 'white', fontWeight: '700'}}> Call</span>
                   </button>
                 </Link>
               )}
@@ -116,16 +123,9 @@ const styles = {
     borderRadius: '8px',
     background: '#f9f9f9'
   },
-  chatBtn: {
-    background: 'orange',
-    color: 'white',
-    border: 'none',
-    padding: '0.5rem 1rem',
-    borderRadius: '20px',
-    cursor: 'pointer',
-    marginTop: '0.5rem'
-  }
+  button: { marginRight: "8px", cursor: "pointer", border: 'none', padding: '10px', borderRadius: '6px', backgroundColor: '#4CAF50' },
 };
+
 
 export default UserRequests;
 

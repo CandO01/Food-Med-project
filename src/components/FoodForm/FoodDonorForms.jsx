@@ -1,56 +1,66 @@
+
 import React, { useState, useEffect } from 'react';
 import { FaCloudUploadAlt, FaBell } from 'react-icons/fa';
-import successIcon from '../../assets/check1.gif'
-function FoodForm () {
+import successIcon from '../../assets/check1.gif';
+
+function FoodForm() {
+const storedUserId = localStorage.getItem('userId') || localStorage.getItem('donorId') || '';
+
+  const storedUserEmail = localStorage.getItem('userEmail') || '';
+  const storedUserName = localStorage.getItem("userName") || "";
+  const storedUserPhone = localStorage.getItem("userPhone") || "";
+
   const [formData, setFormData] = useState({
-        donorId: localStorage.getItem('donorId') || '',
-        donorName: '',
-        donorPhone: '',
-        donorEmail: localStorage.getItem('donorEmail') || '',
-        foodName: '',
-        description: '',
-        quantity: '',
-        expiryDate: '',
-        location: '',
-        foodType: '',
-        mode: ''
-      });
+    donorId: storedUserId,
+    donorName: storedUserName,
+    donorPhone: storedUserPhone,
+    donorEmail: storedUserEmail,
+    foodName: '',
+    description: '',
+    quantity: '',
+    expiryDate: '',
+    location: '',
+    foodType: '',
+    mode: ''
+  });
+
 
   const [images, setImages] = useState([]);
   const [previews, setPreviews] = useState([]);
   const [unexpiredItems, setUnexpiredItems] = useState([]);
   const [notifications, setNotifications] = useState([]);
-  const [showModal, setShowModal] = useState(false)
+  const [showModal, setShowModal] = useState(false);
   const [uploading, setUploading] = useState(false);
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
+
     if (name === 'donorEmail') localStorage.setItem('donorEmail', value);
   };
 
-  const handleImageChange = e => {
+  const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
     setImages(files);
-    setPreviews(files.map(file => URL.createObjectURL(file)));
+    setPreviews(files.map((file) => URL.createObjectURL(file)));
   };
 
-  const handleDrop = e => {
+  const handleDrop = (e) => {
     e.preventDefault();
     const files = Array.from(e.dataTransfer.files);
     setImages(files);
-    setPreviews(files.map(file => URL.createObjectURL(file)));
+    setPreviews(files.map((file) => URL.createObjectURL(file)));
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!images.length) return alert('Please upload at least one image');
 
+    if (!formData.donorId) return alert('Invalid donorId. Please log in properly.');
+
     const data = new FormData();
-    data.append('image', images[0]); // Using one image
-    Object.entries(formData).forEach(([key, val]) => {
-      data.append(key, val);
-    });
+    data.append('image', images[0]); // Only the first image for now
+    Object.entries(formData).forEach(([key, val]) => data.append(key, val));
 
     try {
       setUploading(true);
@@ -58,38 +68,39 @@ function FoodForm () {
         method: 'POST',
         body: data,
       });
+
       const result = await res.json();
       if (!res.ok) throw new Error(result.error || 'Failed to submit');
-      
-      //show success upload
-      setShowModal(true)
-      setFormData({
-        donorName: '',
-        donorPhone: '',
-        donorEmail: localStorage.getItem('donorEmail') || '',
-        foodName: '',
-        description: '',
-        quantity: '',
-        expiryDate: '',
-        location: '',
-        foodType: '',
-        mode: ''
-      })
-      setTimeout(()=>{
-        setShowModal(false)
-      },5000)
 
-        if (localStorage.getItem('canDonate') !== 'true') {
-          localStorage.setItem('canDonate', 'true');
-          localStorage.setItem('donorId', localStorage.getItem('userEmail'));
-        }
+      // Show success modal
+      setShowModal(true);
+      setFormData((prev) => ({
+          ...prev,
+          donorId: storedUserId || localStorage.getItem('userId'),
+          donorName: storedUserName || localStorage.getItem('userName'),
+          donorPhone: storedUserPhone || localStorage.getItem('userPhone'),
+          donorEmail: storedUserEmail || localStorage.getItem('userEmail'),
+          description: '',
+          quantity: '',
+          expiryDate: '',
+          location: '',
+          foodType: '',
+          mode: ''
+        }));
 
+      setTimeout(() => setShowModal(false), 5000);
+
+      // Save donorId if first time
+      if (localStorage.getItem('canDonate') !== 'true') {
+        localStorage.setItem('canDonate', 'true');
+      }
 
       fetchUnexpiredItems();
       setUploading(false);
     } catch (err) {
       console.error('Error submitting:', err);
       alert('Failed to submit');
+      setUploading(false);
     }
   };
 
@@ -99,7 +110,9 @@ function FoodForm () {
       const items = await res.json();
       const now = Date.now();
       const filtered = items.filter(
-        item => new Date(item.expiryDate).getTime() > now && item.donorId === formData.donorId
+        (item) =>
+          new Date(item.expiryDate).getTime() > now &&
+          item.donorId === formData.donorId
       );
       setUnexpiredItems(filtered);
     } catch (err) {
@@ -107,30 +120,39 @@ function FoodForm () {
     }
   };
 
-  const handleRequest = async item => {
+  const handleRequest = async (item) => {
     try {
+      const userId = localStorage.getItem('userId'); // this must be ObjectId
+    const donorId = item.donorId; // must come as ObjectId from backend
+
+      if (!userId || !donorId) {
+      alert("Invalid user or donor ID");
+      return;
+    }
+
       const response = await fetch('https://foodmed-server3.onrender.com/request', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                id: crypto.randomUUID(), 
-                userId: localStorage.getItem('userId'),
-                donorId: item.donorId,
-                foodId: item.id,
-                foodName: item.foodName,
-                email: localStorage.getItem('userEmail'),  // if stored
-                phone: localStorage.getItem('userPhone'),  // if stored
-                userName: localStorage.getItem('userName'),
-                status: 'Pending'
-              })
-            });
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: crypto.randomUUID(),
+          userId,
+          donorId,
+          foodId: item.id,
+          foodName: item.foodName,
+          email: localStorage.getItem('userEmail'),
+          phone: localStorage.getItem('userPhone'),
+          userName: localStorage.getItem('userName'),
+          status: 'Pending'
+        })
+      });
 
       const result = await response.json();
-      if (response.ok) {
-        setNotifications(prev => [...prev, result.message || `Request for "${item.foodName}" sent`]);
-      } else {
-        setNotifications(prev => [...prev, `Failed to request "${item.foodName}"`]);
-      }
+      setNotifications((prev) => [
+        ...prev,
+        response.ok
+          ? result.message || `Request for "${item.foodName}" sent`
+          : `Failed to request "${item.foodName}"`
+      ]);
     } catch (err) {
       console.error('Error sending request:', err);
     }
@@ -143,23 +165,19 @@ function FoodForm () {
   useEffect(() => {
     const interval = setInterval(async () => {
       try {
-        const userId = localStorage.getItem('userEmail') || localStorage.getItem('donorEmail');
-      
-       const canDonate = localStorage.getItem('canDonate') === 'true';
-       const canRequest = localStorage.getItem('canRequest') === 'true'
+        const userId =
+          localStorage.getItem('userId') || localStorage.getItem('donorId');
+        const canDonate = localStorage.getItem('canDonate') === 'true';
+        const canRequest = localStorage.getItem('canRequest') === 'true';
+        if (!userId || (!canDonate && !canRequest)) return;
 
-       if(!userId ||(!canDonate && !canRequest)) return;
-
-       const type = canDonate ? 'donor' : canRequest ? 'user' : '';
-
+        const type = canDonate ? 'donor' : canRequest ? 'user' : '';
         const res = await fetch(`https://foodmed-server3.onrender.com/requests?type=${type}&id=${userId}`);
-
         const requests = await res.json();
-
-        console.log(requests)
-        
-        const accepted = requests.filter(r => r.status === 'accepted');
-        setNotifications(accepted.map(r => `Your request for "${r.foodName}" was accepted`));
+        const accepted = requests.filter((r) => r.status === 'accepted');
+        setNotifications(
+          accepted.map((r) => `Your request for "${r.foodName}" was accepted`)
+        );
       } catch (e) {
         console.error('Failed to fetch requests:', e);
       }
@@ -170,13 +188,14 @@ function FoodForm () {
   return (
     <>
       <form onSubmit={handleSubmit} style={styles.form}>
+        {/* Image Upload */}
         <div
           style={styles.imageBox}
-          onDragOver={e => e.preventDefault()}
+          onDragOver={(e) => e.preventDefault()}
           onDrop={handleDrop}
         >
           <label htmlFor="imageUpload" style={styles.uploadLabel}>
-            <FaCloudUploadAlt size={40} color="orange" />
+            <FaCloudUploadAlt size={40} color="#4CAF50" />
             <p style={{ margin: '0.5rem 0 0 0' }}>Click or drag & drop image(s)</p>
             <input
               type="file"
@@ -262,6 +281,7 @@ function FoodForm () {
           style={styles.input}
           required
         />
+        <p style={{ marginTop: -10, fontSize: 12, fontWeight: '500' }}>Expiry date</p>
         <input
           type="text"
           name="location"
@@ -275,7 +295,7 @@ function FoodForm () {
           name="foodType"
           value={formData.foodType}
           onChange={handleChange}
-          style={{ ...styles.input, borderBottom: '2px solid orange' }}
+          style={{ ...styles.input, borderBottom: '2px solid #4CAF50' }}
           required
         >
           <option value="">Select Food Type</option>
@@ -287,8 +307,6 @@ function FoodForm () {
           <option value="Grains">Grains</option>
           <option value="Oil">Oil</option>
         </select>
-
-        {/* Mode of the food */}
         <select
           name="mode"
           value={formData.mode}
@@ -300,16 +318,9 @@ function FoodForm () {
           <option value="Free">Free Share</option>
           <option value="Barter">Barter</option>
         </select>
-        {/* <button type="submit" style={styles.button}>Submit</button> */}
+
         <button type="submit" disabled={uploading} style={styles.button}>
-          {uploading ? (
-            <>
-             <span className='spinner1'></span>
-              Uploading...
-            </>
-          ): (
-            'Submit'
-          )}
+          {uploading ? 'Uploading...' : 'Submit'}
         </button>
       </form>
 
@@ -318,17 +329,30 @@ function FoodForm () {
         <h3>My Unexpired Food Items</h3>
         <ul style={{ listStyle: 'none', padding: 0 }}>
           {unexpiredItems.length === 0 && <li>No unexpired food items found.</li>}
-          {unexpiredItems.map(item => (
-            <li key={item.id} style={{ marginBottom: '3.5rem', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          {unexpiredItems.map((item) => (
+            <li
+              key={item.id}
+              style={{ marginBottom: '3.5rem', display: 'flex', alignItems: 'center', gap: '1rem' }}
+            >
               <img
                 src={item.imageUrl}
                 alt={item.foodName}
-                style={{ width: '60px', height: '60px', borderRadius: '8px', objectFit: 'cover', border: '1px solid #ccc' }}
+                style={{
+                  width: '60px',
+                  height: '60px',
+                  borderRadius: '8px',
+                  objectFit: 'cover',
+                  border: '1px solid #ccc'
+                }}
               />
               <div>
-                <strong>{item.foodName}</strong><br />
-                <small>Expires on: {item.expiryDate}</small><br />
-                <button onClick={() => handleRequest(item)} style={styles.reqBtn}>Request</button>
+                <strong>{item.foodName}</strong>
+                <br />
+                <small>Expires on: {item.expiryDate}</small>
+                <br />
+                <button onClick={() => handleRequest(item)} style={styles.reqBtn}>
+                  Request
+                </button>
               </div>
             </li>
           ))}
@@ -337,27 +361,41 @@ function FoodForm () {
 
       {/* Notifications */}
       <div style={{ position: 'fixed', top: 20, right: 20 }}>
-        <FaBell color="orange" size={24} />
+        <FaBell color="#4CAF50" size={24} />
         {notifications.length > 0 && (
-          <ul style={{ background: '#fff', color: '#000', padding: '0.5rem', borderRadius: '5px', marginTop: '2.5rem' }}>
-            {notifications.map((n, i) => <li key={i}>{n}</li>)}
+          <ul
+            style={{
+              background: '#fff',
+              color: '#000',
+              padding: '0.5rem',
+              borderRadius: '5px',
+              marginTop: '2.5rem'
+            }}
+          >
+            {notifications.map((n, i) => (
+              <li key={i}>{n}</li>
+            ))}
           </ul>
         )}
       </div>
-      {/* Success modal upload */}
+
+      {/* Success Modal */}
       {showModal && (
         <div style={styles.modalOverlay}>
           <div style={styles.modalContent}>
-            <img style={styles.imageIcon}  src={successIcon} alt="uploaded successfully animation" />
-            <p style={{fontSize: 20, fontWeight: 600, color: 'black'}}>Your food is uploaded successfully.</p>
-            <button onClick={() => setShowModal(false)} style={styles.modalBtn}>OK</button>
+            <img style={styles.imageIcon} src={successIcon} alt="uploaded successfully" />
+            <p style={{ fontSize: 20, fontWeight: 600, color: 'black' }}>
+              Your food is uploaded successfully.
+            </p>
+            <button onClick={() => setShowModal(false)} style={styles.modalBtn}>
+              OK
+            </button>
           </div>
         </div>
       )}
     </>
   );
-};
-
+}
 const styles = {
   form: {
     background: '#fff',
@@ -371,7 +409,7 @@ const styles = {
     boxShadow: '0 0 10px rgba(0,0,0,0.2)',
   },
   imageBox: {
-    border: '2px dashed orange',
+    border: '2px dashed #4CAF50',
     borderRadius: '10px',
     padding: '1rem',
     marginBottom: '1rem',
@@ -408,13 +446,13 @@ const styles = {
   input: {
     padding: '0.6rem',
     margin: '1rem 0',
-    border: 'none',
-    borderBottom: '2px solid orange',
+    border: '1px solid #ccc',
+    borderRadius: '6px',
     outline: 'none',
     fontSize: '1rem',
   },
   button: {
-    background: 'orange',
+    background: '#4CAF50',
     color: '#fff',
     padding: '0.8rem',
     border: 'none',
@@ -452,7 +490,7 @@ const styles = {
   modalBtn: {
     marginTop: '1rem',
     padding: '0.5rem 1.2rem',
-    background: 'orange',
+    background: '#4CAF50',
     color: '#fff',
     border: 'none',
     borderRadius: '5px',

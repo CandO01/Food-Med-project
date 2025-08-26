@@ -6,6 +6,8 @@ import { FaRegUser } from "react-icons/fa";
 import { IoFastFoodOutline, IoCartOutline, IoSettingsOutline } from "react-icons/io5";
 import { FiUploadCloud } from "react-icons/fi";
 import { CiMedicalCross } from "react-icons/ci";
+import { FaUserDoctor } from "react-icons/fa6";
+import { LuBookPlus } from "react-icons/lu";
 import { RiInformation2Line } from "react-icons/ri";
 import { LocationContext } from '../LocationContext/LocationContext';
 import { MdLocationPin } from "react-icons/md";
@@ -125,6 +127,14 @@ const FoodMedHomePage = () => {
             <CiMedicalCross style={{ marginRight: '8px', color: 'black' }} />
             Medical
           </li>
+           <li onClick={() => navigate('/doctor-appointment')}>
+            <FaUserDoctor style={{ marginRight: '8px', color: 'black' }} />
+            Docs Appointment
+          </li>
+          <li onClick={() => navigate('/patient-appointment')}>
+            <LuBookPlus style={{ marginRight: '8px', color: 'black' }} />
+            My Appointment
+          </li>
           <li onClick={() => navigate('/settings')}>
             <IoSettingsOutline style={{ marginRight: '8px', color: 'black' }} />
             Settings
@@ -182,7 +192,7 @@ const FoodMedHomePage = () => {
             )
             })}
           </div>
-         <h2 style={{color: 'orange', fontSize: '1.4rem', fontWeight: '600'}}>Health tips of the day</h2>
+         <h2 style={{color: '#4CAF50', fontSize: '1.4rem', fontWeight: '600'}}>Health tips of the day</h2>
          <div className="health">
           <div className="healthyfood">
             <img src={smile} alt="smiley" />

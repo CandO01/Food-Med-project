@@ -1,14 +1,14 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { color, motion } from 'framer-motion';
 import { FaBell } from 'react-icons/fa';
 import { FaRegUser } from "react-icons/fa";
 import { MdOutlineWavingHand } from "react-icons/md";
+import LoadingDots from '../../AuthenticationContext/LoadingDots';
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from 'react-icons/md';
 import { MdOutlineTimer } from "react-icons/md";
 import { MdLocationPin } from "react-icons/md";
 import { LocationContext } from '../../LocationContext/LocationContext';
-import notificationSound from '../../assets/notification.mp3.mp3'
-import loadingImg from '../../assets/loading3.gif';
+import notificationSound from '../../assets/notification.mp3.mp3';
 import firstFood from '../../assets/food1.jpg';
 import secondFood from '../../assets/food2.jpeg';
 import thirdFood from '../../assets/food3.jpeg';
@@ -127,6 +127,7 @@ const SubmissionsDashboard = () => {
       console.error('User ID is missing from localStorage');
       return;
     }
+    
 
             fetch(`https://foodmed-server3.onrender.com/requests?id=${userId}&type=${type}`)
               .then((res) => res.json())
@@ -198,6 +199,16 @@ const SubmissionsDashboard = () => {
                          const userPhone = localStorage.getItem('userPhone');
                          const userName = localStorage.getItem('userName');
 
+                        //  console.log('userId:', userId);
+                        // console.log('userEmail:', userEmail);
+                        // console.log('userPhone:', userPhone);
+                        // console.log('donorId:', item.donorId);
+                        // console.log('donorEmail:', item.donorEmail);
+                        // console.log('donorName:', item.donorName);
+
+
+                    const isValidObjectId = (id)=> /^[a-fA-F0-9]{24}$/.test(id);
+
                     if (!item.donorEmail || !item.donorId || !item.donorName) {
                         setModalMessage("This food item is missing some donor information. Please select a newer one.");
                         setShowFeedbackModal(true);
@@ -206,12 +217,25 @@ const SubmissionsDashboard = () => {
                       }
 
                       if (!userId || !userEmail || !userPhone || !item) {
-                        setModalMessage("Missing user info or phone number");
+                        setModalMessage("User information is incomplete. Cannot submit request.");
                         setShowFeedbackModal(true);
                         setTimeout(() => setShowFeedbackModal(false), 3000);
                         return;
                       }
 
+                     if(!isValidObjectId(item.donorId)) {
+                       setModalMessage("Invalid donor ID. Cannot submit request.");
+                      setShowFeedbackModal(true);
+                      setTimeout(() => setShowFeedbackModal(false), 3000);
+                      return;
+                     }
+                       if (!isValidObjectId(userId)) {
+                        setModalMessage("Invalid user ID. Cannot submit request.");
+                        setShowFeedbackModal(true);
+                        setTimeout(() => setShowFeedbackModal(false), 3000);
+                        return;
+                      }
+                    try{
                         const res = await fetch('https://foodmed-server3.onrender.com/request', {
                               method: 'POST',
                               headers: { 'Content-Type': 'application/json' },
@@ -231,6 +255,7 @@ const SubmissionsDashboard = () => {
 
 
                         const result = await res.json();
+
                         console.log('This is from the result:', result)
                         if (res.ok) {
                                   setNotifications((prev) => [...prev, { id: crypto.randomUUID(), message: `🟠 Request sent for ${item.foodName}`, type: 'sent' }].slice(-10));
@@ -247,6 +272,12 @@ const SubmissionsDashboard = () => {
                                   setShowFeedbackModal(true);
                                   setTimeout(() => setShowFeedbackModal(false), 3000);
                                 }
+                              } catch(error){
+                                                                       console.error('Error submitting request:', error);
+                        setModalMessage("An unexpected error occurred. Please try again.");
+                        setShowFeedbackModal(true);
+                        setTimeout(() => setShowFeedbackModal(false), 3000);
+                              }
                       }}
                     />
 
@@ -276,25 +307,12 @@ const SubmissionsDashboard = () => {
   const renderImage = (url) => {
     return url?.startsWith('http')
       ? url
-      : `https://foodmed-server3.onrender.com${url}`;
+      : `http://localhost:3005${url}`;
   };
 
   //for indicating loading while waiting for data to be fetched
-  if (loading)
-    return (
-      <img
-        src={loadingImg}
-        alt="Loading..."
-        style={{
-          width: '100px',
-          position: 'absolute',
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-        }}
-      />
-    );
-
+  if (loading) return <LoadingDots center size={12} />
+      
   return (
     <div style={{ ...styles.dashboard, ...themeStyles }}>
       <audio ref={audioRef} src={notificationSound} preload="auto" />
@@ -310,7 +328,7 @@ const SubmissionsDashboard = () => {
         transition={{ duration: 0.6 }}
         onClick={toggleNotifications}
       >
-        <FaBell size={24} color="orange" />
+        <FaBell size={24} color="#4CAF50" />
         {hasNewNotification && (
           <span
             style={{
@@ -376,7 +394,7 @@ const SubmissionsDashboard = () => {
               style={{
                 ...styles.dotIndicator,
                 backgroundColor:
-                  index === currentImageIndex ? 'white' : 'gray',
+                  index === currentImageIndex ? '#4CAF50' : 'gray',
               }}
             />
           ))}
@@ -410,7 +428,7 @@ const SubmissionsDashboard = () => {
               onClick={() => setSelectedCategory('')}
               style={{
                 padding: '0.5rem 1rem',
-                background: selectedCategory === '' ? 'orange' : '#eee',
+                background: selectedCategory === '' ? '#4CAF50' : '#eee',
                 color: selectedCategory === '' ? 'white' : '#000',
                 borderRadius: '20px',
                 border: 'none',
@@ -441,7 +459,7 @@ const SubmissionsDashboard = () => {
                 padding: '0.5rem',
                 borderRadius: '100%',
                 cursor: 'pointer',
-                background: selectedCategory === cat.name ? 'orange' : '#eee',
+                background: selectedCategory === cat.name ? '#77ce7aff' : '#eee',
                 color: selectedCategory === cat.name ? 'white' : '#000',
                 display: 'flex',
                 flexDirection: 'column',
@@ -500,7 +518,7 @@ const SubmissionsDashboard = () => {
              <small 
               style={{
                 backgroundColor: 'white',
-                color: item.mode?.toLowerCase()=== 'barter' ? 'orange' : 'green' ,
+                color: item.mode?.toLowerCase()=== 'barter' ? '#4CAF50' : 'red' ,
                 width: '40px',
                 padding: '2px',
                 borderRadius: '4px',
@@ -514,9 +532,9 @@ const SubmissionsDashboard = () => {
               <h3 style={{margin: 0}}>{item.foodName}</h3>
               <p style={styles.description}>{item.description}</p>
               <div>
-                <small><FaRegUser style={{color: 'orange'}} /> {item.donorName} </small>
-                <small><MdLocationPin style={{color: 'orange'}} /> {item.location} </small>
-                <small><MdOutlineTimer style={{color: 'orange'}} /> Posted on: {timeAgo(item.createdAt)} </small>
+                <small><FaRegUser style={{color: '#4CAF50'}} /> {item.donorName} </small>
+                <small><MdLocationPin style={{color: '#4CAF50'}} /> {item.location} </small>
+                <small><MdOutlineTimer style={{color: '#4CAF50'}} /> Posted on: {timeAgo(item.createdAt)} </small>
               </div>
               <button
                 onClick={(e) => {
@@ -605,7 +623,7 @@ const styles = {
     left: 10,
     zIndex: 1000,
     padding: '0.5rem 1rem',
-    background: 'orange',
+    background: '#4CAF50',
     color: 'white',
     border: 'none',
     borderRadius: '5px',
@@ -639,7 +657,7 @@ const styles = {
     // top: '0'
   },
   greetingIcons: {
-    color: 'orange', 
+    color: '#4CAF50', 
     fontSize: '20px', 
     fontWeight: 800
   },
@@ -675,7 +693,7 @@ const styles = {
     textAlign: 'center',
   },
   exploreBtn: {
-    backgroundColor: 'orange',
+    backgroundColor: '#4CAF50',
     color: 'white',
     border: 'none',
     borderRadius: '6px',
@@ -707,7 +725,7 @@ const styles = {
     width: 10,
     height: 10,
     borderRadius: '50%',
-    backgroundColor: 'orange',
+    backgroundColor: '#4CAF50',
   },
   notificationPanel: {
     background: '#fff',
@@ -765,7 +783,7 @@ image: {
   requestBtn: {
     marginTop: '0.5rem',
     padding: '0.5rem 1.5rem',
-    background: 'orange',
+    background: '#4CAF50',
     color: 'white',
     border: 'none',
     borderRadius: '5px',

@@ -1,5 +1,5 @@
 // components/RequestModal.jsx
-import { color } from 'framer-motion';
+
 import React, { useState } from 'react';
 
 const RequestModal = ({ item, onClose, onSubmit }) => {
@@ -8,8 +8,25 @@ const RequestModal = ({ item, onClose, onSubmit }) => {
 
   const handleSubmit = () => {
     if (!phone.trim()) return; // Prevent submission if phone is empty
+    // Prepare the payload for the parent handler
+
+  const userId = localStorage.getItem('userId') || "";
+  const userEmail = localStorage.getItem('email') || "";
+  const userName = localStorage.getItem('name') || "";
+
+const requestPayload = {
+  ...item,
+  phone,
+  donorId: item.donorId ? String(item.donorId) : null,  // always a string or null
+  donorEmail: item.donorEmail || null,
+  donorName: item.donorName || null,
+  userId,
+  userEmail,
+  userName
+};
+
     // Call the onSubmit function passed as a prop
-    if (onSubmit) onSubmit(item);
+    if (onSubmit) onSubmit(requestPayload);
     onClose();
   };
 
@@ -33,7 +50,7 @@ const RequestModal = ({ item, onClose, onSubmit }) => {
             onClick={handleSubmit}
             disabled={!phone.trim()}
             style={{
-              backgroundColor: !phone.trim() ? '#ccc' : 'orange',
+              backgroundColor: !phone.trim() ? '#ccc' : '#4ac505',
               color: 'white',
               border: 'none',
               padding: '8px 12px',

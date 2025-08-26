@@ -15,8 +15,8 @@ export default function ChatBotWidget() {
             position: "fixed",
             bottom: "50px",
             right: "20px",
-            background: "orange",
-            color: "black",
+            background: "#4CAF50",
+            color: "white",
             borderRadius: "50%",
             padding: "14px",
             boxShadow: "0px 4px 8px rgba(0,0,0,0.3)",
@@ -51,8 +51,8 @@ export default function ChatBotWidget() {
           {/* Header */}
           <div
             style={{
-              background: "orange",
-              color: "black",
+              background: "#4CAF50",
+              color: "#fff",
               padding: "10px",
               display: "flex",
               alignItems: "center",

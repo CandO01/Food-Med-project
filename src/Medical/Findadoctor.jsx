@@ -19,6 +19,8 @@ function Findadoctor() {
   // Ref to the category container
   const categoryContainerRef = useRef(null);
 
+  const isBooking = useRef(false)
+
   // Carousel next slide
   function nextSlide() {
     if (filteredDoctors.length === 0) return;
@@ -46,6 +48,8 @@ function Findadoctor() {
 // Hnadle booking and payment
 
 async function handleBooking(id) {
+  if(isBooking.current) return;
+  isBooking.current = true
    setBookingDoctor(id);
    try {
     // First request payment link from the backend
@@ -77,6 +81,7 @@ async function handleBooking(id) {
      alert('Something went wrong. Try again')
    } finally{
     setBookingDoctor(null)
+    isBooking.current = false
    }
 }
 
@@ -110,7 +115,7 @@ async function handleBooking(id) {
     }
   }, [selectedCategory]);
 
-  if (loading) return <LoadingDots center size={12} color="orange" />
+  if (loading) return <LoadingDots center size={12} color="#4CAF50" />
 
 
   return (
@@ -131,7 +136,7 @@ async function handleBooking(id) {
                 <p style={styles.specialty}>
                   {filteredDoctors[current].specialty}
                 </p>
-                <p style={{ fontSize: '1.0rem' }}>
+                <p style={{ fontSize: '1.0rem', color: '#fff' }}>
                   {Array.from({ length: 5 }, (_, i) => (
                     <span key={i}>
                       {i < Math.min(Math.floor((filteredDoctors[current].patientsCount ?? 0) / 10), 5) ? '⭐' : '☆'}
@@ -187,7 +192,7 @@ async function handleBooking(id) {
                   margin: 0,
                   fontSize: "0.9rem",
                   fontWeight: "bold",
-                  color: "black", // 👈 make text grey
+                  color: "black",
                 }}
               >
                 {showAllCategories ? "▲ Less" : "▼ More"}
@@ -210,7 +215,7 @@ async function handleBooking(id) {
             key={index}
             onClick={() => setSelectedCategory(category.name)}
             style={{
-              backgroundColor: selectedCategory === category.name ? "#f0ad4e" : "#fff",
+              backgroundColor: selectedCategory === category.name ? "#4CAF50" : "#fff",
               color: selectedCategory === category.name ? "#fff" : "#000",
               cursor: "pointer",
               padding: 5,
@@ -241,7 +246,7 @@ async function handleBooking(id) {
               fontSize: '1.0rem',
               fontWeight: '700',
               cursor: 'pointer',
-              color: selectedCategory === "All" ? "orange" : "black"
+              color: selectedCategory === "All" ? "#4CAF50" : "black"
             }}
           >
             All
@@ -290,14 +295,14 @@ async function handleBooking(id) {
                 disabled={bookingDoctor === doc._id}
                 style={{
                   padding: '10px 5px',
-                  backgroundColor: bookingDoctor === doc._id ? "#ddd" : "orange",
+                  backgroundColor: bookingDoctor === doc._id ? "#ddd" : "#4CAF50",
                   color: 'white',
                   border: 'none',
                   borderRadius: 8,
                   cursor: bookingDoctor === doc._id ? "not-allowed" : "pointer"
                 }}
               >
-                {bookingDoctor === doc._id ? <LoadingDots size={6} color="white" /> : "Book Appointment"}
+                {bookingDoctor === doc._id ? <LoadingDots size={6} color="#4CAF50" /> : "Book Appointment"}
               </button>
             </div>
           );
@@ -315,22 +320,22 @@ export default Findadoctor;
 const styles = {
   main: { display: "flex", flexDirection: "column", padding: "1.7rem" },
   ask: { marginBottom: "30px", width: "100px", fontSize: "2.25rem", fontWeight: 500, lineHeight: 1.2 },
-  container: { width: "100%", margin: "0 auto", backgroundColor: "orange", color: "white", borderRadius: 20, position: "relative", padding: 20, height: 200, boxShadow: "0 5px 15px rgba(0,0,0,0.1)" },
+  container: { width: "100%", margin: "0 auto", backgroundColor: "#4CAF50", color: "white", borderRadius: 20, position: "relative", padding: 20, height: 200, boxShadow: "0 5px 15px rgba(0,0,0,0.1)" },
   card: { display: "flex"},
   doctordetails: { flexBasis: "39%", marginTop: '-30px' },
   image: { width: 230, height: 250, marginBottom: 15, flexBasis: "61%", position: "absolute", right: -6, bottom: -15 },
-  arrowButton: { position: "absolute", left: 0, bottom: 0, width: "70px", backgroundColor: "white", color: "orange", padding: 4, border: "none", cursor: "pointer", fontSize: 18, borderBottomLeftRadius: 20, borderTopRightRadius: 20, boxShadow: "0 2px 5px rgba(0,0,0,0.2)" },
+  arrowButton: { position: "absolute", left: 0, bottom: 0, width: "70px", backgroundColor: "white", color: "#4CAF50", padding: 4, border: "none", cursor: "pointer", fontSize: 18, borderBottomLeftRadius: 20, borderTopRightRadius: 20, boxShadow: "0 2px 5px rgba(0,0,0,0.2)" },
   dotsContainer: { display: "flex", justifyContent: "center", marginTop: 15, gap: 6 },
   dot: { height: 4, borderRadius: 2, backgroundColor: "#fff4", transition: "all 0.3s ease" },
-  activeDot: { width: 28, backgroundColor: "orange" },
+  activeDot: { width: 28, backgroundColor: "#4CAF50" },
   inactiveDot: { width: 8, backgroundColor: "#f1909040" },
   categorySection: { display: "flex", flexDirection: "column", marginTop: "30px", marginBottom: '20px' },
   more: { display: "flex", justifyContent: "space-between", alignItems: "center" },
   category: { fontSize: "1rem", fontWeight: 500 },
   doctorCard: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem", padding: "10px 15px", border: "1px solid #ddd", borderRadius: "10px", backgroundColor: "#fff", transition: "all 0.3s ease", cursor: "pointer" },
-  name:{ fontSize: '1.2rem' },
-  specialty:{ fontSize: '1.0rem' },
-  bookButton: { background: "orange", color: "#fff", padding: "10px 15px", border: "none", borderRadius: "5px", cursor: "pointer", transition: "background 0.3s ease" },
+  name:{ fontSize: '1.2rem', color: '#fff' },
+  specialty:{ fontSize: '1.0rem', color: '#fff' },
+  bookButton: { background: "#4CAF50", color: "#fff", padding: "10px 15px", border: "none", borderRadius: "5px", cursor: "pointer", transition: "background 0.3s ease" },
 };
 
 

@@ -26,13 +26,13 @@ function Footer() {
                 <IoHomeSharp
                   style={{
                     ...footerStyle.icon,
-                    color: isActive ? 'orange' : 'gray',
+                    color: isActive ? '#4CAF50' : 'gray',
                   }}
                 />
                 <p
                   style={{
                     ...footerStyle.p,
-                    color: isActive ? 'orange' : 'gray',
+                    color: isActive ? '#4CAF50' : 'gray',
                   }}
                 >
                   Home
@@ -49,13 +49,13 @@ function Footer() {
                 <MdFastfood
                   style={{
                     ...footerStyle.icon,
-                    color: isActive ? 'orange' : 'gray',
+                    color: isActive ? '#4CAF50' : 'gray',
                   }}
                 />
                 <p
                   style={{
                     ...footerStyle.p,
-                    color: isActive ? 'orange' : 'gray',
+                    color: isActive ? '#4CAF50' : 'gray',
                   }}
                 >
                   Food
@@ -72,13 +72,13 @@ function Footer() {
                 <GiHealthNormal
                   style={{
                     ...footerStyle.icon,
-                    color: isActive ? 'orange' : 'gray',
+                    color: isActive ? '#4CAF50' : 'gray',
                   }}
                 />
                 <p
                   style={{
                     ...footerStyle.p,
-                    color: isActive ? 'orange' : 'gray',
+                    color: isActive ? '#4CAF50' : 'gray',
                   }}
                 >
                   Health
@@ -96,13 +96,13 @@ function Footer() {
                   <BsFillChatTextFill
                     style={{
                       ...footerStyle.icon,
-                      color: isActive ? 'orange' : 'gray',
+                      color: isActive ? '#4CAF50' : 'gray',
                     }}
                   />
                   <p
                     style={{
                       ...footerStyle.p,
-                      color: isActive ? 'orange' : 'gray',
+                      color: isActive ? '#4CAF50' : 'gray',
                     }}
                   >
                     Chat
@@ -131,13 +131,13 @@ function Footer() {
                 <FaUser
                   style={{
                     ...footerStyle.icon,
-                    color: isActive ? 'orange' : 'gray',
+                    color: isActive ? '#4CAF50' : 'gray',
                   }}
                 />
                 <p
                   style={{
                     ...footerStyle.p,
-                    color: isActive ? 'orange' : 'gray',
+                    color: isActive ? '#4CAF50' : 'gray',
                   }}
                 >
                   Profile

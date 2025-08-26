@@ -113,7 +113,7 @@ const ProfileSetup = () => {
           disabled={uploading} 
           style={{
             ...styles.button,
-            backgroundColor: uploading || !bio.trim() || !location.trim() || !profileImage ? '#ccc' : 'orange',
+            backgroundColor: uploading || !bio.trim() || !location.trim() || !profileImage ? '#ccc' : 'rgba(76, 175, 80, 1)',
             cursor: uploading || !bio.trim() || !location.trim() || !profileImage ? 'not-allowed' : 'pointer',
             display: 'flex',
             alignItems: 'center',
@@ -179,8 +179,8 @@ const styles = {
   },
   button: {
     padding: '0.9rem',
-    background: 'orange',
-    color: 'black',
+      backgroundColor: 'rgba(76, 175, 80, 1)',
+  color: '#fff',
     border: 'none',
     borderRadius: '5px',
     fontSize: '1.3rem',

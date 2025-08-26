@@ -31,7 +31,7 @@ const AboutUs = () => {
       <ul style={styles.list}>
         <li><strong>Matthew</strong> – Fullstack Developer & Vision Carrier</li>
         <li><strong>Destiny & Miracle</strong> – The brilliant UI/UX duo that shaped every experience</li>
-        <li><strong>Daisy</strong> – Our amiable and energetic Product Manager, always pushing boundaries</li>
+        <li><strong>Daisy</strong> – Strong and energetic Product Manager, always pushing boundaries</li>
       </ul>
 
       <p style={styles.text}>

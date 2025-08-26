@@ -96,31 +96,16 @@ function AskAI() {
         disabled={loading}
         style={{
           padding: "8px 16px",
-          backgroundColor: "orange",
-          color: "#fff",
+          backgroundColor: "#b7ffb9ff",
+          color: "GREEN",
           border: "none",
           cursor: "pointer",
       }}
     >
       {loading ? (
-        <LoadingDots size={6} color='white' />
+        <LoadingDots size={6} color='red' />
       ) : "Ask"}
     </button>
-
-{/* 
-      {answer && (
-        <div
-          style={{
-            marginTop: 20,
-            padding: 10,
-            border: "1px solid #ccc",
-            fontFamily: "monospace",
-          }}
-        >
-          <strong>Answer:</strong>
-          <p>{answer}</p>
-        </div>
-      )} */}
     </div>
   );
 }
@@ -128,14 +113,14 @@ function AskAI() {
 export default AskAI;
 <style>
 {`
-@keyframes bounce {
-  0%, 80%, 100% {
-    transform: translateY(0);
-  }
-  40% {
-    transform: translateY(-6px);
-  }
-}
+ @keyframes bounce {
+        0%, 80%, 100% {
+          transform: scale(0);
+        }
+        40% {
+          transform: scale(1);
+        }
+      }
 `}
 </style>
 

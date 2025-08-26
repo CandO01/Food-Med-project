@@ -45,7 +45,8 @@ const styles = {
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    height: "100vh"
+    height: "100vh",
+    backgroundColor: 'rgba(76, 175, 80, 1)',
 
   },
   para: {
@@ -53,7 +54,7 @@ const styles = {
     fontSize: "1.1rem",
   },
   buttons: {
-    backgroundColor: "orange",
+    backgroundColor: "#4CAF50",
     border: "none",
     padding: "10px 12px",
     fontSize: "1.0rem",
@@ -62,9 +63,9 @@ const styles = {
     fontWeight: "700",
   },
   box: {
-    backgroundColor: "#FFA50033",
+    backgroundColor: "#c8fbcaff",
     padding: "10px",
-    borderLeft: "4px solid orange",
+    borderLeft: "4px solid #3aaa3dff",
     display: "flex",
     flexDirection: "column",
     marginBottom: "10px",

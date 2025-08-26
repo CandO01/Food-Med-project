@@ -46,7 +46,7 @@ body, html{
   font-size: 1.5rem;
   font-weight: 600;
   line-height: 30px;
-  color: #FFA500;
+  color: #4CAF50;
 }
 .signup-container,
 .signin-container,
@@ -69,17 +69,7 @@ body, html{
 .verify-container{
   margin: auto;
 }
-/* .signup-container > input,
-.signup-container > .input{
-  border: 1px solid rgba(209, 213, 219);
-  height: 57px;
-  text-indent: 10px;
-  font-family: "Inter", sans-serif;
-  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.5);
-  font-weight: 400;
-  border-radius: 50px;
-  font-size: 1.375rem;
-} */
+
  .signup-container > input::placeholder,
 .signin-container > input::placeholder,
 .reset-form > input::placeholder,
@@ -97,8 +87,9 @@ body, html{
 .doctor-form-container> .input,
 .signup-container > input,
 .signup-container > .input{
-  border: none; 
-  border-bottom: 3px solid #D9D9D999; 
+  /* border: none;  */
+  border: 2px solid #D9D9D999; 
+  border-radius: 6px;
   outline: none;
   padding: 8px 4px; 
   background: transparent; 
@@ -153,7 +144,8 @@ body, html{
 .language-container > button,
 .congratulations-container > button,
 .role-form-container > button {
-  background-color: #FFA500;
+   background-color: rgba(76, 175, 80, 1); /* solid green */
+  color: #fff;
   border: none;
   width: 100%;
   border-radius: 57px;
@@ -188,7 +180,7 @@ body, html{
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #FFA50080;
+  background-color: #b0f6b2;
   height: 300px;
   width: 100%;
   border-bottom-left-radius: 10px;
@@ -269,7 +261,7 @@ body, html{
   width: 100%;
   padding: 10px 10px 10px 35px; /* leave space for icon */
   font-size: 16px;
-  border: 2px solid #FFA500;
+  border: 2px solid #4CAF50;
   border-radius: 10px;
   outline: none;
   height: 48px;
@@ -290,8 +282,8 @@ body, html{
 .form-group label.active {
   top: -10px;
   font-size: 12px;
-  background-color: white;
-  color: orange;
+  background-color: #4CAF50;
+  color: #fff;
 }
 
 .form-group .icon {
@@ -338,12 +330,12 @@ body, html{
 }
 
 .otp-input:focus {
-  border: 2px solid #f5a623;
+  border: 2px solid #4CAF50;
   background-color: #fff;
 }
 
 .verify-btn {
-  background-color: #ffa500;
+  background-color: #4CAF50;
   border: none;
   padding: 12px 30px;
   border-radius: 25px;
@@ -376,7 +368,7 @@ body, html{
   width: 100%;
   padding: 10px 40px 10px 10px;
   font-size: 16px;
-  border: 2px solid #FFA500;
+  border: 2px solid #4CAF50;
   border-radius: 10px;
   outline: none;
   height: 48px;
@@ -397,8 +389,8 @@ body, html{
 .form-group2 label.active {
   top: -10px;
   font-size: 1.0rem;
-  color: orange;
-  background-color: white;
+  color: white;
+  background-color: #4CAF50;
 }
 
 .form-group2 .toggle-icon {
@@ -505,7 +497,7 @@ footer{
 
 .nav-link.active .active-icon,
 .nav-link.active .active-text {
-  color: orange;
+  color: #4CAF50;
 }
 
 /* For drop down notification */
@@ -525,7 +517,7 @@ footer{
   width: 40px;
   height: 40px;
   border: 5px solid #f3f3f3;
-  border-top: 5px solid orange;
+  border-top: 5px solid #4CAF50;
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin: auto;
@@ -541,7 +533,7 @@ footer{
   width: 16px;
   height: 16px;
   border: 2px solid #f3f3f3;
-  border-top: 2px solid orange;
+  border-top: 2px solid #4CAF50;
   border-radius: 50%;
   animation: spin 0.6s linear infinite;
   display: inline-block;
@@ -595,7 +587,7 @@ footer{
 .user-icon {
   cursor: pointer;
   font-size: 1.5rem;
-  color: #FFA500;
+  color: #4CAF50;
   font-weight: 700;
   display: flex;
   flex-direction: column;
@@ -609,7 +601,7 @@ footer{
   left: -220px;
   width: 220px;
   height: 100vh;
-  background-color: orange;
+  background-color: #4CAF50;
   color: white;
   padding: 2rem 1rem;
   z-index: 999;
@@ -641,8 +633,9 @@ footer{
   position: absolute;
   top: 1rem;
   right: 1rem;
-  background-color: red;
-  color: white;
+  background-color: white;
+  color: red;
+  font-weight: bold;
   border: none;
   padding: 0.3rem 0.7rem;
   border-radius: 5px;
@@ -665,7 +658,7 @@ footer{
   gap: 0.5rem;
 }
 .btnHome{
-  background-color: #ec9f10;
+  background-color: #4CAF50;
   color: white;
   border: none;
   padding: 0.7rem 1.2rem;
@@ -676,7 +669,7 @@ footer{
 }
 
 .btnHome:hover {
-  background-color: #FFA500;
+  background-color: #9cf19f;
 }
 
 /* Nearby Listing Title */
@@ -731,7 +724,7 @@ footer{
 }
 
 .food-mode {
-  background-color: #FFA500;
+  background-color: #4CAF50;
   color: white;
   padding: 14px 20px;
   border: none;
@@ -796,7 +789,7 @@ footer{
 .cursor {
   display: inline-block;
   animation: blink 0.8s infinite;
-  color: orange;
+  color: #4CAF50;
 }
 
 @keyframes blink {

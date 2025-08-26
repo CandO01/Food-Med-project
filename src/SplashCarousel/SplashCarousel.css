@@ -41,7 +41,8 @@ p.para{
 
 /* Get Started Button */
 .get-started-btn {
-  background-color: #FFA500;
+     background-color: rgba(76, 175, 80, 1); /* solid green */
+  color: #fff;
   border: none;
   width: 100%;
   border-radius: 57px;
@@ -58,13 +59,14 @@ p.para{
   top: 20px;
   right: 20px;
   background: none;
-  background-color: black;
-  color: whitesmoke;
+   background-color: rgba(76, 175, 80, 1); /* solid green */
+  color: #fff;
   padding: 8px 14px;
   font-size: 0.9rem;
   font-weight: 700;
   border-radius: 6px;
   cursor: pointer;
+  border: none;
 }
 
 /* Indicator Dots */
@@ -86,7 +88,7 @@ p.para{
 }
 
 .dot.active {
-  background-color: #FFA500;
+     background-color: rgba(76, 175, 80, 1); /* solid green */
 }
 
 /* Optional: Custom backgrounds if used with classNames */

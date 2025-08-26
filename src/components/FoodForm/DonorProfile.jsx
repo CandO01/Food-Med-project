@@ -153,7 +153,7 @@ useEffect(()=>{
   return (
     <div style={{ padding: '2rem' }}>
       <audio ref={audioRef} src="/notification.mp3" preload="auto" />
-      <Link to='/food-form' style={styles.backLink}><IoArrowBack style={{color: 'orange'}} /> Back</Link>
+      <Link to='/food-form' style={styles.backLink}><IoArrowBack style={{color: '#4CAF50'}} /> Back</Link>
       <h2>{localStorage.getItem("userName")}'s Donor Profile</h2>
       {loading ? (
         <div className="spinner"></div> //the css is in the universal file /App.css 
@@ -242,13 +242,13 @@ useEffect(()=>{
 };
 
 const styles = {
-  backLink: { display: 'inline-flex', gap: '0.5rem', color: 'orange', marginBottom: '1rem', textDecoration: 'none' },
+  backLink: { display: 'inline-flex', gap: '0.5rem', color: '#4CAF50', marginBottom: '1rem', textDecoration: 'none' },
   card: { background: '#fff', padding: '1rem', borderRadius: '10px', marginBottom: '2rem', boxShadow: '0 0 10px rgba(0,0,0,0.1)' },
   requestItem: { padding: '0.8rem', border: '1px solid #ccc', borderRadius: '8px', marginTop: '1rem' },
   buttonGroup: { display: 'flex', gap: '1rem', marginTop: '0.5rem' },
   confirmBtn: { background: 'green', color: '#fff', padding: '0.5rem 1rem', borderRadius: '5px', border: 'none', cursor: 'pointer' },
   rejectBtn: { background: 'red', color: '#fff', padding: '0.5rem 1rem', borderRadius: '5px', border: 'none', cursor: 'pointer' },
-  chatBtn: { background: '#007bff', color: '#fff', padding: '0.5rem', border: 'none', borderRadius: '50%', fontSize: '1.2rem', cursor: 'pointer', position: 'relative' },
+  chatBtn: { background: '#4CAF50', color: '#fff', padding: '0.5rem', border: 'none', borderRadius: '50%', fontSize: '1.2rem', cursor: 'pointer', position: 'relative' },
   unreadDot: { position: 'absolute', top: 0, right: 0, background: 'red', color: 'white', fontSize: '0.65rem', width: '18px', height: '18px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', animation: 'pulse 1.2s infinite' },
   pulse: { position: 'absolute', top: '-6px', right: '-6px', width: '10px', height: '10px', borderRadius: '50%', background: 'rgba(255, 0, 0, 0.6)', animation: 'pulseAnim 1.2s infinite', zIndex: -1 },
   modalOverlay: { position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 999 },

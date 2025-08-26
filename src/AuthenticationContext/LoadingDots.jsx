@@ -1,7 +1,7 @@
 // src/components/LoadingDots.jsx
 import React, { useEffect } from "react";
 
-const LoadingDots = ({ color = "orange", size = 10, center = false }) => {
+const LoadingDots = ({ color = "#4CAF50", size = 10, center = false }) => {
   useEffect(() => {
     const style = document.createElement("style");
     style.innerHTML = `

@@ -41,12 +41,12 @@ function AuthcontextProvider({ children }) {
    localStorage.setItem('canRequest', canRequest);
 
 //   // Always set userId
-  localStorage.setItem('userId', email);
+  // localStorage.setItem('userId', email);
 
 //   // If user is a donor, also set donorId and donorEmail
   if (canDonate) {
     localStorage.setItem('donorId', _id);
-    localStorage.setItem('donorId', email);
+    // localStorage.setItem('donorId', email);
     localStorage.setItem('donorEmail', email);
   } else {
     localStorage.removeItem('donorId');
