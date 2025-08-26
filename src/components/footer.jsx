@@ -215,7 +215,7 @@ const modalStyle = {
   button: {
     marginTop: '1rem',
     padding: '0.5rem 1rem',
-    backgroundColor: 'orange',
+    backgroundColor: '#4CAF50',
     color: 'white',
     border: 'none',
     borderRadius: '5px',
