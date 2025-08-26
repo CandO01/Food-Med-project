@@ -46,7 +46,6 @@ const styles = {
     alignItems: "center",
     justifyContent: "center",
     height: "100vh",
-    backgroundColor: 'rgba(76, 175, 80, 1)',
 
   },
   para: {
